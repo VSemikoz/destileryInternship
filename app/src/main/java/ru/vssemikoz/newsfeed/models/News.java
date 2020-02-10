@@ -4,8 +4,12 @@ import java.net.URL;
 import java.util.Date;
 
 public class News {
-    private String author, title, description, content;
-    private URL url, urlToImage;
+    private String author;
+    private String title;
+    private String description;
+    private String content;
+    private URL url;
+    private URL urlToImage;
     private Date publishedAt;
 
     News( String author, String title, String description, String content, URL url, URL urlToImage, Date publishedAt){
