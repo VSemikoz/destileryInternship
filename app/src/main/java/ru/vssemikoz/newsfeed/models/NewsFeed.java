@@ -4,9 +4,9 @@ import java.util.List;
 
 public class NewsFeed {
     private Filter filter;
-    private List<News> listOfNews;
+    private List<NewsItem> listOfNews;
 
-    NewsFeed(Filter filter, List<News> listOfNews){
+    NewsFeed(Filter filter, List<NewsItem> listOfNews){
         this.filter = filter;
         this.listOfNews = listOfNews;
     }
@@ -15,7 +15,7 @@ public class NewsFeed {
         return filter;
     }
 
-    public List<News> getListOfNews() {
+    public List<NewsItem> getListOfNews() {
         return listOfNews;
     }
 }

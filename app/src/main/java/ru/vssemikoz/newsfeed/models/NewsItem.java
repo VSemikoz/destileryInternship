@@ -3,13 +3,13 @@ package ru.vssemikoz.newsfeed.models;
 import java.net.URL;
 import java.util.Date;
 
-public class News {
+public class NewsItem {
     private String author;
     private String title;
     private String description;
     private String content;
     private URL url;
-    private URL urlToImage;
+    private URL imageUrl;
     private Date publishedAt;
 
 
@@ -29,8 +29,8 @@ public class News {
         return content;
     }
 
-    public URL getUrlToImage() {
-        return urlToImage;
+    public URL getImageUrl() {
+        return imageUrl;
     }
 
     public URL getUrl() {
@@ -61,8 +61,8 @@ public class News {
         this.url = url;
     }
 
-    public void setUrlToImage(URL urlToImage) {
-        this.urlToImage = urlToImage;
+    public void setImageUrl(URL imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void setPublishedAt(Date publishedAt) {
