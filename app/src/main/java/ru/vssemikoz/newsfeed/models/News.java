@@ -12,15 +12,6 @@ public class News {
     private URL urlToImage;
     private Date publishedAt;
 
-    News( String author, String title, String description, String content, URL url, URL urlToImage, Date publishedAt){
-        this.author = author;
-        this.title = title;
-        this.description = description;
-        this.content = content;
-        this.url = url;
-        this.urlToImage = urlToImage;
-        this.publishedAt = publishedAt;
-    }
 
     public String getAuthor() {
         return author;
@@ -48,6 +39,34 @@ public class News {
 
     public Date getPublishedAt() {
         return publishedAt;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setUrl(URL url) {
+        this.url = url;
+    }
+
+    public void setUrlToImage(URL urlToImage) {
+        this.urlToImage = urlToImage;
+    }
+
+    public void setPublishedAt(Date publishedAt) {
+        this.publishedAt = publishedAt;
     }
 }
 
