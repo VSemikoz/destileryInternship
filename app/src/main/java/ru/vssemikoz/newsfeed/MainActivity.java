@@ -21,9 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_newsfeed);
 
-        Filter filter = new Filter("asd");
         List<NewsItem> newsItems = new ArrayList<NewsItem>();
-        NewsFeedAdapter adapter = new NewsFeedAdapter(filter, newsItems);
+        NewsFeedAdapter adapter = new NewsFeedAdapter(newsItems);
 
         recyclerView.setAdapter(adapter);
     }

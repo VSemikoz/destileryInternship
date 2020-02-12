@@ -12,14 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ru.vssemikoz.newsfeed.R;
-import ru.vssemikoz.newsfeed.models.Filter;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsViewHolder> {
 
     private List<NewsItem> newsList;
 
-    public NewsFeedAdapter(Filter filter, List<NewsItem> newsList){
+    public NewsFeedAdapter(List<NewsItem> newsList){
         this.newsList = newsList;
     }
     @NonNull
@@ -33,9 +32,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
         NewsItem newsItem = newsList.get(position);
-
-//        holder.imageView.setImageResource(newsItem.getImageUrl());
-
         holder.title.setText(newsItem.getTitle());
         holder.description.setText(newsItem.getDescription());
     }
