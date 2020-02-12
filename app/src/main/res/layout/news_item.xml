@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/image_example" />
+        tools:src= "@tools:sample/backgrounds/scenic" />
 
     <TextView
         android:id="@+id/title"
@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Эрдоган: Сирия заплатит очень высокую цену за нападение на турецких солдат - ТАСС" />
+        tools:text="@tools:sample/lorem"/>
 
     <TextView
         android:id="@+id/decryption"
@@ -41,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:text="Президент Турции намерен 12 февраля объявить о новых мерах, которые предпримет Анкара" />
+        tools:text="@tools:sample/lorem" />
 
     <ImageButton
         android:id="@+id/follow_button"
