@@ -8,15 +8,15 @@
 
     <ImageView
         android:id="@+id/iv_image"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/news_picture_height"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/backgrounds/scenic" />
+        android:src="@mipmap/ic_launcher"
+        tools:src="@tools:sample/backgrounds/scenic"/>
 
     <TextView
         android:id="@+id/tv_title"
