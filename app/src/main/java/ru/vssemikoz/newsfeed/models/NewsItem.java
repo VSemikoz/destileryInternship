@@ -1,5 +1,7 @@
 package ru.vssemikoz.newsfeed.models;
 
+import android.media.Image;
+
 import java.net.URL;
 import java.util.Date;
 
@@ -68,6 +70,8 @@ public class NewsItem {
     public void setPublishedAt(Date publishedAt) {
         this.publishedAt = publishedAt;
     }
+
+
 }
 
 
