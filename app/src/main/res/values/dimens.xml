@@ -10,4 +10,7 @@
     <dimen name="category_height">60dp</dimen>
     <dimen name="buttons_height">40dp</dimen>
 
+    <dimen name="text_size_title">24dp</dimen>
+    <dimen name="text_size_description">16dp</dimen>
+
 </resources>
