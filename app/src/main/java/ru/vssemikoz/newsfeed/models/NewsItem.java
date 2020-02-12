@@ -15,6 +15,10 @@ public class NewsItem {
     private Date publishedAt;
 
 
+    public NewsItem(String title, String description){
+        this.title = title;
+        this.description = description;
+    }
     public String getAuthor() {
         return author;
     }
