@@ -10,8 +10,7 @@
     <View
         android:id="@+id/v_category"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginBottom="1dp"
+        android:layout_height="@dimen/category_height"
         android:background="@color/colorAccent"
         app:layout_constraintBottom_toTopOf="@+id/rv_newsfeed"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,29 +19,28 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_newsfeed"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
+        android:layout_width="@dimen/match_constraint"
+        android:layout_height="@dimen/match_constraint"
         android:background="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/v_buttons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/v_category"/>
+        app:layout_constraintTop_toBottomOf="@+id/v_category" />
 
     <View
         android:id="@+id/v_buttons"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/buttons_height"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_newsfeed"/>
 
     <ImageView
         android:id="@+id/iv_favorite"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/match_constraint"
+        android:layout_height="@dimen/match_constraint"
         android:background="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/v_buttons"
@@ -53,8 +51,8 @@
 
     <ImageView
         android:id="@+id/im_home"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/match_constraint"
+        android:layout_height="@dimen/match_constraint"
         android:background="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/iv_favorite"
