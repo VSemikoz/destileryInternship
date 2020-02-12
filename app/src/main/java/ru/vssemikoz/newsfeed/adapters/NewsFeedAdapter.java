@@ -1,6 +1,5 @@
 package ru.vssemikoz.newsfeed.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +17,9 @@ import ru.vssemikoz.newsfeed.models.NewsItem;
 
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsViewHolder> {
 
-    private Filter filter;
     private List<NewsItem> newsList;
 
     public NewsFeedAdapter(Filter filter, List<NewsItem> newsList){
-        this.filter = filter;
         this.newsList = newsList;
     }
     @NonNull
@@ -37,7 +34,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
         NewsItem newsItem = newsList.get(position);
 
-        holder.imageView.setImageResource(newsItem.getImageUrl());
+//        holder.imageView.setImageResource(newsItem.getImageUrl());
 
         holder.title.setText(newsItem.getTitle());
         holder.description.setText(newsItem.getDescription());
@@ -54,9 +51,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         final TextView description;
         public NewsViewHolder(View view) {
             super(view);
-            imageView = view.findViewById(R.id.image_view);
-            title =  view.findViewById(R.id.title);
-            description =  view.findViewById(R.id.description);
+            imageView = view.findViewById(R.id.iv_image);
+            title =  view.findViewById(R.id.tv_title);
+            description =  view.findViewById(R.id.tv_description);
         }
     }
 }

@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_newsfeed);
 
         Filter filter = new Filter("asd");
         List<NewsItem> newsItems = new ArrayList<NewsItem>();

@@ -9,7 +9,7 @@
 
 
     <ImageView
-        android:id="@+id/image_view"
+        android:id="@+id/iv_image"
         android:layout_width="0dp"
         android:layout_height="160dp"
         android:scaleType="centerCrop"
@@ -20,19 +20,19 @@
         tools:src= "@tools:sample/backgrounds/scenic" />
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:textColor="@color/colorText"
-        app:layout_constraintBottom_toTopOf="@+id/image_view"
-        app:layout_constraintEnd_toEndOf="@+id/image_view"
-        app:layout_constraintStart_toStartOf="@+id/image_view"
+        app:layout_constraintBottom_toTopOf="@+id/iv_image"
+        app:layout_constraintEnd_toEndOf="@+id/iv_image"
+        app:layout_constraintStart_toStartOf="@+id/iv_image"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem"/>
 
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/tv_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -40,19 +40,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_view"
+        app:layout_constraintTop_toBottomOf="@+id/iv_image"
         tools:text="@tools:sample/lorem" />
 
     <ImageButton
-        android:id="@+id/follow_button"
+        android:id="@+id/im_follow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/image_view"
-        app:layout_constraintEnd_toEndOf="@+id/image_view"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_image"
+        app:layout_constraintEnd_toEndOf="@+id/iv_image"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@android:drawable/btn_star_big_on" />
 
