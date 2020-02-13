@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import ru.vssemikoz.newsfeed.R;
 
-public class newsFeedFragment extends Fragment {
+public class NewsFeedFragment extends Fragment {
 
     @Nullable
     @Override
