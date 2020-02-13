@@ -12,10 +12,6 @@ import androidx.fragment.app.Fragment;
 import ru.vssemikoz.newsfeed.R;
 
 public class newsFeedFragment extends Fragment {
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Nullable
     @Override
@@ -23,8 +19,4 @@ public class newsFeedFragment extends Fragment {
         return inflater.inflate(R.layout.news_feed_fragment, container, false);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
 }
