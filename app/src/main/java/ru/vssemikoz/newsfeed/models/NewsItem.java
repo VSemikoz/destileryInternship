@@ -14,7 +14,6 @@ public class NewsItem {
     private URL imageUrl;
     private Date publishedAt;
 
-
     public NewsItem(String title, String description){
         this.title = title;
         this.description = description;
@@ -74,7 +73,6 @@ public class NewsItem {
     public void setPublishedAt(Date publishedAt) {
         this.publishedAt = publishedAt;
     }
-
 
 }
 
