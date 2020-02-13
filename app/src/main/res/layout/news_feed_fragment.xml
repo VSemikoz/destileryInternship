@@ -12,13 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/category_height"
         android:background="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/rv_newsfeed"
+        app:layout_constraintBottom_toTopOf="@+id/rv_news_feed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_newsfeed"
+        android:id="@+id/rv_news_feed"
         android:layout_width="@dimen/match_constraint"
         android:layout_height="@dimen/match_constraint"
         android:background="@color/colorPrimary"
@@ -35,7 +35,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_newsfeed"/>
+        app:layout_constraintTop_toBottomOf="@+id/rv_news_feed"/>
 
     <ImageView
         android:id="@+id/iv_favorite"
@@ -44,13 +44,13 @@
         android:background="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/v_buttons"
-        app:layout_constraintStart_toEndOf="@+id/im_home"
-        app:layout_constraintTop_toBottomOf="@+id/rv_newsfeed"
+        app:layout_constraintStart_toEndOf="@+id/iv_home"
+        app:layout_constraintTop_toBottomOf="@+id/rv_news_feed"
         app:layout_constraintVertical_bias="0.625"
         app:srcCompat="@android:drawable/btn_star_big_on"/>
 
     <ImageView
-        android:id="@+id/im_home"
+        android:id="@+id/iv_home"
         android:layout_width="@dimen/match_constraint"
         android:layout_height="@dimen/match_constraint"
         android:background="@color/colorAccent"

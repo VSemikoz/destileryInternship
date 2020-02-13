@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initData();
-        RecyclerView recyclerView =  findViewById(R.id.rv_newsfeed);
+        RecyclerView recyclerView =  findViewById(R.id.rv_news_feed);
         NewsFeedAdapter adapter = new NewsFeedAdapter(newsItems);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
