@@ -1,5 +1,7 @@
 package ru.vssemikoz.newsfeed.models;
 
+import android.media.Image;
+
 import java.net.URL;
 import java.util.Date;
 
@@ -12,7 +14,10 @@ public class NewsItem {
     private URL imageUrl;
     private Date publishedAt;
 
-
+    public NewsItem(String title, String description){
+        this.title = title;
+        this.description = description;
+    }
     public String getAuthor() {
         return author;
     }
@@ -68,6 +73,7 @@ public class NewsItem {
     public void setPublishedAt(Date publishedAt) {
         this.publishedAt = publishedAt;
     }
+
 }
 
 
