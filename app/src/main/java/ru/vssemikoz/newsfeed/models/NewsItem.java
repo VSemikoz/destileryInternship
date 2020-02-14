@@ -2,6 +2,8 @@ package ru.vssemikoz.newsfeed.models;
 
 import android.media.Image;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.net.URL;
 import java.util.Date;
 
@@ -11,7 +13,8 @@ public class NewsItem {
     private String description;
     private String content;
     private URL url;
-    private URL imageUrl;
+    @SerializedName("urlToImage")
+    private URL imageUrl    ;
     private Date publishedAt;
 
     public NewsItem(String title, String description){
