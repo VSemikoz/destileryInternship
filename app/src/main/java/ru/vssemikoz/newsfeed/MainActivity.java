@@ -10,7 +10,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initDataBase();
         Callback<NewsItemList> callbackNewsItemList = new Callback<NewsItemList>() {
             @Override
@@ -43,13 +41,13 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 newsItemDAO.insertUnique(response.body().getNewsItem());
+                Log.d("MyLog", String.valueOf(newsItemDAO.getAll().size()));
                 initRecView();
             }
 
             @Override
             public void onFailure(Call<NewsItemList> call, Throwable t) {
-                Log.d("MyLog", "onFailure " + Objects.requireNonNull(t.getMessage()));
-
+                Log.d("MyLog", "onFailure " + t.getMessage());
             }
         };
 
@@ -60,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
         NewsApi newsApi = retrofit.create(NewsApi.class);
         Call<NewsItemList> call = newsApi.getNews("ru", KEY);
-
         call.enqueue(callbackNewsItemList);
 
     }
