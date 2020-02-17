@@ -29,6 +29,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Callback<NewsItemList> callbackNewsItemList = new Callback<NewsItemList>() {
+            @Override
+            public void onResponse(Call<NewsItemList> call, Response<NewsItemList> response) {
+                if (!response.isSuccessful()){
+                    Log.d("MyLog", "onResponse " + response.code());
+                    return;
+                }
+                newsItems = Objects.requireNonNull(response.body()).getNewsItem();
+                Log.d("MyLog", "onSuccess " + newsItems);
+                initRecView();
+            }
+
+            @Override
+            public void onFailure(Call<NewsItemList> call, Throwable t) {
+                Log.d("MyLog", "onFailure " + Objects.requireNonNull(t.getMessage()));
+
+            }
+        };
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://newsapi.org")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -37,23 +55,7 @@ public class MainActivity extends AppCompatActivity {
         NewsApi newsApi = retrofit.create(NewsApi.class);
         Call<NewsItemList> call = newsApi.getNews("ru", KEY);
 
-        call.enqueue(new Callback<NewsItemList> () {
-            @Override
-            public void onResponse(Call<NewsItemList>  call, Response<NewsItemList>  response) {
-                if (!response.isSuccessful()){
-                    Log.d("MyLog", "onResponse " + response.code());
-                    return;
-                }
-                newsItems = response.body().getNewsItem();
-                Log.d("MyLog", "onSuccess " + newsItems);
-                initRecView();
-            }
-
-            @Override
-            public void onFailure(Call<NewsItemList>  call, Throwable t) {
-                Log.d("MyLog", "onFailure " + Objects.requireNonNull(t.getMessage()));
-            }
-        });
+        call.enqueue(callbackNewsItemList);
 
     }
 
