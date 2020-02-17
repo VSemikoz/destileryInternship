@@ -4,13 +4,18 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.net.URL;
 import java.util.Date;
 
+import ru.vssemikoz.newsfeed.TypeConverters.DateConverter;
+import ru.vssemikoz.newsfeed.TypeConverters.UrlConverter;
+
 @Entity(indices = @Index(value = "title", unique = true))
+@TypeConverters({UrlConverter.class, DateConverter.class})
 public class NewsItem {
     @PrimaryKey(autoGenerate = true)
     public  int newsId;
@@ -18,12 +23,12 @@ public class NewsItem {
     public  String title;
     public  String description;
     public  String content;
-    public  String url;
+    public  URL url;
     @ColumnInfo(name = "image_url")
     @SerializedName("urlToImage")
-    public  String imageUrl;
+    public  String imageUrl;//Cant define type URL cause api callback return "no protocol"
     @ColumnInfo(name = "published_at")
-    public  String publishedAt;
+    public  Date publishedAt;
 
     public NewsItem(String title, String description){
         this.title = title;
@@ -49,11 +54,11 @@ public class NewsItem {
         return imageUrl;
     }
 
-    public String getUrl() {
+    public URL getUrl() {
         return url;
     }
 
-    public String getPublishedAt() {
+    public Date getPublishedAt() {
         return publishedAt;
     }
 
@@ -73,7 +78,7 @@ public class NewsItem {
         this.content = content;
     }
 
-    public void setUrl(String url) {
+    public void setUrl(URL url) {
         this.url = url;
     }
 
@@ -81,7 +86,7 @@ public class NewsItem {
         this.imageUrl = imageUrl;
     }
 
-    public void setPublishedAt(String publishedAt) {
+    public void setPublishedAt(Date publishedAt) {
         this.publishedAt = publishedAt;
     }
 
