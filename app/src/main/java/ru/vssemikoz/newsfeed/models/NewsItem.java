@@ -1,9 +1,8 @@
 package ru.vssemikoz.newsfeed.models;
 
-import android.media.Image;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
@@ -11,25 +10,20 @@ import com.google.gson.annotations.SerializedName;
 import java.net.URL;
 import java.util.Date;
 
-@Entity
+@Entity(indices = @Index(value = "title", unique = true))
 public class NewsItem {
-    @PrimaryKey
-    private int newsId;
-    @ColumnInfo(name = "author")
-    private String author;
-    @ColumnInfo(name = "title")
-    private String title;
-    @ColumnInfo(name = "description")
-    private String description;
-    @ColumnInfo(name = "content")
-    private String content;
-    @ColumnInfo(name = "url")
-    private URL url;
+    @PrimaryKey(autoGenerate = true)
+    public  int newsId;
+    public  String author;
+    public  String title;
+    public  String description;
+    public  String content;
+    public  String url;
     @ColumnInfo(name = "image_url")
     @SerializedName("urlToImage")
-    private URL imageUrl;
+    public  String imageUrl;
     @ColumnInfo(name = "published_at")
-    private Date publishedAt;
+    public  String publishedAt;
 
     public NewsItem(String title, String description){
         this.title = title;
@@ -51,15 +45,15 @@ public class NewsItem {
         return content;
     }
 
-    public URL getImageUrl() {
+    public String getImageUrl() {
         return imageUrl;
     }
 
-    public URL getUrl() {
+    public String getUrl() {
         return url;
     }
 
-    public Date getPublishedAt() {
+    public String getPublishedAt() {
         return publishedAt;
     }
 
@@ -79,15 +73,15 @@ public class NewsItem {
         this.content = content;
     }
 
-    public void setUrl(URL url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 
-    public void setImageUrl(URL imageUrl) {
+    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    public void setPublishedAt(Date publishedAt) {
+    public void setPublishedAt(String publishedAt) {
         this.publishedAt = publishedAt;
     }
 
