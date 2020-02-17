@@ -27,14 +27,14 @@ import ru.vssemikoz.newsfeed.models.NewsItemList;
 public class MainActivity extends AppCompatActivity {
     String KEY = "c94a57cbbb50497f94a2bb167dc91fc5";
     List<NewsItem> newsItems = new ArrayList<NewsItem>();
+    NewsAppDataBase newsDataBase;
+    NewsItemDAO newsItemDAO;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        NewsAppDataBase newsDataBase = Room.databaseBuilder(getApplicationContext(),
-                NewsAppDataBase.class, "news_data_base").build();
-        NewsItemDAO newsItemDAO = newsDataBase.newsItemDAO();
 
+        initDataBase();
         Callback<NewsItemList> callbackNewsItemList = new Callback<NewsItemList>() {
             @Override
             public void onResponse(Call<NewsItemList> call, Response<NewsItemList> response) {
@@ -42,8 +42,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("MyLog", "onResponse " + response.code());
                     return;
                 }
-                newsItems = Objects.requireNonNull(response.body()).getNewsItem();
-                Log.d("MyLog", "onSuccess " + newsItems);
+                newsItemDAO.insertUnique(response.body().getNewsItem());
                 initRecView();
             }
 
@@ -53,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://newsapi.org")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -66,10 +66,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void initRecView(){
+        initNewsItemsData();
         RecyclerView recyclerView =  findViewById(R.id.rv_news_feed);
         NewsFeedAdapter adapter = new NewsFeedAdapter(newsItems);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
     }
 
+    void initNewsItemsData(){
+        newsItems = newsItemDAO.getAll();
+    }
+
+    void initDataBase(){
+        newsDataBase = Room.databaseBuilder(this,
+                NewsAppDataBase.class, "news_data_base")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
+        newsItemDAO = newsDataBase.newsItemDAO();
+    }
 }
