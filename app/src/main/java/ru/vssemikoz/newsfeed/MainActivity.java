@@ -7,6 +7,7 @@ import androidx.room.Room;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +41,10 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("MyLog", "onResponse " + response.code());
                     return;
                 }
+
                 newsItemDAO.insertUnique(response.body().getNewsItem());
-                Log.d("MyLog", String.valueOf(newsItemDAO.getAll().size()));
+                String dbSize = "DBSize: " + newsItemDAO.getAll().size();
+                Toast.makeText(getApplicationContext(), dbSize, Toast.LENGTH_LONG).show();
                 initRecView();
             }
 
