@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.Date;
 
 public class NewsItem {
+    private int newsId;
     private String author;
     private String title;
     private String description;
@@ -77,6 +78,13 @@ public class NewsItem {
         this.publishedAt = publishedAt;
     }
 
+    public int getNewsId() {
+        return newsId;
+    }
+
+    public void setNewsId(int newsId) {
+        this.newsId = newsId;
+    }
 }
 
 
