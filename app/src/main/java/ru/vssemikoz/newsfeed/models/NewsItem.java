@@ -2,20 +2,33 @@ package ru.vssemikoz.newsfeed.models;
 
 import android.media.Image;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.net.URL;
 import java.util.Date;
 
+@Entity
 public class NewsItem {
+    @PrimaryKey
     private int newsId;
+    @ColumnInfo(name = "author")
     private String author;
+    @ColumnInfo(name = "title")
     private String title;
+    @ColumnInfo(name = "description")
     private String description;
+    @ColumnInfo(name = "content")
     private String content;
+    @ColumnInfo(name = "url")
     private URL url;
+    @ColumnInfo(name = "image_url")
     @SerializedName("urlToImage")
-    private URL imageUrl    ;
+    private URL imageUrl;
+    @ColumnInfo(name = "published_at")
     private Date publishedAt;
 
     public NewsItem(String title, String description){
