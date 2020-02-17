@@ -3,6 +3,7 @@ package ru.vssemikoz.newsfeed;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +17,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import ru.vssemikoz.newsfeed.DAO.NewsItemDAO;
+import ru.vssemikoz.newsfeed.DataBase.NewsAppDataBase;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
 import ru.vssemikoz.newsfeed.api.NewsApi;
 import ru.vssemikoz.newsfeed.models.NewsItem;
@@ -28,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        NewsAppDataBase newsDataBase = Room.databaseBuilder(getApplicationContext(),
+                NewsAppDataBase.class, "news_data_base").build();
+        NewsItemDAO newsItemDAO = newsDataBase.newsItemDAO();
 
         Callback<NewsItemList> callbackNewsItemList = new Callback<NewsItemList>() {
             @Override
