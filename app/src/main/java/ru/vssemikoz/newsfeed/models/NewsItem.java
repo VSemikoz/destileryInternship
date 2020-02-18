@@ -1,5 +1,7 @@
 package ru.vssemikoz.newsfeed.models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class NewsItem {
@@ -15,14 +17,19 @@ public class NewsItem {
 
     }
 
-    NewsItem(NewsApiResponseItem newsApiResponseItem){
+    public NewsItem(NewsApiResponseItem newsApiResponseItem){
         this.author = newsApiResponseItem.getAuthor();
         this.title = newsApiResponseItem.getTitle();
         this.description = newsApiResponseItem.getDescription();
         this.content = newsApiResponseItem.getContent();
         this.url = newsApiResponseItem.getUrl();
         this.imageUrl = newsApiResponseItem.getImageUrl();
-        this.publishedAt = newsApiResponseItem.getPublishedAt();
+        try {
+            this.publishedAt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+                    .parse(newsApiResponseItem.getPublishedAt());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getAuthor() {
