@@ -5,34 +5,82 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
+import ru.vssemikoz.newsfeed.api.NewsApi;
+import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
+import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
 public class MainActivity extends AppCompatActivity {
+    String KEY = "c94a57cbbb50497f94a2bb167dc91fc5";
+    String MAIN_URL = "https://newsapi.org";
 
-    List<NewsItem> newsItems = new ArrayList<NewsItem>();
+    List<NewsApiResponseItem> newsApiResponseItems = new ArrayList<>();
+    List<NewsItem> newsItemList = new ArrayList<>();
+    NewsFeedAdapter adapter = new NewsFeedAdapter();
+    RecyclerView recyclerView;
+    Callback<NewsApiResponse> callbackNewsItemList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initData();
-        RecyclerView recyclerView =  findViewById(R.id.rv_news_feed);
-        NewsFeedAdapter adapter = new NewsFeedAdapter(newsItems);
+        initRecView();
+        initNewsItemListCallback();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(MAIN_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        NewsApi newsApi = retrofit.create(NewsApi.class);
+        Call<NewsApiResponse> call = newsApi.getNews("ru", KEY);
+        call.enqueue(callbackNewsItemList);
+    }
+
+    void initRecView(){
+        recyclerView =  findViewById(R.id.rv_news_feed);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    void initRecViewData(){
+        adapter.setNewsList(newsItemList);
         recyclerView.setAdapter(adapter);
     }
 
-    private void initData(){
-        newsItems.add(new NewsItem("Экс-глава управления ФСИН попытался покончить с собой в суде после приговора по делу о вымогательстве - Новая газета",
-                "Экс-глава управления ФСИН Виктор Свиридов попытался застрелиться в Чертановском суде Москвы во время оглашения приговора по делу о вымогательстве (ч. 3 ст. 163 УК). Об этом сообщает РБК. \\r\\n\\r\\nСвиридов до приговора был под подпиской о невыезде. После слов судьи…"));
-        newsItems.add(new NewsItem("Польша запросила у 'Газпрома' данные для дела против Nord Stream 2 - РИА НОВОСТИ",
-                "Польский комитет конкуренции и защиты потребителей (UOKiK) запросил информацию у \\\"Газпрома\\\" для проведения расследования в отношении проекта газопровода... РИА Новости, 12.02.2020"));
-        newsItems.add(new NewsItem("Рассекречена дешевая версия AirPods - Lenta.ru", "Apple планирует выпустить дешевую версию AirPods Pro. Об этом говорится в отчете знакомого с цепочкой поставок источника. В сообщении говорится, что компания намерена увеличить количество поставок девайсов iPad, Apple Watch, iMac и AirPods Pro Lite, чтобы удо…"));
-        newsItems.add(new NewsItem("Microsoft выпустила эмулятор Windows 10X. Опробовать новую ОС могут все желающие - 3DNews", "Microsoft выпустила эмулятор операционной системы Windows 10X."));
+    void initNewsItemListCallback(){
+        callbackNewsItemList = new Callback<NewsApiResponse>() {
+            @Override
+            public void onResponse(Call<NewsApiResponse> call, Response<NewsApiResponse> response) {
+                if (!response.isSuccessful()){
+                    Log.d("MyLog", "onResponse " + response.code());
+                    return;
+                }
+                initNewsItemListByResponse(response);
+                initRecViewData();
+            }
+            @Override
+            public void onFailure(Call<NewsApiResponse> call, Throwable t) {
+                Log.d("MyLog", "onFailure " + Objects.requireNonNull(t.getMessage()));
+            }
+        };
+    }
+
+    void initNewsItemListByResponse(Response<NewsApiResponse> response){
+        newsApiResponseItems = Objects.requireNonNull(response.body()).getNewsApiResponseItemList();
+        for (NewsApiResponseItem newsApiResponseItem : newsApiResponseItems){
+            newsItemList.add(new NewsItem(newsApiResponseItem));
+        }
     }
 }
