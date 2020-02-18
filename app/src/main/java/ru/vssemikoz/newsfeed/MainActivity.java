@@ -7,6 +7,7 @@ import androidx.room.Room;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +27,8 @@ import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
 public class MainActivity extends AppCompatActivity {
-    String KEY = "c94a57cbbb50497f94a2bb167dc91fc5";
-    String MAIN_URL = "https://newsapi.org";
-
-    NewsAppDataBase newsDataBase;
+    MainApplication globalVariables;
     NewsItemDAO newsItemDAO;
-
     Callback<NewsApiResponse> callbackNewsItemList;
     List<NewsApiResponseItem> newsApiResponseItems = new ArrayList<>();
     List<NewsItem> newsItemsFromDB = new ArrayList<>();
@@ -42,17 +39,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        globalVariables = (MainApplication) getApplicationContext();
 
         initRecView();
         initDataBase();
         initNewsItemListCallback();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(MAIN_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        NewsApi newsApi = retrofit.create(NewsApi.class);
-        Call<NewsApiResponse> call = newsApi.getNews("ru", KEY);
+        Call<NewsApiResponse> call = globalVariables.getNewsApi().getNews("ru",
+                globalVariables.getKEY());
         call.enqueue(callbackNewsItemList);
     }
 
@@ -65,15 +59,13 @@ public class MainActivity extends AppCompatActivity {
         newsItemsFromDB = newsItemDAO.getAll();
         adapter.setNewsList(newsItemsFromDB);
         recyclerView.setAdapter(adapter);
+        Toast.makeText(getApplicationContext(),
+                "DBSize: " + newsItemsFromDB.size(),
+                Toast.LENGTH_LONG).show();
     }
 
     void initDataBase() {
-        newsDataBase = Room.databaseBuilder(this,
-                NewsAppDataBase.class, "news_data_base")
-                .allowMainThreadQueries()
-                .fallbackToDestructiveMigration()
-                .build();
-        newsItemDAO = newsDataBase.newsItemDAO();
+        newsItemDAO = globalVariables.getNewsDataBase(getApplicationContext()).newsItemDAO();
     }
 
     void initNewsItemListCallback(){
