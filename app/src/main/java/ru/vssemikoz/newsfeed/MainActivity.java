@@ -20,12 +20,14 @@ import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
 import ru.vssemikoz.newsfeed.api.NewsApi;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
+import ru.vssemikoz.newsfeed.models.NewsItem;
 
 public class MainActivity extends AppCompatActivity {
     String KEY = "c94a57cbbb50497f94a2bb167dc91fc5";
     String MAIN_URL = "https://newsapi.org";
 
     List<NewsApiResponseItem> newsApiResponseItems = new ArrayList<>();
+    List<NewsItem> newsItemList = new ArrayList<>();
     NewsFeedAdapter adapter = new NewsFeedAdapter();
     RecyclerView recyclerView;
     Callback<NewsApiResponse> callbackNewsItemList;
@@ -52,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    void initDataRecView(){
-        adapter.setNewsList(newsApiResponseItems);
+    void initRecViewData(){
+        adapter.setNewsList(newsItemList);
         recyclerView.setAdapter(adapter);
     }
 
@@ -65,14 +67,20 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("MyLog", "onResponse " + response.code());
                     return;
                 }
-                newsApiResponseItems = Objects.requireNonNull(response.body()).getNewsApiResponseItemList();
-                Log.d("MyLog", "onSuccess " + newsApiResponseItems);
-                initDataRecView();
+                initNewsItemListByResponse(response);
+                initRecViewData();
             }
             @Override
             public void onFailure(Call<NewsApiResponse> call, Throwable t) {
                 Log.d("MyLog", "onFailure " + Objects.requireNonNull(t.getMessage()));
             }
         };
+    }
+
+    void initNewsItemListByResponse(Response<NewsApiResponse> response){
+        newsApiResponseItems = Objects.requireNonNull(response.body()).getNewsApiResponseItemList();
+        for (NewsApiResponseItem newsApiResponseItem : newsApiResponseItems){
+            newsItemList.add(new NewsItem(newsApiResponseItem));
+        }
     }
 }
