@@ -12,15 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ru.vssemikoz.newsfeed.R;
-import ru.vssemikoz.newsfeed.models.NewsItem;
+import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsViewHolder> {
 
-    private List<NewsItem> newsList;
+    private List<NewsApiResponseItem> newsList;
 
-    public NewsFeedAdapter(List<NewsItem> newsList){
+    public void setNewsList(List<NewsApiResponseItem> newsList) {
         this.newsList = newsList;
     }
+
     @NonNull
     @Override
     public NewsFeedAdapter.NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -30,9 +31,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
 
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
-        NewsItem newsItem = newsList.get(position);
-        holder.title.setText(newsItem.getTitle());
-        holder.description.setText(newsItem.getDescription());
+        NewsApiResponseItem newsApiResponseItem = newsList.get(position);
+        holder.title.setText(newsApiResponseItem.getTitle());
+        holder.description.setText(newsApiResponseItem.getDescription());
     }
 
     @Override
