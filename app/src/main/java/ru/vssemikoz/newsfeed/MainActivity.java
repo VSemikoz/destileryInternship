@@ -62,14 +62,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void initRecViewData(){
-        initNewsItemsData();
+        newsItemsFromDB = newsItemDAO.getAll();
         adapter.setNewsList(newsItemsFromDB);
         recyclerView.setAdapter(adapter);
-    }
-
-    void initNewsItemsData(){
-        Log.d("MyLog", newsItemDAO.toString());
-        newsItemsFromDB = newsItemDAO.getAll();
     }
 
     void initDataBase() {
