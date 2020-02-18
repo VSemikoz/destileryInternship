@@ -12,7 +12,7 @@ public class NewsApiResponseItem {
     private String url;
     @SerializedName("urlToImage")
     private String imageUrl;
-    private Date publishedAt;
+    private String publishedAt;
 
     public NewsApiResponseItem(){
 
@@ -42,7 +42,7 @@ public class NewsApiResponseItem {
         return url;
     }
 
-    public Date getPublishedAt() {
+    public String getPublishedAt() {
         return publishedAt;
     }
 
@@ -70,7 +70,7 @@ public class NewsApiResponseItem {
         this.imageUrl = imageUrl;
     }
 
-    public void setPublishedAt(Date publishedAt) {
+    public void setPublishedAt(String publishedAt) {
         this.publishedAt = publishedAt;
     }
 
