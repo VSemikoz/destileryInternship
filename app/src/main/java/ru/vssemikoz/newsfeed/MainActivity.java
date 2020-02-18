@@ -18,52 +18,61 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
 import ru.vssemikoz.newsfeed.api.NewsApi;
-import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.models.NewsItemList;
+import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
+import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 
 public class MainActivity extends AppCompatActivity {
     String KEY = "c94a57cbbb50497f94a2bb167dc91fc5";
-    List<NewsItem> newsItems = new ArrayList<NewsItem>();
+    String MAIN_URL = "https://newsapi.org";
+
+    List<NewsApiResponseItem> newsApiResponseItems = new ArrayList<>();
+    NewsFeedAdapter adapter = new NewsFeedAdapter();
+    RecyclerView recyclerView;
+    Callback<NewsApiResponse> callbackNewsItemList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Callback<NewsItemList> callbackNewsItemList = new Callback<NewsItemList>() {
-            @Override
-            public void onResponse(Call<NewsItemList> call, Response<NewsItemList> response) {
-                if (!response.isSuccessful()){
-                    Log.d("MyLog", "onResponse " + response.code());
-                    return;
-                }
-                newsItems = Objects.requireNonNull(response.body()).getNewsItem();
-                Log.d("MyLog", "onSuccess " + newsItems);
-                initRecView();
-            }
-
-            @Override
-            public void onFailure(Call<NewsItemList> call, Throwable t) {
-                Log.d("MyLog", "onFailure " + Objects.requireNonNull(t.getMessage()));
-
-            }
-        };
+        initRecView();
+        initNewsItemListCallback();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://newsapi.org")
+                .baseUrl(MAIN_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         NewsApi newsApi = retrofit.create(NewsApi.class);
-        Call<NewsItemList> call = newsApi.getNews("ru", KEY);
-
+        Call<NewsApiResponse> call = newsApi.getNews("ru", KEY);
         call.enqueue(callbackNewsItemList);
-
     }
 
     void initRecView(){
-        RecyclerView recyclerView =  findViewById(R.id.rv_news_feed);
-        NewsFeedAdapter adapter = new NewsFeedAdapter(newsItems);
+        recyclerView =  findViewById(R.id.rv_news_feed);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    void initDataRecView(){
+        adapter.setNewsList(newsApiResponseItems);
         recyclerView.setAdapter(adapter);
     }
 
+    void initNewsItemListCallback(){
+        callbackNewsItemList = new Callback<NewsApiResponse>() {
+            @Override
+            public void onResponse(Call<NewsApiResponse> call, Response<NewsApiResponse> response) {
+                if (!response.isSuccessful()){
+                    Log.d("MyLog", "onResponse " + response.code());
+                    return;
+                }
+                newsApiResponseItems = Objects.requireNonNull(response.body()).getNewsApiResponseItemList();
+                Log.d("MyLog", "onSuccess " + newsApiResponseItems);
+                initDataRecView();
+            }
+            @Override
+            public void onFailure(Call<NewsApiResponse> call, Throwable t) {
+                Log.d("MyLog", "onFailure " + Objects.requireNonNull(t.getMessage()));
+            }
+        };
+    }
 }
