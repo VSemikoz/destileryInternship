@@ -6,8 +6,6 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ru.vssemikoz.newsfeed.TypeConverters.DateConverter;
