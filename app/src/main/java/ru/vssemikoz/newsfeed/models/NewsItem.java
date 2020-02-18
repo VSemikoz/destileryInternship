@@ -1,10 +1,5 @@
 package ru.vssemikoz.newsfeed.models;
 
-import android.media.Image;
-
-import com.google.gson.annotations.SerializedName;
-
-import java.net.URL;
 import java.util.Date;
 
 public class NewsItem {
@@ -12,71 +7,77 @@ public class NewsItem {
     private String title;
     private String description;
     private String content;
-    private URL url;
-    @SerializedName("urlToImage")
-    private URL imageUrl    ;
+    private String url;
+    private String imageUrl;
     private Date publishedAt;
 
-    public NewsItem(String title, String description){
-        this.title = title;
-        this.description = description;
+    NewsItem(){
+
     }
+
+    NewsItem(NewsApiResponseItem newsApiResponseItem){
+        this.author = newsApiResponseItem.getAuthor();
+        this.title = newsApiResponseItem.getTitle();
+        this.description = newsApiResponseItem.getDescription();
+        this.content = newsApiResponseItem.getContent();
+        this.url = newsApiResponseItem.getUrl();
+        this.imageUrl = newsApiResponseItem.getImageUrl();
+        this.publishedAt = newsApiResponseItem.getPublishedAt();
+    }
+
     public String getAuthor() {
         return author;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public URL getImageUrl() {
-        return imageUrl;
-    }
-
-    public URL getUrl() {
-        return url;
-    }
-
-    public Date getPublishedAt() {
-        return publishedAt;
     }
 
     public void setAuthor(String author) {
         this.author = author;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
+    public String getContent() {
+        return content;
+    }
+
     public void setContent(String content) {
         this.content = content;
     }
 
-    public void setUrl(URL url) {
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
         this.url = url;
     }
 
-    public void setImageUrl(URL imageUrl) {
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Date getPublishedAt() {
+        return publishedAt;
     }
 
     public void setPublishedAt(Date publishedAt) {
         this.publishedAt = publishedAt;
     }
-
 }
-
-
