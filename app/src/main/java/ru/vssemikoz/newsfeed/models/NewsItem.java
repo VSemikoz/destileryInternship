@@ -6,9 +6,8 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.net.URI;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ru.vssemikoz.newsfeed.TypeConverters.DateConverter;
@@ -23,67 +22,24 @@ public class NewsItem {
     public  String title;
     public  String description;
     public  String content;
-    public  URI url;
+    public  String url;
     @ColumnInfo(name = "image_url")
-    @SerializedName("urlToImage")
-    public URI imageUrl;
+    public String imageUrl;
     @ColumnInfo(name = "published_at")
     public  Date publishedAt;
 
-    public String getAuthor() {
-        return author;
+    public NewsItem(){
+
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public URI getImageUrl() {
-        return imageUrl;
-    }
-
-    public URI getUrl() {
-        return url;
-    }
-
-    public Date getPublishedAt() {
-        return publishedAt;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setUrl(URI url) {
-        this.url = url;
-    }
-
-    public void setImageUrl(URI imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public void setPublishedAt(Date publishedAt) {
-        this.publishedAt = publishedAt;
+    public NewsItem(NewsApiResponseItem newsApiResponseItem){
+        this.author = newsApiResponseItem.getAuthor();
+        this.title = newsApiResponseItem.getTitle();
+        this.description = newsApiResponseItem.getDescription();
+        this.content = newsApiResponseItem.getContent();
+        this.url = newsApiResponseItem.getUrl();
+        this.imageUrl = newsApiResponseItem.getImageUrl();
+        this.publishedAt = DateConverter.fromString(newsApiResponseItem.getPublishedAt());
     }
 
     public int getNewsId() {
@@ -93,6 +49,60 @@ public class NewsItem {
     public void setNewsId(int newsId) {
         this.newsId = newsId;
     }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Date getPublishedAt() {
+        return publishedAt;
+    }
+
+    public void setPublishedAt(Date publishedAt) {
+        this.publishedAt = publishedAt;
+    }
 }
-
-
