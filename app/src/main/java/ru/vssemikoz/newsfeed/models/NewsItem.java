@@ -9,10 +9,9 @@ import androidx.room.TypeConverters;
 import java.util.Date;
 
 import ru.vssemikoz.newsfeed.TypeConverters.DateConverter;
-import ru.vssemikoz.newsfeed.TypeConverters.URIConverter;
 
 @Entity(indices = @Index(value = "title", unique = true))
-@TypeConverters({URIConverter.class, DateConverter.class})
+@TypeConverters({DateConverter.class})
 public class NewsItem {
     @PrimaryKey(autoGenerate = true)
     public  int newsId;
