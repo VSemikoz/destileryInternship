@@ -14,12 +14,35 @@ public class MainApplication extends Application {
     private final String MAIN_URL = "https://newsapi.org";
     private final String KEY = "c94a57cbbb50497f94a2bb167dc91fc5";
 
-    private Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(MAIN_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-    private NewsApi newsApi = retrofit.create(NewsApi.class);
+    private Retrofit retrofit;
+    private NewsApi newsApi;
     private NewsAppDataBase newsDataBase;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        initRetrofit();
+        initNewsApi();
+        initNewsDataBase(this);
+    }
+
+    void initRetrofit(){
+        retrofit = new Retrofit.Builder()
+                .baseUrl(MAIN_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+    }
+
+    void initNewsApi(){
+        newsApi = retrofit.create(NewsApi.class);
+    }
+
+    void initNewsDataBase(Context context){
+        newsDataBase = Room.databaseBuilder(context, NewsAppDataBase.class, "news_data_base")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
+    }
 
     public NewsApi getNewsApi() {
         return newsApi;
@@ -29,13 +52,7 @@ public class MainApplication extends Application {
         return KEY;
     }
 
-    public NewsAppDataBase getNewsDataBase(Context context){
-        if (newsDataBase == null){
-            newsDataBase = Room.databaseBuilder(context, NewsAppDataBase.class, "news_data_base")
-                    .allowMainThreadQueries()
-                    .fallbackToDestructiveMigration()
-                    .build();
-        }
+    public NewsAppDataBase getNewsDataBase(){
         return newsDataBase;
     }
 }

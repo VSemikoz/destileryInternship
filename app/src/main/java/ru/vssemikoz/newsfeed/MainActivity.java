@@ -22,7 +22,7 @@ import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
 public class MainActivity extends AppCompatActivity {
-    MainApplication globalVariables;
+    MainApplication mainApplication;
     NewsItemDAO newsItemDAO;
     Callback<NewsApiResponse> callbackNewsItemList;
     List<NewsApiResponseItem> newsApiResponseItems = new ArrayList<>();
@@ -34,14 +34,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        globalVariables = (MainApplication) getApplicationContext();
+        mainApplication = (MainApplication) getApplicationContext();
 
         initRecView();
         initNewsItemDAO();
         initNewsItemListCallback();
 
-        Call<NewsApiResponse> call = globalVariables.getNewsApi().getNews("ru",
-                globalVariables.getKEY());
+        Call<NewsApiResponse> call = mainApplication.getNewsApi().getNews("ru",
+                mainApplication.getKEY());
         call.enqueue(callbackNewsItemList);
     }
 
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void initNewsItemDAO() {
-        newsItemDAO = globalVariables.getNewsDataBase(getApplicationContext()).newsItemDAO();
+        newsItemDAO = mainApplication.getNewsDataBase().newsItemDAO();
     }
 
     void initNewsItemListCallback(){
