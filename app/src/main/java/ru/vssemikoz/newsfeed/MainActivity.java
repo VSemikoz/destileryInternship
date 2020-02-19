@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
     @Override
     public void onDialogSelectCategory(Category selectCategory) {
-        performCall();
         category = selectCategory;
+        performCall();
     }
 }
