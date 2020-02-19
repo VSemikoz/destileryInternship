@@ -82,12 +82,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     List<NewsItem> getNewsItemListByResponse(Response<NewsApiResponse> response){
-        ArrayList<NewsItem> newsItemList = new ArrayList<>();
+        List<NewsItem> news = new ArrayList<>();
         newsApiResponseItems = Objects.requireNonNull(response.body()).getNewsApiResponseItemList();
         for (NewsApiResponseItem newsApiResponseItem : newsApiResponseItems){
-            newsItemList.add(new NewsItem(newsApiResponseItem));
+            news.add(new NewsItem(newsApiResponseItem));
         }
-        return newsItemList;
+        return news;
 
     }
 }
