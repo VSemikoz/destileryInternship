@@ -24,7 +24,7 @@ public class PickCategoryDialog extends DialogFragment {
         String[] categoryStrList = Enum.getCategoryNameList();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("PickCategory")
+        builder.setTitle("Выбрать категрию")
                 .setItems(categoryStrList, (dialog, which) -> {
                     nListener.onDialogSelectCategory(Category.values()[which]);
                 });
