@@ -28,6 +28,6 @@ public interface NewsItemDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUnique(List<NewsItem> newsItems);
 
-    @Delete
-    void deleteAll(List<NewsItem> news);
+    @Query("DELETE FROM NewsItem")
+    void deleteAll();
 }
