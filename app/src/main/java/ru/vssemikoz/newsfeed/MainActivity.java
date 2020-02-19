@@ -3,7 +3,6 @@ package ru.vssemikoz.newsfeed;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -16,12 +15,8 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import ru.vssemikoz.newsfeed.DAO.NewsItemDAO;
-import ru.vssemikoz.newsfeed.DataBase.NewsAppDataBase;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
-import ru.vssemikoz.newsfeed.api.NewsApi;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
@@ -42,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         globalVariables = (MainApplication) getApplicationContext();
 
         initRecView();
-        initDataBase();
+        initNewsItemDAO();
         initNewsItemListCallback();
 
         Call<NewsApiResponse> call = globalVariables.getNewsApi().getNews("ru",
@@ -64,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.LENGTH_LONG).show();
     }
 
-    void initDataBase() {
+    void initNewsItemDAO() {
         newsItemDAO = globalVariables.getNewsDataBase(getApplicationContext()).newsItemDAO();
     }
 
