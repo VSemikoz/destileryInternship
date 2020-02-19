@@ -88,6 +88,5 @@ public class MainActivity extends AppCompatActivity {
             news.add(new NewsItem(newsApiResponseItem));
         }
         return news;
-
     }
 }
