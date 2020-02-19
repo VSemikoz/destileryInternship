@@ -26,5 +26,5 @@ public interface NewsItemDAO {
     void insertUnique(List<NewsItem> newsItems);
 
     @Delete
-    void delete(List<NewsItem> newsItem);
+    void deleteAll(List<NewsItem> news);
 }
