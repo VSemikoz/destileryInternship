@@ -8,28 +8,29 @@ import androidx.room.TypeConverters;
 
 import java.util.Date;
 
-import ru.vssemikoz.newsfeed.TypeConverters.DateConverter;
+import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
 @Entity(indices = @Index(value = "title", unique = true))
 @TypeConverters({DateConverter.class})
 public class NewsItem {
     @PrimaryKey(autoGenerate = true)
-    public  int newsId;
-    public  String author;
-    public  String title;
-    public  String description;
-    public  String content;
-    public  String url;
+    public int newsId;
+    public String category;
+    public String author;
+    public String title;
+    public String description;
+    public String content;
+    public String url;
     @ColumnInfo(name = "image_url")
     public String imageUrl;
     @ColumnInfo(name = "published_at")
-    public  Date publishedAt;
+    public Date publishedAt;
 
     public NewsItem(){
 
     }
 
-    public NewsItem(NewsApiResponseItem newsApiResponseItem){
+    public NewsItem(NewsApiResponseItem newsApiResponseItem, Category category){
         this.author = newsApiResponseItem.getAuthor();
         this.title = newsApiResponseItem.getTitle();
         this.description = newsApiResponseItem.getDescription();
@@ -37,6 +38,12 @@ public class NewsItem {
         this.url = newsApiResponseItem.getUrl();
         this.imageUrl = newsApiResponseItem.getImageUrl();
         this.publishedAt = DateConverter.fromString(newsApiResponseItem.getPublishedAt());
+
+        if (category == null){
+            this.category = "";
+        }else {
+            this.category = category.name();
+        }
     }
 
     public int getNewsId() {
