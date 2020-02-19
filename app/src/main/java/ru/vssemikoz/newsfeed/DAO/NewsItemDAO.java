@@ -19,6 +19,9 @@ public interface NewsItemDAO {
     @Query("SELECT * FROM NewsItem WHERE published_at < :first AND published_at > :second")
     List<NewsItem> getNewsByDate(String first, String second);
 
+    @Query("SELECT * FROM NewsItem WHERE category == :category")
+    List<NewsItem> getNewsByCategory(String category);
+
     @Insert
     void insertAll(List<NewsItem> newsItems);
 
