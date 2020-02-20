@@ -25,8 +25,8 @@ import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
-public class MainActivity extends AppCompatActivity implements PickCategoryDialog.NoticeDialogListener {
-    Category category = Category.all;
+public class MainActivity extends AppCompatActivity implements PickCategoryDialog.OnCategorySelectedListener {
+    Category category = Category.ALL;
     String KEY;
     MainApplication mainApplication;
     NewsItemDAO newsItemDAO;
@@ -48,19 +48,18 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
             DialogFragment categoryDialog = new PickCategoryDialog();
             categoryDialog.show(getSupportFragmentManager(), "categoryDialog");
         });
-
         initRecView();
         initNewsItemDAO();
         initNewsItemListCallback();
         performCall();
     }
 
-    void initRecView(){
+    private void initRecView(){
         recyclerView =  findViewById(R.id.rv_news_feed);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    void initRecViewData(){
+    private void initRecViewData(){
         newsItemsFromDB = getNewsFromDB();
         adapter.setNewsList(newsItemsFromDB);
         recyclerView.setAdapter(adapter);
@@ -69,17 +68,17 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
                 Toast.LENGTH_LONG).show();
     }
 
-    List<NewsItem> getNewsFromDB(){
-        if (category == Category.all){
+    private List<NewsItem> getNewsFromDB(){
+        if (category == Category.ALL){
             return newsItemDAO.getAll();
         } else {
             return newsItemDAO.getNewsByCategory(category.name());
         }
     }
 
-    void performCall(){
+    private void performCall(){
         Call<NewsApiResponse> call;
-        if (category == Category.all){
+        if (category == Category.ALL){
             call = mainApplication.getNewsApi().getNews("ru", KEY);
         }else {
             call = mainApplication.getNewsApi().
@@ -88,11 +87,11 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         call.enqueue(callbackNewsItemList);
     }
 
-    void initNewsItemDAO() {
+    private void initNewsItemDAO() {
         newsItemDAO = mainApplication.getNewsDataBase().newsItemDAO();
     }
 
-    void initNewsItemListCallback(){
+    private void initNewsItemListCallback(){
         callbackNewsItemList = new Callback<NewsApiResponse>() {
             @Override
             public void onResponse(Call<NewsApiResponse> call, Response<NewsApiResponse> response) {
@@ -110,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         };
     }
 
-    List<NewsItem> getNewsItemListByResponse(Response<NewsApiResponse> response, Category category){
+    private List<NewsItem> getNewsItemListByResponse(Response<NewsApiResponse> response, Category category){
         List<NewsItem> news = new ArrayList<>();
         newsApiResponseItems = Objects.requireNonNull(response.body()).getNewsApiResponseItemList();
         for (NewsApiResponseItem newsApiResponseItem : newsApiResponseItems){
@@ -120,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     }
 
     @Override
-    public void onDialogSelectCategory(Category selectCategory) {
+    public void onCategorySelected(Category selectCategory) {
         category = selectCategory;
         performCall();
     }
