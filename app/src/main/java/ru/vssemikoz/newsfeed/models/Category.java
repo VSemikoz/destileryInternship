@@ -1,15 +1,5 @@
 package ru.vssemikoz.newsfeed.models;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Stream;
-
 import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
 
@@ -20,7 +10,7 @@ public enum Category {
     ENTERTAINMENT(R.string.category_entertainment),
     HEALTH(R.string.category_health),
     SCIENCE(R.string.category_science),
-    SPORT(R.string.category_sport),
+    SPORTS(R.string.category_sport),
     TECHNOLOGY(R.string.category_technology);
 
     private Integer categoryId;
