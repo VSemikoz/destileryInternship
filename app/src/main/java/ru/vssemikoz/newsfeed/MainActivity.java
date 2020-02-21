@@ -57,11 +57,12 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     private void initRecView(){
         recyclerView =  findViewById(R.id.rv_news_feed);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter.setContext(getApplicationContext());
     }
 
     private void initRecViewData(){
         newsItemsFromDB = getNewsFromDB();
-        adapter.setNewsList(getApplicationContext(), newsItemsFromDB);
+        adapter.setNewsList( newsItemsFromDB);
         recyclerView.setAdapter(adapter);
         Toast.makeText(getApplicationContext(),
                 "DBSize: " + newsItemsFromDB.size(),
