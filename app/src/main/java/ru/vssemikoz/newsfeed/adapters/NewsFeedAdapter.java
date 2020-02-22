@@ -1,5 +1,6 @@
 package ru.vssemikoz.newsfeed.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import ru.vssemikoz.newsfeed.R;
@@ -17,6 +20,11 @@ import ru.vssemikoz.newsfeed.models.NewsItem;
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsViewHolder> {
 
     private List<NewsItem> newsList;
+    private Context context;
+
+    public NewsFeedAdapter(Context context){
+        this.context = context;
+    }
 
     public void setNewsList(List<NewsItem> newsList) {
         this.newsList = newsList;
@@ -34,6 +42,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         NewsItem newsApiResponseItem = newsList.get(position);
         holder.title.setText(newsApiResponseItem.getTitle());
         holder.description.setText(newsApiResponseItem.getDescription());
+
+        if (newsApiResponseItem.getImageUrl() != null){
+            Picasso.with(context)
+                    .load(newsApiResponseItem.getImageUrl())
+                    .into(holder.imageView);
+        }
     }
 
     @Override

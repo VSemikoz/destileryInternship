@@ -7,5 +7,11 @@ import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 
 public interface NewsApi {
     @GET("/v2/top-headlines")
-    Call<NewsApiResponse> getNews(@Query("country") String countryName, @Query("apiKey") String key);
+    Call<NewsApiResponse> getNewsByCategory(@Query("country") String country,
+                                  @Query("apiKey") String key,
+                                  @Query("category") String category);
+
+    @GET("/v2/top-headlines")
+    Call<NewsApiResponse> getNews(@Query("country") String country,
+                                            @Query("apiKey") String key);
 }

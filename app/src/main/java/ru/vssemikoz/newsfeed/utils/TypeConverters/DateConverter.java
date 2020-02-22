@@ -1,8 +1,7 @@
-package ru.vssemikoz.newsfeed.TypeConverters;
+package ru.vssemikoz.newsfeed.utils.TypeConverters;
 
 import androidx.room.TypeConverter;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
