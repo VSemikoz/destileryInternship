@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     Callback<NewsApiResponse> callbackNewsItemList;
     List<NewsApiResponseItem> newsApiResponseItems = new ArrayList<>();
     List<NewsItem> newsItemsFromDB = new ArrayList<>();
-    NewsFeedAdapter adapter = new NewsFeedAdapter();
+    NewsFeedAdapter adapter;
     RecyclerView recyclerView;
 
     @Override
@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
     private void initRecViewData(){
         newsItemsFromDB = getNewsFromDB();
-        adapter.setNewsList(newsItemsFromDB);
+        adapter = new NewsFeedAdapter(getApplicationContext());
+        adapter.setNewsList( newsItemsFromDB);
         recyclerView.setAdapter(adapter);
         Toast.makeText(getApplicationContext(),
                 "DBSize: " + newsItemsFromDB.size(),
