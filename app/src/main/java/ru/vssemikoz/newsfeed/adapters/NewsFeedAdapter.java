@@ -22,11 +22,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
     private List<NewsItem> newsList;
     private Context context;
 
+    public NewsFeedAdapter(Context context){
+        this.context = context;
+    }
+
     public void setNewsList(List<NewsItem> newsList) {
         this.newsList = newsList;
-    }
-    public void setContext(Context context){
-        this.context = context;
     }
 
     @NonNull
