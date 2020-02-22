@@ -11,5 +11,4 @@ public class Filter {
         return filterName;
     }
 
-
 }

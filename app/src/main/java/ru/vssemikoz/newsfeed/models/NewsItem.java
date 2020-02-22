@@ -1,35 +1,57 @@
 package ru.vssemikoz.newsfeed.models;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
 import java.util.Date;
 
-public class NewsItem {
-    private String author;
-    private String title;
-    private String description;
-    private String content;
-    private String url;
-    private String imageUrl;
-    private Date publishedAt;
+import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
-    NewsItem(){
+@Entity(indices = @Index(value = "title", unique = true))
+@TypeConverters({DateConverter.class})
+public class NewsItem {
+    @PrimaryKey(autoGenerate = true)
+    public int newsId;
+    public String category;
+    public String author;
+    public String title;
+    public String description;
+    public String content;
+    public String url;
+    @ColumnInfo(name = "image_url")
+    public String imageUrl;
+    @ColumnInfo(name = "published_at")
+    public Date publishedAt;
+
+    public NewsItem(){
 
     }
 
-    public NewsItem(NewsApiResponseItem newsApiResponseItem){
+    public NewsItem(NewsApiResponseItem newsApiResponseItem, Category category){
         this.author = newsApiResponseItem.getAuthor();
         this.title = newsApiResponseItem.getTitle();
         this.description = newsApiResponseItem.getDescription();
         this.content = newsApiResponseItem.getContent();
         this.url = newsApiResponseItem.getUrl();
         this.imageUrl = newsApiResponseItem.getImageUrl();
-        try {
-            this.publishedAt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
-                    .parse(newsApiResponseItem.getPublishedAt());
-        } catch (ParseException e) {
-            e.printStackTrace();
+        this.publishedAt = DateConverter.fromString(newsApiResponseItem.getPublishedAt());
+
+        if (category == null){
+            this.category = "";
+        }else {
+            this.category = category.name();
         }
+    }
+
+    public int getNewsId() {
+        return newsId;
+    }
+
+    public void setNewsId(int newsId) {
+        this.newsId = newsId;
     }
 
     public String getAuthor() {
