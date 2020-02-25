@@ -14,6 +14,7 @@
         android:background="@color/colorAccent"
         app:layout_constraintBottom_toTopOf="@+id/rv_news_feed"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,44 +23,11 @@
         android:layout_width="@dimen/match_constraint"
         android:layout_height="@dimen/match_constraint"
         android:background="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/v_buttons"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/v_category" />
-
-    <View
-        android:id="@+id/v_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/buttons_height"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_news_feed"/>
-
-    <ImageView
-        android:id="@+id/iv_favorite"
-        android:layout_width="@dimen/match_constraint"
-        android:layout_height="@dimen/match_constraint"
-        android:background="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/v_buttons"
-        app:layout_constraintStart_toEndOf="@+id/iv_home"
-        app:layout_constraintTop_toBottomOf="@+id/rv_news_feed"
-        app:layout_constraintVertical_bias="0.625"
-        app:srcCompat="@android:drawable/btn_star_big_on"/>
-
-    <ImageView
-        android:id="@+id/iv_home"
-        android:layout_width="@dimen/match_constraint"
-        android:layout_height="@dimen/match_constraint"
-        android:background="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/iv_favorite"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/v_buttons"
-        app:layout_constraintVertical_bias="0.625"
-        app:srcCompat="?attr/homeAsUpIndicator"/>
 
     <ImageButton
         android:id="@+id/ib_category"
@@ -72,5 +40,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+
+    <ImageButton
+        android:id="@+id/ib_favorite"
+        android:layout_width="70dp"
+        android:layout_height="46dp"
+        android:background="@null"
+        android:src="@drawable/ic_star_white_48dp"
+        app:layout_constraintBottom_toTopOf="@+id/v_category"
+        app:layout_constraintEnd_toStartOf="@+id/ib_category"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/v_category"
+        app:layout_constraintTop_toBottomOf="@+id/v_category" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
