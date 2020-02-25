@@ -15,6 +15,8 @@ import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 public class NewsItem {
     @PrimaryKey(autoGenerate = true)
     public int newsId;
+    @ColumnInfo(name = "is_favorite")
+    public boolean isFavorite;
     public String category;
     public String author;
     public String title;
@@ -31,6 +33,7 @@ public class NewsItem {
     }
 
     public NewsItem(NewsApiResponseItem newsApiResponseItem, Category category){
+        this.isFavorite = false;
         this.author = newsApiResponseItem.getAuthor();
         this.title = newsApiResponseItem.getTitle();
         this.description = newsApiResponseItem.getDescription();
@@ -44,6 +47,10 @@ public class NewsItem {
         }else {
             this.category = category.name();
         }
+    }
+
+    public void invertFollowState(){
+        isFavorite = !isFavorite;
     }
 
     public int getNewsId() {
@@ -88,6 +95,22 @@ public class NewsItem {
 
     public String getUrl() {
         return url;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public void setUrl(String url) {
