@@ -19,7 +19,6 @@ import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsViewHolder> {
-
     private List<NewsItem> newsList;
     private Context context;
     private onItemClickListener mListener;
@@ -74,7 +73,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
 
     public class NewsViewHolder extends RecyclerView.ViewHolder{
         boolean followState;
-
         final ImageView imageView;
         final TextView title;
         final TextView description;
@@ -95,7 +93,6 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
                         followState = !followState;
                     }
                 }
-
             });
         }
     }
