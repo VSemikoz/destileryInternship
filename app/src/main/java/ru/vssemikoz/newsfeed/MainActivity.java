@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
             adapter.setNewsList(newsItemsFromDB);
             adapter.notifyDataSetChanged();
         });
+        updateCategoryNameOnToolBar();
         initRecView();
         initNewsItemDAO();
         initNewsItemListCallback();
@@ -165,5 +167,10 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     public void onCategorySelected(Category selectCategory) {
         category = selectCategory;
         performCall();
+        updateCategoryNameOnToolBar();
+    }
+    private void updateCategoryNameOnToolBar(){
+        TextView categoryTextView = findViewById(R.id.tv_category);
+        categoryTextView.setText(Category.getCategoryName(category));
     }
 }
