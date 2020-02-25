@@ -10,7 +10,7 @@ import java.util.Date;
 
 import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
-@Entity(indices = @Index(value = "title", unique = true))
+@Entity(indices = @Index(value = "newsId", unique = true))
 @TypeConverters({DateConverter.class})
 public class NewsItem {
     @PrimaryKey(autoGenerate = true)
