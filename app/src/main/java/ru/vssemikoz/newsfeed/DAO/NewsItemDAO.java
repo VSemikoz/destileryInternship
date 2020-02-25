@@ -5,6 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -16,17 +17,23 @@ public interface NewsItemDAO {
     @Query("SELECT * FROM NewsItem")
     List<NewsItem> getAll();
 
-    @Query("SELECT * FROM NewsItem WHERE published_at < :first AND published_at > :second")
-    List<NewsItem> getNewsByDate(String first, String second);
-
     @Query("SELECT * FROM NewsItem WHERE category == :category")
     List<NewsItem> getNewsByCategory(String category);
+
+    @Query("SELECT * FROM NewsItem WHERE is_favorite == 1")
+    List<NewsItem> getFavoriteNews();
+
+    @Query("SELECT * FROM NewsItem WHERE is_favorite == 1 and category == :category")
+    List<NewsItem> getFavoriteNewsByCategory(String category);
 
     @Insert
     void insertAll(List<NewsItem> newsItems);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUnique(List<NewsItem> newsItems);
+
+    @Update
+    void update(NewsItem newsItem);
 
     @Query("DELETE FROM NewsItem")
     void deleteAll();
