@@ -14,19 +14,19 @@ import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 @TypeConverters({DateConverter.class})
 public class NewsItem {
     @PrimaryKey(autoGenerate = true)
-    public int newsId;
+    private int newsId;
     @ColumnInfo(name = "is_favorite")
-    public boolean isFavorite;
-    public String category;
-    public String author;
-    public String title;
-    public String description;
-    public String content;
-    public String url;
+    private boolean isFavorite;
+    private String category;
+    private String author;
+    private String title;
+    private String description;
+    private String content;
+    private String url;
     @ColumnInfo(name = "image_url")
-    public String imageUrl;
+    private String imageUrl;
     @ColumnInfo(name = "published_at")
-    public Date publishedAt;
+    private Date publishedAt;
 
     public NewsItem(){
 
