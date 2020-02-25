@@ -26,6 +26,8 @@ import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
 public class MainActivity extends AppCompatActivity implements PickCategoryDialog.OnCategorySelectedListener {
+    String TAG = "MyLog";
+    boolean favoriteNewsState = false;
     Category category = Category.ALL;
     String KEY;
     MainApplication mainApplication;
@@ -44,9 +46,18 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         KEY = mainApplication.getKEY();
 
         ImageButton categoryButton = findViewById(R.id.ib_category);
+        ImageButton favoriteNewsButton = findViewById(R.id.ib_favorite);
         categoryButton.setOnClickListener(v -> {
             DialogFragment categoryDialog = new PickCategoryDialog();
             categoryDialog.show(getSupportFragmentManager(), "categoryDialog");
+        });
+        favoriteNewsButton.setOnClickListener(v -> {
+            favoriteNewsState = !favoriteNewsState;
+            Log.d(TAG, "onCreate: " + favoriteNewsState);
+            newsItemsFromDB = getNewsFromDB();
+            changeFavoriteIcon(favoriteNewsButton);
+            adapter.setNewsList(newsItemsFromDB);
+            adapter.notifyDataSetChanged();
         });
         initRecView();
         initNewsItemDAO();
@@ -54,28 +65,59 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         performCall();
     }
 
+    private void changeFavoriteIcon(ImageButton button) {
+        if (favoriteNewsState){
+            button.setImageResource(R.drawable.ic_star_yellow_48dp);
+        }else {
+            button.setImageResource(R.drawable.ic_star_white_48dp);
+        }
+    }
+
+    private List<NewsItem> getNewsFromDB() {
+        if (favoriteNewsState){
+            if (category == Category.ALL){
+                return newsItemDAO.getFavoriteNews();
+            }else{
+                return newsItemDAO.getFavoriteNewsByCategory(category.name());
+            }
+        }else{
+            if (category == Category.ALL){
+                return newsItemDAO.getAll();
+            }else{
+                return newsItemDAO.getNewsByCategory(category.name());
+            }
+        }
+    }
+
     private void initRecView(){
         recyclerView =  findViewById(R.id.rv_news_feed);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new NewsFeedAdapter(getApplicationContext());
+        adapter.setOnItemClickListener(this::changeFollowState);
+    }
+
+    private void changeFollowState(int position) {
+        NewsItem item = newsItemsFromDB.get(position);
+        item.invertFollowState();
+        newsItemDAO.update(item);
+        Log.d(TAG, "changeFollowState: " + item.isFavorite());
+        if (!item.isFavorite() && favoriteNewsState){
+            newsItemsFromDB.remove(position);
+            adapter.notifyItemRemoved(position);
+        }else {
+            adapter.notifyItemChanged(position);
+        }
     }
 
     private void initRecViewData(){
         newsItemsFromDB = getNewsFromDB();
-        adapter = new NewsFeedAdapter(getApplicationContext());
-        adapter.setNewsList( newsItemsFromDB);
+        adapter.setNewsList(newsItemsFromDB);
         recyclerView.setAdapter(adapter);
         Toast.makeText(getApplicationContext(),
                 "DBSize: " + newsItemsFromDB.size(),
                 Toast.LENGTH_LONG).show();
     }
 
-    private List<NewsItem> getNewsFromDB(){
-        if (category == Category.ALL){
-            return newsItemDAO.getAll();
-        } else {
-            return newsItemDAO.getNewsByCategory(category.name());
-        }
-    }
 
     private void performCall(){
         Call<NewsApiResponse> call;
