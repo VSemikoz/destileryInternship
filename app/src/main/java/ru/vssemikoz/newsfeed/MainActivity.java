@@ -169,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         performCall();
         updateCategoryNameOnToolBar();
     }
+
     private void updateCategoryNameOnToolBar(){
         TextView categoryTextView = findViewById(R.id.tv_category);
         categoryTextView.setText(Category.getCategoryName(category));
