@@ -2,26 +2,27 @@ package ru.vssemikoz.newsfeed.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
 import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
-@Entity(indices = @Index(value = "newsId", unique = true))
+@Entity( primaryKeys = {"title", "url"})
 @TypeConverters({DateConverter.class})
 public class NewsItem {
-    @PrimaryKey(autoGenerate = true)
-    private int newsId;
+
     @ColumnInfo(name = "is_favorite")
     private boolean isFavorite;
     private String category;
     private String author;
+    @NotNull
     private String title;
     private String description;
     private String content;
+    @NotNull
     private String url;
     @ColumnInfo(name = "image_url")
     private String imageUrl;
@@ -53,14 +54,6 @@ public class NewsItem {
         isFavorite = !isFavorite;
     }
 
-    public int getNewsId() {
-        return newsId;
-    }
-
-    public void setNewsId(int newsId) {
-        this.newsId = newsId;
-    }
-
     public String getAuthor() {
         return author;
     }
@@ -69,11 +62,12 @@ public class NewsItem {
         this.author = author;
     }
 
+    @NotNull
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(@NotNull String title) {
         this.title = title;
     }
 

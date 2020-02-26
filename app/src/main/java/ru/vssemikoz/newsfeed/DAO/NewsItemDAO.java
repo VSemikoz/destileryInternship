@@ -1,7 +1,6 @@
 package ru.vssemikoz.newsfeed.DAO;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -29,7 +28,7 @@ public interface NewsItemDAO {
     @Insert
     void insertAll(List<NewsItem> newsItems);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insertUnique(List<NewsItem> newsItems);
 
     @Update
