@@ -13,16 +13,16 @@ import ru.vssemikoz.newsfeed.models.NewsItem;
 @Dao
 public interface NewsItemDAO {
 
-    @Query("SELECT * FROM NewsItem")
+    @Query("SELECT * FROM NewsItem ORDER BY published_at DESC")
     List<NewsItem> getAll();
 
-    @Query("SELECT * FROM NewsItem WHERE category == :category")
+    @Query("SELECT * FROM NewsItem WHERE category == :category ORDER BY published_at DESC")
     List<NewsItem> getNewsByCategory(String category);
 
-    @Query("SELECT * FROM NewsItem WHERE is_favorite == 1")
+    @Query("SELECT * FROM NewsItem WHERE is_favorite == 1 ORDER BY published_at DESC")
     List<NewsItem> getFavoriteNews();
 
-    @Query("SELECT * FROM NewsItem WHERE is_favorite == 1 and category == :category")
+    @Query("SELECT * FROM NewsItem WHERE is_favorite == 1 and category == :category ORDER BY published_at DESC")
     List<NewsItem> getFavoriteNewsByCategory(String category);
 
     @Insert
