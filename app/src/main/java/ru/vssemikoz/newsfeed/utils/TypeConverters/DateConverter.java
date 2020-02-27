@@ -7,7 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateConverter {
-    final static String dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
+    private final static String dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
+    private final static String humanReadableFormat = "dd MMM yyyy HH:mm:ss";//Mon, 13 Apr 2015 22:59:26
 
     @TypeConverter
     public static String fromDate(Date date){
@@ -23,5 +24,9 @@ public class DateConverter {
             e.printStackTrace();
         }
         return date;
+    }
+
+    public static String fromDateToHumanReadable(Date date){
+        return new SimpleDateFormat(humanReadableFormat).format(date);
     }
 }
