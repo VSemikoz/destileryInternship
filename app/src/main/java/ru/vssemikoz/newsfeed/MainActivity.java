@@ -25,7 +25,8 @@ import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.models.NewsStorage;
+import ru.vssemikoz.newsfeed.storage.ApiStorage;
+import ru.vssemikoz.newsfeed.storage.NewsStorage;
 
 public class MainActivity extends AppCompatActivity implements PickCategoryDialog.OnCategorySelectedListener {
     private String TAG = "MyLog";
@@ -109,14 +110,16 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     }
 
     private void performCall(){
-        Call<NewsApiResponse> call;
-        if (category == Category.ALL){
-            call = mainApplication.getNewsApi().getNews("ru", KEY);
-        }else {
-            call = mainApplication.getNewsApi().
-                    getNewsByCategory("ru", KEY, category.name());
-        }
-        call.enqueue(callbackNewsItemList);
+        ApiStorage apiStorage = new ApiStorage(mainApplication);
+        apiStorage.getNewsFromApi(category, callbackNewsItemList);
+//        Call<NewsApiResponse> call;
+//        if (category == Category.ALL){
+//            call = mainApplication.getNewsApi().getNews("ru", KEY);
+//        }else {
+//            call = mainApplication.getNewsApi().
+//                    getNewsByCategory("ru", KEY, category.name());
+//        }
+//        call.enqueue(callbackNewsItemList);
     }
 
     private void initNewsStorage() {
