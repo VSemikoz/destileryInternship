@@ -27,17 +27,16 @@ import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
 public class MainActivity extends AppCompatActivity implements PickCategoryDialog.OnCategorySelectedListener {
-    String TAG = "MyLog";
-    boolean favoriteNewsState = false;
-    Category category = Category.ALL;
-    String KEY;
-    MainApplication mainApplication;
-    NewsItemDAO newsItemDAO;
-    Callback<NewsApiResponse> callbackNewsItemList;
-    List<NewsApiResponseItem> newsApiResponseItems = new ArrayList<>();
-    List<NewsItem> newsItemsFromDB = new ArrayList<>();
-    NewsFeedAdapter adapter;
-    RecyclerView recyclerView;
+    private String TAG = "MyLog";
+    private boolean favoriteNewsState = false;
+    private Category category = Category.ALL;
+    private String KEY;
+    private MainApplication mainApplication;
+    private NewsItemDAO newsItemDAO;
+    private Callback<NewsApiResponse> callbackNewsItemList;
+    private List<NewsItem> newsItemsFromDB = new ArrayList<>();
+    private NewsFeedAdapter adapter;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
     private List<NewsItem> getNewsItemListByResponse(Response<NewsApiResponse> response, Category category){
         List<NewsItem> news = new ArrayList<>();
-        newsApiResponseItems = Objects.requireNonNull(response.body()).getNewsApiResponseItemList();
+        List<NewsApiResponseItem> newsApiResponseItems = Objects.requireNonNull(response.body()).getNewsApiResponseItemList();
         for (NewsApiResponseItem newsApiResponseItem : newsApiResponseItems){
             news.add(new NewsItem(newsApiResponseItem, category));
         }
