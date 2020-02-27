@@ -26,7 +26,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
     private onItemClickListener mListener;
 
     public interface onItemClickListener{
-        void onFollowClick(int position);
+        void onChangeFavoriteStateClick(int position);
     }
 
     public void  setOnItemClickListener(onItemClickListener listener){
@@ -54,14 +54,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         NewsItem newsItem = newsList.get(position);
         holder.title.setText(newsItem.getTitle());
         holder.description.setText(newsItem.getDescription());
-        holder.followState = newsItem.isFavorite();
+        holder.favoriteState = newsItem.isFavorite();
 
-        if (holder.followState){
-            holder.followButton.setImageDrawable(mainApplication.getYellowStarWithBorders());
-//            holder.followButton.setImageResource(R.drawable.ic_favorite_red_48dp);
+        if (holder.favoriteState){
+            holder.changeFavoriteStateButton.setImageDrawable(mainApplication.getYellowStarWithBorders());
         }else {
-            holder.followButton.setImageDrawable(mainApplication.getWhiteStarWithBorders());
-//            holder.followButton.setImageResource(R.drawable.ic_favorite_white_48dp);
+            holder.changeFavoriteStateButton.setImageDrawable(mainApplication.getWhiteStarWithBorders());
         }
 
         if (newsItem.getImageUrl() != null){
@@ -77,25 +75,25 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
     }
 
     public class NewsViewHolder extends RecyclerView.ViewHolder{
-        boolean followState;
+        boolean favoriteState;
         final ImageView imageView;
         final TextView title;
         final TextView description;
-        final ImageButton followButton;
+        final ImageButton changeFavoriteStateButton;
 
         public NewsViewHolder(View view, onItemClickListener listener) {
             super(view);
             imageView = view.findViewById(R.id.iv_image);
             title =  view.findViewById(R.id.tv_title);
             description =  view.findViewById(R.id.tv_description);
-            followButton = view.findViewById(R.id.ib_follow);
+            changeFavoriteStateButton = view.findViewById(R.id.ib_change_favorite_state);
 
-            followButton.setOnClickListener(v -> {
+            changeFavoriteStateButton.setOnClickListener(v -> {
                 if (listener != null){
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        listener.onFollowClick(position);
-                        followState = !followState;
+                        listener.onChangeFavoriteStateClick(position);
+                        favoriteState = !favoriteState;
                     }
                 }
             });
