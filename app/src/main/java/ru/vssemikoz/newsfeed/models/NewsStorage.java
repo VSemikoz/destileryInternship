@@ -12,10 +12,6 @@ public class NewsStorage {
         this.newsItemDAO = newsItemDAO;
     }
 
-    public NewsItemDAO getNewsItemDAO() {
-        return newsItemDAO;
-    }
-
     public List<NewsItem> getNewsFromDB(boolean favoriteNewsState, Category category) {
         if (favoriteNewsState){
             if (category == Category.ALL){
