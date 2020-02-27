@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     private String TAG = "MyLog";
     private boolean favoriteNewsState = false;
     private Category category = Category.ALL;
-    private String KEY;
     private MainApplication mainApplication;
     private NewsStorage newsStorage;
     private Callback<NewsApiResponse> callbackNewsItemList;
@@ -45,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mainApplication = (MainApplication) getApplicationContext();
-        KEY = mainApplication.getKEY();
 
         ImageButton categoryButton = findViewById(R.id.ib_category);
         ImageButton favoriteNewsButton = findViewById(R.id.ib_favorite);
