@@ -25,6 +25,7 @@ import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
+import ru.vssemikoz.newsfeed.models.NewsStorage;
 
 public class MainActivity extends AppCompatActivity implements PickCategoryDialog.OnCategorySelectedListener {
     private String TAG = "MyLog";
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     private Category category = Category.ALL;
     private String KEY;
     private MainApplication mainApplication;
-    private NewsItemDAO newsItemDAO;
+    private NewsStorage newsStorage;
     private Callback<NewsApiResponse> callbackNewsItemList;
     private List<NewsItem> newsItemsFromDB = new ArrayList<>();
     private NewsFeedAdapter adapter;
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         });
         updateCategoryNameOnToolBar();
         initRecView();
-        initNewsItemDAO();
+        initNewsStorage();
         initNewsItemListCallback();
         performCall();
     }
@@ -75,19 +76,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     }
 
     private List<NewsItem> getNewsFromDB() {
-        if (favoriteNewsState){
-            if (category == Category.ALL){
-                return newsItemDAO.getFavoriteNews();
-            }else{
-                return newsItemDAO.getFavoriteNewsByCategory(category.name());
-            }
-        }else{
-            if (category == Category.ALL){
-                return newsItemDAO.getAll();
-            }else{
-                return newsItemDAO.getNewsByCategory(category.name());
-            }
-        }
+        return newsStorage.getNewsFromDB(favoriteNewsState, category);
     }
 
     private void initRecView(){
@@ -100,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     private void changeFollowState(int position) {
         NewsItem item = newsItemsFromDB.get(position);
         item.invertFollowState();
-        newsItemDAO.update(item);
+        newsStorage.updateNews(item);
         Log.d(TAG, "changeFollowState: " + item.isFavorite());
         if (!item.isFavorite() && favoriteNewsState){
             newsItemsFromDB.remove(position);
@@ -119,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
                 Toast.LENGTH_LONG).show();
     }
 
-
     private void performCall(){
         Call<NewsApiResponse> call;
         if (category == Category.ALL){
@@ -131,8 +119,9 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         call.enqueue(callbackNewsItemList);
     }
 
-    private void initNewsItemDAO() {
-        newsItemDAO = mainApplication.getNewsDataBase().newsItemDAO();
+    private void initNewsStorage() {
+        NewsItemDAO newsItemDAO = mainApplication.getNewsDataBase().newsItemDAO();
+        newsStorage = new NewsStorage(newsItemDAO);
     }
 
     private void initNewsItemListCallback(){
@@ -143,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
                     Log.d("MyLog", "onResponse " + response.code());
                     return;
                 }
-                newsItemDAO.insertUnique(getNewsItemListByResponse(response, category));
+                newsStorage.insertUnique(getNewsItemListByResponse(response, category));
                 initRecViewData();
             }
             @Override
