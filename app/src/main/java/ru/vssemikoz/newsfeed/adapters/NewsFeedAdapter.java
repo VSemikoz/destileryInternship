@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.models.NewsItem;
+import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsViewHolder> {
     private List<NewsItem> newsList;
@@ -52,6 +54,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         holder.title.setText(newsItem.getTitle());
         holder.description.setText(newsItem.getDescription());
         holder.followState = newsItem.isFavorite();
+        holder.dateTime.setText(DateConverter.fromDateToHumanReadable(newsItem.getPublishedAt())
+        );
 
         if (holder.followState){
             holder.followButton.setImageResource(R.drawable.ic_favorite_red_48dp);
@@ -77,6 +81,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         final TextView title;
         final TextView description;
         final ImageButton followButton;
+        final TextView dateTime;
 
         public NewsViewHolder(View view, onItemClickListener listener) {
             super(view);
@@ -84,6 +89,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
             title =  view.findViewById(R.id.tv_title);
             description =  view.findViewById(R.id.tv_description);
             followButton = view.findViewById(R.id.ib_follow);
+            dateTime = view.findViewById(R.id.et_datetime);
 
             followButton.setOnClickListener(v -> {
                 if (listener != null){
