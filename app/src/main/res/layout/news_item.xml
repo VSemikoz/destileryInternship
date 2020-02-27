@@ -45,7 +45,7 @@
         tools:text="@tools:sample/lorem" />
 
     <ImageButton
-        android:id="@+id/ib_follow"
+        android:id="@+id/ib_change_favorite_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
@@ -54,8 +54,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
         app:layout_constraintVertical_bias="0.95"
-        app:layout_constraintHorizontal_bias="0.95"
-        app:srcCompat="@drawable/ic_favorite_white_48dp" />
+        app:layout_constraintHorizontal_bias="0.95"/>
 
     <TextView
         android:id="@+id/et_datetime"
