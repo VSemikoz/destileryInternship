@@ -9,6 +9,7 @@
     <dimen name="news_picture_height">160dp</dimen>
     <dimen name="category_height">60dp</dimen>
     <dimen name="buttons_height">40dp</dimen>
+    <dimen name="divider_height">4dp</dimen>
 
     <dimen name="text_size_title">24sp</dimen>
     <dimen name="text_size_description">16sp</dimen>
