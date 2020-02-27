@@ -48,10 +48,10 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
 
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
-        NewsItem newsApiResponseItem = newsList.get(position);
-        holder.title.setText(newsApiResponseItem.getTitle());
-        holder.description.setText(newsApiResponseItem.getDescription());
-        holder.followState = newsApiResponseItem.isFavorite();
+        NewsItem newsItem = newsList.get(position);
+        holder.title.setText(newsItem.getTitle());
+        holder.description.setText(newsItem.getDescription());
+        holder.followState = newsItem.isFavorite();
 
         if (holder.followState){
             holder.followButton.setImageResource(R.drawable.ic_favorite_red_48dp);
@@ -59,9 +59,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
             holder.followButton.setImageResource(R.drawable.ic_favorite_white_48dp);
         }
 
-        if (newsApiResponseItem.getImageUrl() != null){
+        if (newsItem.getImageUrl() != null){
             Picasso.with(context)
-                    .load(newsApiResponseItem.getImageUrl())
+                    .load(newsItem.getImageUrl())
                     .into(holder.imageView);
         }
     }
