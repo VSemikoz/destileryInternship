@@ -5,6 +5,9 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
@@ -82,7 +85,17 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         recyclerView =  findViewById(R.id.rv_news_feed);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new NewsFeedAdapter(getApplicationContext());
-        adapter.setOnItemClickListener(this::changeFavoriteState);
+        adapter.setOnItemClickListener(new NewsFeedAdapter.onItemClickListener() {
+            @Override
+            public void onFollowClick(int position) {
+                changeFavoriteState(position);
+            }
+
+            @Override
+            public void onNewsImageClick(int position) {
+                showNewsInBrowserByUrl(position);
+            }
+        });
     }
 
     private void changeFavoriteState(int position) {
@@ -95,6 +108,20 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
             adapter.notifyItemRemoved(position);
         }else {
             adapter.notifyItemChanged(position);
+        }
+    }
+
+    private void showNewsInBrowserByUrl(int position){
+        NewsItem item = newsItemsFromDB.get(position);
+        String urlString = item.getUrl();
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlString));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setPackage("com.android.chrome");
+        try {
+            getApplicationContext().startActivity(intent);
+        } catch (ActivityNotFoundException ex) {
+            intent.setPackage(null);
+            getApplicationContext().startActivity(intent);
         }
     }
 
