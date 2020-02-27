@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
@@ -22,10 +23,11 @@ import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsViewHolder> {
     private List<NewsItem> newsList;
     private Context context;
+    private MainApplication mainApplication;
     private onItemClickListener mListener;
 
     public interface onItemClickListener{
-        void onFollowClick(int position);
+        void onChangeFavoriteStateClick(int position);
         void onNewsImageClick(int position);
     }
 
@@ -33,8 +35,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         this.mListener = listener;
     }
 
-    public NewsFeedAdapter(Context context){
+    public NewsFeedAdapter(Context context, MainApplication mainApplication){
         this.context = context;
+        this.mainApplication = mainApplication;
     }
 
     public void setNewsList(List<NewsItem> newsList) {
@@ -53,14 +56,15 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         NewsItem newsItem = newsList.get(position);
         holder.title.setText(newsItem.getTitle());
         holder.description.setText(newsItem.getDescription());
-        holder.followState = newsItem.isFavorite();
+        holder.favoriteState = newsItem.isFavorite();
+
         holder.dateTime.setText(DateConverter.fromDateToHumanReadable(newsItem.getPublishedAt())
         );
 
-        if (holder.followState){
-            holder.followButton.setImageResource(R.drawable.ic_favorite_red_48dp);
+        if (holder.favoriteState){
+            holder.changeFavoriteStateButton.setImageDrawable(mainApplication.getYellowStarWithBorders());
         }else {
-            holder.followButton.setImageResource(R.drawable.ic_favorite_white_48dp);
+            holder.changeFavoriteStateButton.setImageDrawable(mainApplication.getWhiteStarWithBorders());
         }
 
         if (newsItem.getImageUrl() != null){
@@ -76,27 +80,27 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
     }
 
     public class NewsViewHolder extends RecyclerView.ViewHolder{
-        boolean followState;
+        boolean favoriteState;
         final ImageView imageView;
         final TextView title;
         final TextView description;
-        final ImageButton followButton;
         final TextView dateTime;
+        final ImageButton changeFavoriteStateButton;
 
         public NewsViewHolder(View view, onItemClickListener listener) {
             super(view);
             imageView = view.findViewById(R.id.iv_news_image);
             title =  view.findViewById(R.id.tv_title);
             description =  view.findViewById(R.id.tv_description);
-            followButton = view.findViewById(R.id.ib_follow);
             dateTime = view.findViewById(R.id.et_datetime);
+            changeFavoriteStateButton = view.findViewById(R.id.ib_change_favorite_state);
 
-            followButton.setOnClickListener(v -> {
+            changeFavoriteStateButton.setOnClickListener(v -> {
                 if (listener != null){
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        listener.onFollowClick(position);
-                        followState = !followState;
+                        listener.onChangeFavoriteStateClick(position);
+                        favoriteState = !favoriteState;
                     }
                 }
             });

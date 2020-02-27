@@ -50,6 +50,8 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
         ImageButton categoryButton = findViewById(R.id.ib_category);
         ImageButton favoriteNewsButton = findViewById(R.id.ib_favorite);
+        favoriteNewsButton.setImageDrawable(mainApplication.getWhiteStarWithoutBorders());
+
         categoryButton.setOnClickListener(v -> {
             DialogFragment categoryDialog = new PickCategoryDialog();
             categoryDialog.show(getSupportFragmentManager(), "categoryDialog");
@@ -71,9 +73,9 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
     private void changeFavoriteIcon(ImageButton button) {
         if (favoriteNewsState){
-            button.setImageResource(R.drawable.ic_star_yellow_48dp);
+            button.setImageDrawable(mainApplication.getYellowStarWithoutBorders());
         }else {
-            button.setImageResource(R.drawable.ic_star_white_48dp);
+            button.setImageDrawable(mainApplication.getWhiteStarWithoutBorders());
         }
     }
 
@@ -84,10 +86,10 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     private void initRecView(){
         recyclerView =  findViewById(R.id.rv_news_feed);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new NewsFeedAdapter(getApplicationContext());
+        adapter = new NewsFeedAdapter(getApplicationContext(), mainApplication);
         adapter.setOnItemClickListener(new NewsFeedAdapter.onItemClickListener() {
             @Override
-            public void onFollowClick(int position) {
+            public void onChangeFavoriteStateClick(int position) {
                 changeFavoriteState(position);
             }
 
@@ -137,14 +139,6 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     private void performCall(){
         ApiStorage apiStorage = new ApiStorage(mainApplication);
         apiStorage.getNewsFromApi(category, callbackNewsItemList);
-//        Call<NewsApiResponse> call;
-//        if (category == Category.ALL){
-//            call = mainApplication.getNewsApi().getNews("ru", KEY);
-//        }else {
-//            call = mainApplication.getNewsApi().
-//                    getNewsByCategory("ru", KEY, category.name());
-//        }
-//        call.enqueue(callbackNewsItemList);
     }
 
     private void initNewsStorage() {
