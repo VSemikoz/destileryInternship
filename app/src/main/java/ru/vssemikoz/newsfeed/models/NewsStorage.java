@@ -35,4 +35,8 @@ public class NewsStorage {
     public void insertUnique(List<NewsItem> newsItems){
         newsItemDAO.insertUnique(newsItems);
     }
+
+    public void deleteAllNewsFromDB(){
+        newsItemDAO.deleteAll();
+    }
 }
