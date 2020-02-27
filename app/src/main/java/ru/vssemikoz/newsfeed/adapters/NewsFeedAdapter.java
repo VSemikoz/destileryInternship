@@ -15,12 +15,14 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsViewHolder> {
     private List<NewsItem> newsList;
     private Context context;
+    private MainApplication mainApplication;
     private onItemClickListener mListener;
 
     public interface onItemClickListener{
@@ -31,8 +33,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         this.mListener = listener;
     }
 
-    public NewsFeedAdapter(Context context){
+    public NewsFeedAdapter(Context context, MainApplication mainApplication){
         this.context = context;
+        this.mainApplication = mainApplication;
     }
 
     public void setNewsList(List<NewsItem> newsList) {
@@ -54,9 +57,11 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         holder.followState = newsItem.isFavorite();
 
         if (holder.followState){
-            holder.followButton.setImageResource(R.drawable.ic_favorite_red_48dp);
+            holder.followButton.setImageDrawable(mainApplication.getYellowStarWithBorders());
+//            holder.followButton.setImageResource(R.drawable.ic_favorite_red_48dp);
         }else {
-            holder.followButton.setImageResource(R.drawable.ic_favorite_white_48dp);
+            holder.followButton.setImageDrawable(mainApplication.getWhiteStarWithBorders());
+//            holder.followButton.setImageResource(R.drawable.ic_favorite_white_48dp);
         }
 
         if (newsItem.getImageUrl() != null){
