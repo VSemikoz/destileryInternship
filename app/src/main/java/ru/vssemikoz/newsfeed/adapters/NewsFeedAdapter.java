@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,6 +26,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
 
     public interface onItemClickListener{
         void onFollowClick(int position);
+        void onNewsImageClick(int position);
     }
 
     public void  setOnItemClickListener(onItemClickListener listener){
@@ -85,7 +85,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
 
         public NewsViewHolder(View view, onItemClickListener listener) {
             super(view);
-            imageView = view.findViewById(R.id.iv_image);
+            imageView = view.findViewById(R.id.iv_news_image);
             title =  view.findViewById(R.id.tv_title);
             description =  view.findViewById(R.id.tv_description);
             followButton = view.findViewById(R.id.ib_follow);
@@ -97,6 +97,15 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
                     if (position != RecyclerView.NO_POSITION) {
                         listener.onFollowClick(position);
                         followState = !followState;
+                    }
+                }
+            });
+
+            imageView.setOnClickListener(v -> {
+                if (listener != null){
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onNewsImageClick(position);
                     }
                 }
             });
