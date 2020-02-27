@@ -82,14 +82,14 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         recyclerView =  findViewById(R.id.rv_news_feed);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new NewsFeedAdapter(getApplicationContext());
-        adapter.setOnItemClickListener(this::changeFollowState);
+        adapter.setOnItemClickListener(this::changeFavoriteState);
     }
 
-    private void changeFollowState(int position) {
+    private void changeFavoriteState(int position) {
         NewsItem item = newsItemsFromDB.get(position);
-        item.invertFollowState();
+        item.invertFavoriteState();
         newsStorage.updateNews(item);
-        Log.d(TAG, "changeFollowState: " + item.isFavorite());
+        Log.d(TAG, "changeFavoriteState: " + item.isFavorite());
         if (!item.isFavorite() && favoriteNewsState){
             newsItemsFromDB.remove(position);
             adapter.notifyItemRemoved(position);
