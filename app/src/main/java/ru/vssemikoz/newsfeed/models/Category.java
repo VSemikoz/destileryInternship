@@ -25,7 +25,7 @@ public enum Category {
 
     @Override
     public String toString() {
-        return MainApplication.getmContext().getString(categoryId);
+        return MainApplication.getContext().getString(categoryId);
     }
 
     public static String[] getCategoryNameList(){

@@ -47,7 +47,7 @@ public class MainApplication extends Application {
         return whiteStarWithBorders;
     }
 
-    public static Context getmContext() {
+    public static Context getContext() {
         return mContext;
     }
 
