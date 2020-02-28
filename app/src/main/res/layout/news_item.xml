@@ -7,9 +7,9 @@
 
 
     <ImageView
-        android:id="@+id/iv_image"
+        android:id="@+id/iv_news_image"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/news_picture_height"
+        android:layout_height="@dimen/news_feed_item_picture_height"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,10 +24,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_8dp"
         android:textColor="@color/colorText"
-        android:textSize="@dimen/text_size_title"
-        app:layout_constraintBottom_toTopOf="@+id/iv_image"
-        app:layout_constraintEnd_toEndOf="@+id/iv_image"
-        app:layout_constraintStart_toStartOf="@+id/iv_image"
+        android:textSize="@dimen/newsfeed_item_text_size_title"
+        app:layout_constraintBottom_toTopOf="@+id/iv_news_image"
+        app:layout_constraintEnd_toEndOf="@+id/iv_news_image"
+        app:layout_constraintStart_toStartOf="@+id/iv_news_image"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem" />
 
@@ -37,11 +37,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_8dp"
         android:textColor="@color/colorText"
-        android:textSize="@dimen/text_size_description"
+        android:textSize="@dimen/newsfeed_item_text_size_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_image"
+        app:layout_constraintTop_toBottomOf="@+id/iv_news_image"
         tools:text="@tools:sample/lorem" />
 
     <ImageButton
@@ -49,11 +49,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_image"
-        app:layout_constraintEnd_toEndOf="@+id/iv_image"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_news_image"
+        app:layout_constraintEnd_toEndOf="@+id/iv_news_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
         app:layout_constraintVertical_bias="0.95"
         app:layout_constraintHorizontal_bias="0.95"/>
+
+    <TextView
+        android:id="@+id/et_datetime"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:ems="10"
+        app:layout_constraintBottom_toTopOf="@+id/tv_title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:text="@tools:sample/date/ddmmyy"/>
+
+    <View
+        android:id="@+id/v_divider"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/news_feed_item_divider_height"
+        app:layout_constraintTop_toBottomOf="@+id/tv_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/colorPrimaryDark"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

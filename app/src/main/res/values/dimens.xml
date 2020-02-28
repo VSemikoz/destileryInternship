@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="match_constraint">0dp</dimen>
-
-    <dimen name="margin_0dp">0dp</dimen>
     <dimen name="margin_8dp">8dp</dimen>
     <dimen name="margin_16dp">16dp</dimen>
 
-    <dimen name="news_picture_height">160dp</dimen>
-    <dimen name="category_height">60dp</dimen>
-    <dimen name="buttons_height">40dp</dimen>
+    <dimen name="news_feed_item_picture_height">160dp</dimen>
+    <dimen name="news_feed_item_divider_height">4dp</dimen>
+    <dimen name="toolbar_height">60dp</dimen>
 
-    <dimen name="text_size_title">24sp</dimen>
-    <dimen name="text_size_description">16sp</dimen>
+    <dimen name="newsfeed_item_text_size_title">24sp</dimen>
+    <dimen name="newsfeed_item_text_size_description">16sp</dimen>
+    <dimen name="newsfeed_text_size_category">16sp</dimen>
 
 </resources>

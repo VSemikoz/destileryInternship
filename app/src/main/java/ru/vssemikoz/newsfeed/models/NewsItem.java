@@ -50,7 +50,7 @@ public class NewsItem {
         }
     }
 
-    public void invertFollowState(){
+    public void invertFavoriteState(){
         isFavorite = !isFavorite;
     }
 

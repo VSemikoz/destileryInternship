@@ -18,6 +18,7 @@ import java.util.List;
 import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.models.NewsItem;
+import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsViewHolder> {
     private List<NewsItem> newsList;
@@ -27,6 +28,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
 
     public interface onItemClickListener{
         void onChangeFavoriteStateClick(int position);
+        void onNewsImageClick(int position);
     }
 
     public void  setOnItemClickListener(onItemClickListener listener){
@@ -56,6 +58,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         holder.description.setText(newsItem.getDescription());
         holder.favoriteState = newsItem.isFavorite();
 
+        holder.dateTime.setText(DateConverter.fromDateToHumanReadable(newsItem.getPublishedAt())
+        );
+
         if (holder.favoriteState){
             holder.changeFavoriteStateButton.setImageDrawable(mainApplication.getYellowStarWithBorders());
         }else {
@@ -79,13 +84,15 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         final ImageView imageView;
         final TextView title;
         final TextView description;
+        final TextView dateTime;
         final ImageButton changeFavoriteStateButton;
 
         public NewsViewHolder(View view, onItemClickListener listener) {
             super(view);
-            imageView = view.findViewById(R.id.iv_image);
+            imageView = view.findViewById(R.id.iv_news_image);
             title =  view.findViewById(R.id.tv_title);
             description =  view.findViewById(R.id.tv_description);
+            dateTime = view.findViewById(R.id.et_datetime);
             changeFavoriteStateButton = view.findViewById(R.id.ib_change_favorite_state);
 
             changeFavoriteStateButton.setOnClickListener(v -> {
@@ -94,6 +101,15 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
                     if (position != RecyclerView.NO_POSITION) {
                         listener.onChangeFavoriteStateClick(position);
                         favoriteState = !favoriteState;
+                    }
+                }
+            });
+
+            imageView.setOnClickListener(v -> {
+                if (listener != null){
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onNewsImageClick(position);
                     }
                 }
             });
