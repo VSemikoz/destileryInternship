@@ -32,7 +32,7 @@ import ru.vssemikoz.newsfeed.storage.ApiStorage;
 import ru.vssemikoz.newsfeed.storage.NewsStorage;
 
 public class MainActivity extends AppCompatActivity implements PickCategoryDialog.OnCategorySelectedListener {
-    private String TAG = "MyLog";
+    private String TAG = MainActivity.class.getSimpleName();
     private boolean favoriteNewsState = false;
     private Category category = Category.ALL;
     private MainApplication mainApplication;
