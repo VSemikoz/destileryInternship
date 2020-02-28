@@ -26,16 +26,17 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
     private MainApplication mainApplication;
     private onItemClickListener mListener;
 
-    public interface onItemClickListener{
+    public interface onItemClickListener {
         void onChangeFavoriteStateClick(int position);
+
         void onNewsImageClick(int position);
     }
 
-    public void  setOnItemClickListener(onItemClickListener listener){
+    public void setOnItemClickListener(onItemClickListener listener) {
         this.mListener = listener;
     }
 
-    public NewsFeedAdapter(Context context, MainApplication mainApplication){
+    public NewsFeedAdapter(Context context, MainApplication mainApplication) {
         this.context = context;
         this.mainApplication = mainApplication;
     }
@@ -61,13 +62,13 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         holder.dateTime.setText(DateConverter.fromDateToHumanReadable(newsItem.getPublishedAt())
         );
 
-        if (holder.favoriteState){
+        if (holder.favoriteState) {
             holder.changeFavoriteStateButton.setImageDrawable(mainApplication.getYellowStarWithBorders());
-        }else {
+        } else {
             holder.changeFavoriteStateButton.setImageDrawable(mainApplication.getWhiteStarWithBorders());
         }
 
-        if (newsItem.getImageUrl() != null){
+        if (newsItem.getImageUrl() != null) {
             Picasso.with(context)
                     .load(newsItem.getImageUrl())
                     .into(holder.imageView);
@@ -79,7 +80,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         return newsList.size();
     }
 
-    public class NewsViewHolder extends RecyclerView.ViewHolder{
+    public class NewsViewHolder extends RecyclerView.ViewHolder {
         boolean favoriteState;
         final ImageView imageView;
         final TextView title;
@@ -90,13 +91,13 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         public NewsViewHolder(View view, onItemClickListener listener) {
             super(view);
             imageView = view.findViewById(R.id.iv_news_image);
-            title =  view.findViewById(R.id.tv_title);
-            description =  view.findViewById(R.id.tv_description);
+            title = view.findViewById(R.id.tv_title);
+            description = view.findViewById(R.id.tv_description);
             dateTime = view.findViewById(R.id.et_datetime);
             changeFavoriteStateButton = view.findViewById(R.id.ib_change_favorite_state);
 
             changeFavoriteStateButton.setOnClickListener(v -> {
-                if (listener != null){
+                if (listener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         listener.onChangeFavoriteStateClick(position);
@@ -106,7 +107,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
             });
 
             imageView.setOnClickListener(v -> {
-                if (listener != null){
+                if (listener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         listener.onNewsImageClick(position);

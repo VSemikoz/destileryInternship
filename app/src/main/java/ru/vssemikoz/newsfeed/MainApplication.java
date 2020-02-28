@@ -61,7 +61,7 @@ public class MainApplication extends Application {
         initNewsDataBase(this);
     }
 
-    void initDrawableRes(){
+    void initDrawableRes() {
         whiteStarWithoutBorders = new IconicsDrawable(this)
                 .icon(GoogleMaterial.Icon.gmd_star)
                 .color(IconicsColor.colorInt(Color.WHITE))
@@ -87,18 +87,18 @@ public class MainApplication extends Application {
                 .contourWidth(IconicsSize.dp(2));
     }
 
-    void initRetrofit(){
+    void initRetrofit() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(MAIN_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
-    void initNewsApi(){
+    void initNewsApi() {
         newsApi = retrofit.create(NewsApi.class);
     }
 
-    void initNewsDataBase(Context context){
+    void initNewsDataBase(Context context) {
         newsDataBase = Room.databaseBuilder(context, NewsAppDataBase.class, "news_data_base")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
@@ -113,7 +113,7 @@ public class MainApplication extends Application {
         return KEY;
     }
 
-    public NewsAppDataBase getNewsDataBase(){
+    public NewsAppDataBase getNewsDataBase() {
         return newsDataBase;
     }
 }

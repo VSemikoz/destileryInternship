@@ -10,7 +10,7 @@ import java.util.Date;
 
 import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
-@Entity( primaryKeys = {"title", "url"})
+@Entity(primaryKeys = {"title", "url"})
 @TypeConverters({DateConverter.class})
 public class NewsItem {
 
@@ -29,11 +29,11 @@ public class NewsItem {
     @ColumnInfo(name = "published_at")
     private Date publishedAt;
 
-    public NewsItem(){
+    public NewsItem() {
 
     }
 
-    public NewsItem(NewsApiResponseItem newsApiResponseItem, Category category){
+    public NewsItem(NewsApiResponseItem newsApiResponseItem, Category category) {
         this.isFavorite = false;
         this.author = newsApiResponseItem.getAuthor();
         this.title = newsApiResponseItem.getTitle();
@@ -43,14 +43,14 @@ public class NewsItem {
         this.imageUrl = newsApiResponseItem.getImageUrl();
         this.publishedAt = DateConverter.fromString(newsApiResponseItem.getPublishedAt());
 
-        if (category == null){
+        if (category == null) {
             this.category = "";
-        }else {
+        } else {
             this.category = category.name();
         }
     }
 
-    public void invertFavoriteState(){
+    public void invertFavoriteState() {
         isFavorite = !isFavorite;
     }
 

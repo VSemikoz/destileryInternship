@@ -14,15 +14,15 @@ public class ApiStorage {
         this.mainApplication = mainApplication;
     }
 
-    public void getNewsFromApi(Category category,  Callback<NewsApiResponse> callback){
+    public void getNewsFromApi(Category category, Callback<NewsApiResponse> callback) {
         Call<NewsApiResponse> call;
         String KEY = mainApplication.getKEY();
 
-        if (category == Category.ALL){
+        if (category == Category.ALL) {
             call = mainApplication
                     .getNewsApi()
                     .getNews("ru", KEY);
-        }else {
+        } else {
             call = mainApplication.getNewsApi().
                     getNewsByCategory("ru", KEY, category.name());
         }

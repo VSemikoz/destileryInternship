@@ -72,9 +72,9 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     }
 
     private void changeFavoriteIcon(ImageButton button) {
-        if (showOnlyFavoriteNews){
+        if (showOnlyFavoriteNews) {
             button.setImageDrawable(mainApplication.getYellowStarWithoutBorders());
-        }else {
+        } else {
             button.setImageDrawable(mainApplication.getWhiteStarWithoutBorders());
         }
     }
@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         return newsStorage.getNewsFromDB(showOnlyFavoriteNews, category);
     }
 
-    private void initRecView(){
-        recyclerView =  findViewById(R.id.rv_news_feed);
+    private void initRecView() {
+        recyclerView = findViewById(R.id.rv_news_feed);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new NewsFeedAdapter(getApplicationContext(), mainApplication);
         adapter.setOnItemClickListener(new NewsFeedAdapter.onItemClickListener() {
@@ -105,15 +105,15 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         item.invertFavoriteState();
         newsStorage.updateNews(item);
         Log.d(TAG, "changeFavoriteState: " + item.isFavorite());
-        if (!item.isFavorite() && showOnlyFavoriteNews){
+        if (!item.isFavorite() && showOnlyFavoriteNews) {
             news.remove(position);
             adapter.notifyItemRemoved(position);
-        }else {
+        } else {
             adapter.notifyItemChanged(position);
         }
     }
 
-    private void showNewsInBrowserByUrl(int position){
+    private void showNewsInBrowserByUrl(int position) {
         NewsItem item = news.get(position);
         String url = item.getUrl();
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         }
     }
 
-    private void initRecycleViewData(){
+    private void initRecycleViewData() {
         news = getNewsFromDB();
         adapter.setNewsList(news);
         recyclerView.setAdapter(adapter);
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
                 Toast.LENGTH_LONG).show();
     }
 
-    private void performCall(){
+    private void performCall() {
         ApiStorage apiStorage = new ApiStorage(mainApplication);
         apiStorage.getNewsFromApi(category, callbackNewsItemList);
     }
@@ -146,17 +146,18 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         newsStorage = new NewsStorage(newsItemDAO);
     }
 
-    private void initNewsItemListCallback(){
+    private void initNewsItemListCallback() {
         callbackNewsItemList = new Callback<NewsApiResponse>() {
             @Override
             public void onResponse(Call<NewsApiResponse> call, Response<NewsApiResponse> response) {
-                if (!response.isSuccessful()){
+                if (!response.isSuccessful()) {
                     Log.d("MyLog", "onResponse " + response.code());
                     return;
                 }
                 newsStorage.insertUnique(getNewsItemListByResponse(response, category));
                 initRecycleViewData();
             }
+
             @Override
             public void onFailure(Call<NewsApiResponse> call, Throwable t) {
                 Log.d("MyLog", "onFailure " + Objects.requireNonNull(t.getMessage()));
@@ -164,10 +165,10 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         };
     }
 
-    private List<NewsItem> getNewsItemListByResponse(Response<NewsApiResponse> response, Category category){
+    private List<NewsItem> getNewsItemListByResponse(Response<NewsApiResponse> response, Category category) {
         List<NewsItem> news = new ArrayList<>();
         List<NewsApiResponseItem> newsApiResponseItems = Objects.requireNonNull(response.body()).getNewsApiResponseItemList();
-        for (NewsApiResponseItem newsApiResponseItem : newsApiResponseItems){
+        for (NewsApiResponseItem newsApiResponseItem : newsApiResponseItems) {
             news.add(new NewsItem(newsApiResponseItem, category));
         }
         return news;
@@ -180,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         updateCategoryNameOnToolBar();
     }
 
-    private void updateCategoryNameOnToolBar(){
+    private void updateCategoryNameOnToolBar() {
         TextView categoryTextView = findViewById(R.id.tv_category);
         categoryTextView.setText(Category.getCategoryName(category));
     }

@@ -16,6 +16,7 @@ public class PickCategoryDialog extends DialogFragment {
     public interface OnCategorySelectedListener {
         void onCategorySelected(Category selectCategory);
     }
+
     private OnCategorySelectedListener nListener;
 
     @NonNull

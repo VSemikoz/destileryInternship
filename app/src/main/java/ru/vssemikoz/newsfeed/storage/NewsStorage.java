@@ -15,30 +15,30 @@ public class NewsStorage {
     }
 
     public List<NewsItem> getNewsFromDB(boolean favoriteNewsState, Category category) {
-        if (favoriteNewsState){
-            if (category == Category.ALL){
+        if (favoriteNewsState) {
+            if (category == Category.ALL) {
                 return newsItemDAO.getFavoriteNews();
-            }else{
+            } else {
                 return newsItemDAO.getFavoriteNewsByCategory(category.name());
             }
-        }else{
-            if (category == Category.ALL){
+        } else {
+            if (category == Category.ALL) {
                 return newsItemDAO.getAll();
-            }else{
+            } else {
                 return newsItemDAO.getNewsByCategory(category.name());
             }
         }
     }
 
-    public void updateNews(NewsItem item){
+    public void updateNews(NewsItem item) {
         newsItemDAO.update(item);
     }
 
-    public void insertUnique(List<NewsItem> newsItems){
+    public void insertUnique(List<NewsItem> newsItems) {
         newsItemDAO.insertUnique(newsItems);
     }
 
-    public void deleteAllNewsFromDB(){
+    public void deleteAllNewsFromDB() {
         newsItemDAO.deleteAll();
     }
 }
