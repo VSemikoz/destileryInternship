@@ -7,10 +7,10 @@ import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 
 
-public class ApiStorage {
+public class NewsApiRepository {
     private MainApplication mainApplication;
 
-    public ApiStorage(MainApplication mainApplication) {
+    public NewsApiRepository(MainApplication mainApplication) {
         this.mainApplication = mainApplication;
     }
 
