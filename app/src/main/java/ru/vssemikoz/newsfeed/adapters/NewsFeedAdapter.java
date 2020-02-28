@@ -15,15 +15,14 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.models.NewsItem;
+import ru.vssemikoz.newsfeed.storage.IconicStorage;
 import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsViewHolder> {
     private List<NewsItem> newsList;
     private Context context;
-    private MainApplication mainApplication;
     private onItemClickListener mListener;
 
     public interface onItemClickListener {
@@ -36,9 +35,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         this.mListener = listener;
     }
 
-    public NewsFeedAdapter(Context context, MainApplication mainApplication) {
+    public NewsFeedAdapter(Context context) {
         this.context = context;
-        this.mainApplication = mainApplication;
     }
 
     public void setNewsList(List<NewsItem> newsList) {
@@ -63,9 +61,9 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         );
 
         if (holder.favoriteState) {
-            holder.changeFavoriteStateButton.setImageDrawable(mainApplication.getYellowStarWithBorders());
+            holder.changeFavoriteStateButton.setImageDrawable(IconicStorage.getYellowStarBorder(context));
         } else {
-            holder.changeFavoriteStateButton.setImageDrawable(mainApplication.getWhiteStarWithBorders());
+            holder.changeFavoriteStateButton.setImageDrawable(IconicStorage.getWhiteStarBorder(context));
         }
 
         if (newsItem.getImageUrl() != null) {

@@ -28,7 +28,8 @@ import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.storage.ApiStorage;
+import ru.vssemikoz.newsfeed.storage.IconicStorage;
+import ru.vssemikoz.newsfeed.storage.NewsApiRepository;
 import ru.vssemikoz.newsfeed.storage.NewsStorage;
 
 public class MainActivity extends AppCompatActivity implements PickCategoryDialog.OnCategorySelectedListener {
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
         ImageButton categoryButton = findViewById(R.id.ib_category);
         ImageButton favoriteNewsButton = findViewById(R.id.ib_favorite);
-        favoriteNewsButton.setImageDrawable(mainApplication.getWhiteStarWithoutBorders());
+        favoriteNewsButton.setImageDrawable(IconicStorage.getWhiteStarBorderless(this));
 
         categoryButton.setOnClickListener(v -> {
             DialogFragment categoryDialog = new PickCategoryDialog();
@@ -73,9 +74,9 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
     private void changeFavoriteIcon(ImageButton button) {
         if (showOnlyFavoriteNews) {
-            button.setImageDrawable(mainApplication.getYellowStarWithoutBorders());
+            button.setImageDrawable(IconicStorage.getYellowStarBorderless(this));
         } else {
-            button.setImageDrawable(mainApplication.getWhiteStarWithoutBorders());
+            button.setImageDrawable(IconicStorage.getWhiteStarBorderless(this));
         }
     }
 
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     private void initRecView() {
         recyclerView = findViewById(R.id.rv_news_feed);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new NewsFeedAdapter(getApplicationContext(), mainApplication);
+        adapter = new NewsFeedAdapter(getApplicationContext());
         adapter.setOnItemClickListener(new NewsFeedAdapter.onItemClickListener() {
             @Override
             public void onChangeFavoriteStateClick(int position) {
@@ -137,8 +138,8 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     }
 
     private void performCall() {
-        ApiStorage apiStorage = new ApiStorage(mainApplication);
-        apiStorage.getNewsFromApi(category, callbackNewsItemList);
+        NewsApiRepository newsApiRepository = new NewsApiRepository(mainApplication);
+        newsApiRepository.getNewsFromApi(category, callbackNewsItemList);
     }
 
     private void initNewsStorage() {
