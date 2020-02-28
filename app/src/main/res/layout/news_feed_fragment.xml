@@ -10,7 +10,7 @@
     <View
         android:id="@+id/v_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/category_height"
+        android:layout_height="@dimen/toolbar_height"
         android:background="@color/colorAccent"
         app:layout_constraintBottom_toTopOf="@+id/rv_news_feed"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,8 +20,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_news_feed"
-        android:layout_width="@dimen/match_constraint"
-        android:layout_height="@dimen/match_constraint"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,9 +51,12 @@
         android:id="@+id/tv_category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorText"
+        android:textSize="@dimen/newsfeed_text_size_category"
         app:layout_constraintBottom_toBottomOf="@+id/v_toolbar"
         app:layout_constraintEnd_toStartOf="@+id/ib_category"
         app:layout_constraintStart_toEndOf="@+id/ib_favorite"
-        app:layout_constraintTop_toTopOf="@+id/v_toolbar" />
+        app:layout_constraintTop_toTopOf="@+id/v_toolbar"
+        tools:text="@string/category_health"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
