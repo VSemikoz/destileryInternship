@@ -5,6 +5,9 @@ import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     private MainApplication mainApplication;
     private NewsStorage newsStorage;
     private Callback<NewsApiResponse> callbackNewsItemList;
-    private List<NewsItem> newsItemsFromDB = new ArrayList<>();
+    private List<NewsItem> news = new ArrayList<>();
     private NewsFeedAdapter adapter;
     private RecyclerView recyclerView;
 
@@ -56,9 +59,9 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         favoriteNewsButton.setOnClickListener(v -> {
             favoriteNewsState = !favoriteNewsState;
             Log.d(TAG, "onCreate: " + favoriteNewsState);
-            newsItemsFromDB = getNewsFromDB();
+            news = getNewsFromDB();
             changeFavoriteIcon(favoriteNewsButton);
-            adapter.setNewsList(newsItemsFromDB);
+            adapter.setNewsList(news);
             adapter.notifyDataSetChanged();
         });
         updateCategoryNameOnToolBar();
@@ -84,28 +87,52 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         recyclerView =  findViewById(R.id.rv_news_feed);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new NewsFeedAdapter(getApplicationContext(), mainApplication);
-        adapter.setOnItemClickListener(this::changeFavoriteState);
+        adapter.setOnItemClickListener(new NewsFeedAdapter.onItemClickListener() {
+            @Override
+            public void onChangeFavoriteStateClick(int position) {
+                changeFavoriteState(position);
+            }
+
+            @Override
+            public void onNewsImageClick(int position) {
+                showNewsInBrowserByUrl(position);
+            }
+        });
     }
 
     private void changeFavoriteState(int position) {
-        NewsItem item = newsItemsFromDB.get(position);
+        NewsItem item = news.get(position);
         item.invertFavoriteState();
         newsStorage.updateNews(item);
         Log.d(TAG, "changeFavoriteState: " + item.isFavorite());
         if (!item.isFavorite() && favoriteNewsState){
-            newsItemsFromDB.remove(position);
+            news.remove(position);
             adapter.notifyItemRemoved(position);
         }else {
             adapter.notifyItemChanged(position);
         }
     }
 
-    private void initRecViewData(){
-        newsItemsFromDB = getNewsFromDB();
-        adapter.setNewsList(newsItemsFromDB);
+    private void showNewsInBrowserByUrl(int position){
+        NewsItem item = news.get(position);
+        String url = item.getUrl();
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setPackage("com.android.chrome");
+        try {
+            getApplicationContext().startActivity(intent);
+        } catch (ActivityNotFoundException ex) {
+            intent.setPackage(null);
+            getApplicationContext().startActivity(intent);
+        }
+    }
+
+    private void initRecycleViewData(){
+        news = getNewsFromDB();
+        adapter.setNewsList(news);
         recyclerView.setAdapter(adapter);
         Toast.makeText(getApplicationContext(),
-                "DBSize: " + newsItemsFromDB.size(),
+                "DBSize: " + news.size(),
                 Toast.LENGTH_LONG).show();
     }
 
@@ -128,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
                     return;
                 }
                 newsStorage.insertUnique(getNewsItemListByResponse(response, category));
-                initRecViewData();
+                initRecycleViewData();
             }
             @Override
             public void onFailure(Call<NewsApiResponse> call, Throwable t) {

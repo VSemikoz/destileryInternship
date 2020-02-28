@@ -7,7 +7,7 @@
 
 
     <ImageView
-        android:id="@+id/iv_image"
+        android:id="@+id/iv_news_image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/news_picture_height"
         android:scaleType="centerCrop"
@@ -25,9 +25,9 @@
         android:layout_marginBottom="@dimen/margin_8dp"
         android:textColor="@color/colorText"
         android:textSize="@dimen/text_size_title"
-        app:layout_constraintBottom_toTopOf="@+id/iv_image"
-        app:layout_constraintEnd_toEndOf="@+id/iv_image"
-        app:layout_constraintStart_toStartOf="@+id/iv_image"
+        app:layout_constraintBottom_toTopOf="@+id/iv_news_image"
+        app:layout_constraintEnd_toEndOf="@+id/iv_news_image"
+        app:layout_constraintStart_toStartOf="@+id/iv_news_image"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem" />
 
@@ -41,7 +41,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_image"
+        app:layout_constraintTop_toBottomOf="@+id/iv_news_image"
         tools:text="@tools:sample/lorem" />
 
     <ImageButton
@@ -49,8 +49,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_image"
-        app:layout_constraintEnd_toEndOf="@+id/iv_image"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_news_image"
+        app:layout_constraintEnd_toEndOf="@+id/iv_news_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
         app:layout_constraintVertical_bias="0.95"
