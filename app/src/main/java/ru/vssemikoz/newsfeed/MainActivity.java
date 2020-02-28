@@ -33,7 +33,7 @@ import ru.vssemikoz.newsfeed.storage.NewsStorage;
 
 public class MainActivity extends AppCompatActivity implements PickCategoryDialog.OnCategorySelectedListener {
     private String TAG = MainActivity.class.getSimpleName();
-    private boolean favoriteNewsState = false;
+    private boolean showOnlyFavoriteNews = false;
     private Category category = Category.ALL;
     private MainApplication mainApplication;
     private NewsStorage newsStorage;
@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
             categoryDialog.show(getSupportFragmentManager(), "categoryDialog");
         });
         favoriteNewsButton.setOnClickListener(v -> {
-            favoriteNewsState = !favoriteNewsState;
-            Log.d(TAG, "onCreate: " + favoriteNewsState);
+            showOnlyFavoriteNews = !showOnlyFavoriteNews;
+            Log.d(TAG, "onCreate: " + showOnlyFavoriteNews);
             news = getNewsFromDB();
             changeFavoriteIcon(favoriteNewsButton);
             adapter.setNewsList(news);
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     }
 
     private void changeFavoriteIcon(ImageButton button) {
-        if (favoriteNewsState){
+        if (showOnlyFavoriteNews){
             button.setImageDrawable(mainApplication.getYellowStarWithoutBorders());
         }else {
             button.setImageDrawable(mainApplication.getWhiteStarWithoutBorders());
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     }
 
     private List<NewsItem> getNewsFromDB() {
-        return newsStorage.getNewsFromDB(favoriteNewsState, category);
+        return newsStorage.getNewsFromDB(showOnlyFavoriteNews, category);
     }
 
     private void initRecView(){
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         item.invertFavoriteState();
         newsStorage.updateNews(item);
         Log.d(TAG, "changeFavoriteState: " + item.isFavorite());
-        if (!item.isFavorite() && favoriteNewsState){
+        if (!item.isFavorite() && showOnlyFavoriteNews){
             news.remove(position);
             adapter.notifyItemRemoved(position);
         }else {
