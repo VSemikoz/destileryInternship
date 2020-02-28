@@ -26,27 +26,6 @@ public class MainApplication extends Application {
     private NewsApi newsApi;
     private NewsAppDataBase newsDataBase;
 
-    private Drawable whiteStarWithoutBorders;
-    private Drawable yellowStarWithoutBorders;
-    private Drawable yellowStarWithBorders;
-    private Drawable whiteStarWithBorders;
-
-    public Drawable getWhiteStarWithoutBorders() {
-        return whiteStarWithoutBorders;
-    }
-
-    public Drawable getYellowStarWithoutBorders() {
-        return yellowStarWithoutBorders;
-    }
-
-    public Drawable getYellowStarWithBorders() {
-        return yellowStarWithBorders;
-    }
-
-    public Drawable getWhiteStarWithBorders() {
-        return whiteStarWithBorders;
-    }
-
     public static Context getContext() {
         return mContext;
     }
@@ -55,36 +34,9 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = this;
-        initDrawableRes();
         initRetrofit();
         initNewsApi();
         initNewsDataBase(this);
-    }
-
-    void initDrawableRes() {
-        whiteStarWithoutBorders = new IconicsDrawable(this)
-                .icon(GoogleMaterial.Icon.gmd_star)
-                .color(IconicsColor.colorInt(Color.WHITE))
-                .size(IconicsSize.dp(48));
-
-        yellowStarWithoutBorders = new IconicsDrawable(this)
-                .icon(GoogleMaterial.Icon.gmd_star)
-                .color(IconicsColor.colorInt(Color.YELLOW))
-                .size(IconicsSize.dp(48));
-
-        whiteStarWithBorders = new IconicsDrawable(this)
-                .icon(GoogleMaterial.Icon.gmd_star)
-                .color(IconicsColor.colorInt(Color.WHITE))
-                .size(IconicsSize.dp(48))
-                .contourColor(IconicsColor.colorInt(Color.BLACK))
-                .contourWidth(IconicsSize.dp(2));
-
-        yellowStarWithBorders = new IconicsDrawable(this)
-                .icon(GoogleMaterial.Icon.gmd_star)
-                .color(IconicsColor.colorInt(Color.YELLOW))
-                .size(IconicsSize.dp(48))
-                .contourColor(IconicsColor.colorInt(Color.BLACK))
-                .contourWidth(IconicsSize.dp(2));
     }
 
     void initRetrofit() {
