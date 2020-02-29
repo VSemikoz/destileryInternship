@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     private NewsFeedAdapter adapter;
     private RecyclerView recyclerView;
     private TextView emptyView;
-    private ImageButton categoryButton;
     private ImageButton favoriteNewsButton;
 
     @Override
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
         mainApplication = (MainApplication) getApplicationContext();
 
-        categoryButton = findViewById(R.id.ib_category);
+        ImageButton categoryButton = findViewById(R.id.ib_category);
         favoriteNewsButton = findViewById(R.id.ib_favorite);
         favoriteNewsButton.setImageDrawable(IconicStorage.getWhiteStarBorderless(this));
 
@@ -131,6 +130,9 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         if (!item.isFavorite() && showOnlyFavoriteNews) {
             news.remove(position);
             adapter.notifyItemRemoved(position);
+            if (news.isEmpty()){
+                setRecyclerViewOrEmptyView();
+            }
         } else {
             adapter.notifyItemChanged(position);
         }
@@ -183,7 +185,9 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
                     Log.d(TAG, "onResponse " + response.code());
                     return;
                 }
+                Log.d(TAG, "onResponse: " + getNewsItemListByResponse(response, category));
                 newsStorage.insertUnique(getNewsItemListByResponse(response, category));
+                updateData();
             }
 
             @Override
@@ -204,6 +208,8 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
     void updateData() {
         news = getNewsFromDB();
+        Log.d(TAG, "updateData: " + news);
+        setRecyclerViewOrEmptyView();
         adapter.setNewsList(news);
         adapter.notifyDataSetChanged();
         Toast.makeText(getApplicationContext(),
