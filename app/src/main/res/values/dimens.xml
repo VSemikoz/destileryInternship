@@ -10,5 +10,7 @@
     <dimen name="newsfeed_item_text_size_title">24sp</dimen>
     <dimen name="newsfeed_item_text_size_description">16sp</dimen>
     <dimen name="newsfeed_text_size_category">16sp</dimen>
+    <dimen name="card_radius">8dp</dimen>
+    <dimen name="card_elevation">8dp</dimen>
 
 </resources>

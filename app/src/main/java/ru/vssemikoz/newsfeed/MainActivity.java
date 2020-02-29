@@ -21,7 +21,7 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ru.vssemikoz.newsfeed.DAO.NewsItemDAO;
+import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
 import ru.vssemikoz.newsfeed.models.Category;

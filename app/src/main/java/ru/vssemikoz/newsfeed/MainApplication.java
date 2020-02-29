@@ -2,19 +2,12 @@ package ru.vssemikoz.newsfeed;
 
 import android.app.Application;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 
 import androidx.room.Room;
 
-import com.mikepenz.iconics.IconicsColor;
-import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.IconicsSize;
-import com.mikepenz.iconics.typeface.library.googlematerial.GoogleMaterial;
-
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import ru.vssemikoz.newsfeed.DataBase.NewsAppDataBase;
+import ru.vssemikoz.newsfeed.database.NewsAppDataBase;
 import ru.vssemikoz.newsfeed.api.NewsApi;
 
 public class MainApplication extends Application {

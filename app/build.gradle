@@ -41,4 +41,5 @@ dependencies {
     implementation "com.mikepenz:iconics-views:4.0.0"
 
     implementation 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
+    implementation 'androidx.cardview:cardview:1.0.0'
 }

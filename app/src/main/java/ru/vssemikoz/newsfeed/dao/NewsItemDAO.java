@@ -1,4 +1,4 @@
-package ru.vssemikoz.newsfeed.DAO;
+package ru.vssemikoz.newsfeed.dao;
 
 import androidx.room.Dao;
 import androidx.room.Insert;

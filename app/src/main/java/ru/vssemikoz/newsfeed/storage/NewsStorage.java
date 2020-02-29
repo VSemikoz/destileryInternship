@@ -2,7 +2,7 @@ package ru.vssemikoz.newsfeed.storage;
 
 import java.util.List;
 
-import ru.vssemikoz.newsfeed.DAO.NewsItemDAO;
+import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
