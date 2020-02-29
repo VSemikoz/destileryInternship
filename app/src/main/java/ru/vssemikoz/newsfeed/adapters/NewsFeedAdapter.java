@@ -43,6 +43,11 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         this.newsList = newsList;
     }
 
+    public List<NewsItem> getNewsList() {
+        return newsList;
+    }
+
+
     @NonNull
     @Override
     public NewsFeedAdapter.NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

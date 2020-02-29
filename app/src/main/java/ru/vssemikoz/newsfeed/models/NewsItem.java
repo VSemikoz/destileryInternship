@@ -1,5 +1,8 @@
 package ru.vssemikoz.newsfeed.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.TypeConverters;
@@ -12,7 +15,7 @@ import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
 @Entity(primaryKeys = {"title", "url"})
 @TypeConverters({DateConverter.class})
-public class NewsItem {
+public class NewsItem implements Parcelable {
 
     @ColumnInfo(name = "is_favorite")
     private boolean isFavorite;
@@ -49,6 +52,30 @@ public class NewsItem {
             this.category = category.name();
         }
     }
+
+    protected NewsItem(Parcel in) {
+        isFavorite = in.readByte() != 0;
+        category = in.readString();
+        author = in.readString();
+        title = in.readString();
+        description = in.readString();
+        content = in.readString();
+        url = in.readString();
+        imageUrl = in.readString();
+        publishedAt = DateConverter.fromString(in.readString());
+    }
+
+    public static final Creator<NewsItem> CREATOR = new Creator<NewsItem>() {
+        @Override
+        public NewsItem createFromParcel(Parcel in) {
+            return new NewsItem(in);
+        }
+
+        @Override
+        public NewsItem[] newArray(int size) {
+            return new NewsItem[size];
+        }
+    };
 
     public void invertFavoriteState() {
         isFavorite = !isFavorite;
@@ -125,5 +152,24 @@ public class NewsItem {
 
     public void setPublishedAt(Date publishedAt) {
         this.publishedAt = publishedAt;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString((String.valueOf(isFavorite)));
+        dest.writeString(category);
+        dest.writeString(author);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeString(content);
+        dest.writeString(url);
+        dest.writeString(imageUrl);
+        dest.writeString(DateConverter.fromDate(publishedAt));
+
     }
 }

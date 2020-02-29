@@ -9,4 +9,5 @@
     <string name="category_science">Наука</string>
     <string name="category_sport">Спорт</string>
     <string name="category_technology">Технологии</string>
+    <string name="no_data_available">no data available</string>
 </resources>
