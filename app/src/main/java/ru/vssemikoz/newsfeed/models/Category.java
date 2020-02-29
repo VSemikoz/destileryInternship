@@ -15,11 +15,11 @@ public enum Category {
 
     private Integer categoryId;
 
-    public static String getCategoryName(Category category){
+    public static String getCategoryName(Category category) {
         return category.toString();
     }
 
-    Category(int stringCategory){
+    Category(int stringCategory) {
         this.categoryId = stringCategory;
     }
 
@@ -28,11 +28,11 @@ public enum Category {
         return MainApplication.getContext().getString(categoryId);
     }
 
-    public static String[] getCategoryNameList(){
+    public static String[] getCategoryNameList() {
         Category[] categories = Category.values();
         String[] categoriesName = new String[categories.length];
 
-        for (int i = 0; i < categories.length; i++){
+        for (int i = 0; i < categories.length; i++) {
             categoriesName[i] = getCategoryName(categories[i]);
         }
         return categoriesName;

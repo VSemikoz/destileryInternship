@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         if (!item.isFavorite() && showOnlyFavoriteNews) {
             news.remove(position);
             adapter.notifyItemRemoved(position);
-            if (news.isEmpty()){
+            if (news.isEmpty()) {
                 setRecyclerViewOrEmptyView();
             }
         } else {
