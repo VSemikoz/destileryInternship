@@ -61,9 +61,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         holder.title.setText(newsItem.getTitle());
         holder.description.setText(newsItem.getDescription());
         holder.favoriteState = newsItem.isFavorite();
-
-        holder.dateTime.setText(DateConverter.fromDateToHumanReadable(newsItem.getPublishedAt())
-        );
+        holder.dateTime.setText(DateConverter.fromDateToHumanReadable(newsItem.getPublishedAt()));
 
         if (holder.favoriteState) {
             holder.changeFavoriteStateButton.setImageDrawable(IconicStorage.getYellowStarBorder(context));
