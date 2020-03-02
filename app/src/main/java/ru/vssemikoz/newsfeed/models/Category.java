@@ -29,13 +29,13 @@ public enum Category {
     }
 
     public static String[] getCategoryNameList() {
-        Category[] categories = Category.values();
-        String[] categoriesName = new String[categories.length];
+        Category[] values = Category.values();
+        String[] categories = new String[values .length];
 
-        for (int i = 0; i < categories.length; i++) {
-            categoriesName[i] = getCategoryName(categories[i]);
+        for (int i = 0; i < values .length; i++) {
+            categories[i] = getCategoryName(values [i]);
         }
-        return categoriesName;
+        return categories;
     }
 
 }
