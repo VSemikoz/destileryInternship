@@ -29,7 +29,7 @@ public class MainApplication extends Application {
         mContext = this;
         initRetrofit();
         initNewsApi();
-        initNewsDataBase(this);
+        initNewsDatabase(this);
     }
 
     void initRetrofit() {
@@ -43,7 +43,7 @@ public class MainApplication extends Application {
         newsApi = retrofit.create(NewsApi.class);
     }
 
-    void initNewsDataBase(Context context) {
+    void initNewsDatabase(Context context) {
         newsDataBase = Room.databaseBuilder(context, NewsAppDataBase.class, "news_data_base")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
