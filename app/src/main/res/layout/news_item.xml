@@ -67,12 +67,24 @@
              android:id="@+id/et_datetime"
              android:layout_width="0dp"
              android:layout_height="match_parent"
-             android:ems="10"
              app:layout_constraintBottom_toTopOf="@+id/tv_title"
              app:layout_constraintLeft_toLeftOf="parent"
+             app:layout_constraintRight_toLeftOf="@id/et_author"
+             app:layout_constraintTop_toTopOf="parent"
+             android:textSize="@dimen/newsfeed_item_text_size_datetime"
+             tools:text="@tools:sample/date/ddmmyy" />
+
+         <TextView
+             android:id="@+id/et_author"
+             android:layout_width="0dp"
+             android:layout_height="match_parent"
+             android:gravity="end"
+             app:layout_constraintBottom_toTopOf="@+id/tv_title"
+             app:layout_constraintLeft_toRightOf="@id/et_datetime"
              app:layout_constraintRight_toRightOf="parent"
              app:layout_constraintTop_toTopOf="parent"
-             tools:text="@tools:sample/date/ddmmyy" />
+             android:textSize="@dimen/newsfeed_item_text_size_author"
+             tools:text="@tools:sample/first_names"/>
 
          <View
              android:id="@+id/v_divider"

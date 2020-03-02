@@ -62,6 +62,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         holder.description.setText(newsItem.getDescription());
         holder.favoriteState = newsItem.isFavorite();
         holder.dateTime.setText(DateConverter.fromDateToUIFormat(newsItem.getPublishedAt()));
+        holder.author.setText(newsItem.getAuthor());
 
         if (holder.favoriteState) {
             holder.changeFavoriteStateButton.setImageDrawable(IconicStorage.getYellowStarBorder(context));
@@ -87,6 +88,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         final TextView title;
         final TextView description;
         final TextView dateTime;
+        final TextView author;
         final ImageButton changeFavoriteStateButton;
 
         public NewsViewHolder(View view, onItemClickListener listener) {
@@ -95,6 +97,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
             title = view.findViewById(R.id.tv_title);
             description = view.findViewById(R.id.tv_description);
             dateTime = view.findViewById(R.id.et_datetime);
+            author = view.findViewById(R.id.et_author);
             changeFavoriteStateButton = view.findViewById(R.id.ib_change_favorite_state);
 
             changeFavoriteStateButton.setOnClickListener(v -> {
