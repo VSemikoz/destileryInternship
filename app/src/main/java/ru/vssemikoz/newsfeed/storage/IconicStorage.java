@@ -15,7 +15,6 @@ public class IconicStorage {
     private static Drawable STAR_WHITE_BORDERLESS = null;
     private static Drawable STAR_WHITE_BORDER = null;
 
-
     public static Drawable getYellowStarBorderless(Context context) {
         if (STAR_YELLOW_BORDERLESS == null) {
             STAR_YELLOW_BORDERLESS = new IconicsDrawable(context)
@@ -59,5 +58,4 @@ public class IconicStorage {
         }
         return STAR_WHITE_BORDER;
     }
-
 }
