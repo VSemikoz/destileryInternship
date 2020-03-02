@@ -19,8 +19,8 @@ public enum Category {
         return category.toString();
     }
 
-    Category(int stringCategory) {
-        this.categoryId = stringCategory;
+    Category(int categoryResId) {
+        this.categoryId = categoryResId;
     }
 
     @Override
