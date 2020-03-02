@@ -185,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
                     Log.d(TAG, "onResponse " + response.code());
                     return;
                 }
-                Log.d(TAG, "onResponse: " + getNewsItemListByResponse(response, category));
                 newsStorage.insertUnique(getNewsItemListByResponse(response, category));
                 updateData();
             }
