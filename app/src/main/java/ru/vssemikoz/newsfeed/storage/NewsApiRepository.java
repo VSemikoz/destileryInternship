@@ -5,6 +5,7 @@ import retrofit2.Callback;
 import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
+import ru.vssemikoz.newsfeed.models.Source;
 
 
 public class NewsApiRepository {
@@ -14,27 +15,21 @@ public class NewsApiRepository {
         this.mainApplication = mainApplication;
     }
 
-    public void getNewsFromApi(Category category, Callback<NewsApiResponse> callback) {
+    public void getNewsFromApi(Category category, Callback<NewsApiResponse> callback, Source source) {
         String KEY = mainApplication.getKEY();
-        Call<NewsApiResponse> call;
+        Call<NewsApiResponse> call = null;
+        if (category == Category.ALL & source == Source.ALL){
+            call = mainApplication.getNewsApi().getTopNews("ru", KEY);
+        }
+        if (category != Category.ALL & source == Source.ALL){
+            call = mainApplication.getNewsApi().getNewsByCategory("ru", KEY, category.name());
+        }
+        if (category == Category.ALL & source != Source.ALL){
+            call = mainApplication.getNewsApi().getNewsBySource(source.toString(), KEY);
+        }
 
-        if (category == Category.ALL) {
-            call = mainApplication
-                    .getNewsApi()
-                    .getTopNews("ru", KEY);
+        if (call != null){
             call.enqueue(callback);
-
-            call = mainApplication
-                    .getNewsApi()
-                    .getNewsBySource(mainApplication.getNewsSource(), KEY);
-            call.enqueue(callback);
-
-
-        } else {
-            call = mainApplication.getNewsApi().
-                    getNewsByCategory("ru", KEY, category.name());
-            call.enqueue(callback);
-
         }
     }
 
