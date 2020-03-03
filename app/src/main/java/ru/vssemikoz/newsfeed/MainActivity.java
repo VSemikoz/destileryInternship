@@ -257,15 +257,15 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         updateData();
     }
 
-    private String GetDisplayCategoryText() {
+    private String GetDisplaySelectDescriptionText() {
         return "Категории: " + Category.getDisplayName(category) +
                 "\n" +
                 "Источники: " + Source.getDisplayName(source);
     }
 
     private void updateCategoryNameOnToolBar() {
-        TextView categoryTextView = findViewById(R.id.tv_category);
-        categoryTextView.setText(GetDisplayCategoryText());
+        TextView selectDescriptionTextView = findViewById(R.id.tv_select_description);
+        selectDescriptionTextView.setText(GetDisplaySelectDescriptionText());
     }
 
     @Override
