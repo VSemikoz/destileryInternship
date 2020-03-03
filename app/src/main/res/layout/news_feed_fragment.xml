@@ -17,6 +17,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.mikepenz.iconics.view.IconicsImageView
+        android:id="@+id/ib_sources"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintEnd_toStartOf="@+id/ib_category"
+        app:layout_constraintStart_toEndOf="@+id/tv_category"
+        app:layout_constraintTop_toTopOf="@+id/v_toolbar"
+        app:layout_constraintBottom_toBottomOf="@+id/v_toolbar"
+        app:iiv_icon="gmd-settings"
+        app:iiv_color="@android:color/white" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_news_feed"
         android:layout_width="0dp"
@@ -54,6 +65,7 @@
         android:id="@+id/ib_favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:background="@null"
         app:layout_constraintBottom_toBottomOf="@+id/v_toolbar"
         app:layout_constraintStart_toStartOf="@+id/v_toolbar"
