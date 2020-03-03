@@ -10,4 +10,10 @@
     <string name="category_sport">Спорт</string>
     <string name="category_technology">Технологии</string>
     <string name="no_data_available">no data available</string>
+
+    <string name="source_all">RT,RBC,LENTA</string>
+    <string name="source_RT">RT</string>
+    <string name="source_RBC">RBC</string>
+    <string name="source_LENTA">LENTA</string>
+
 </resources>
