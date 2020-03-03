@@ -43,11 +43,8 @@ public class NewsItem {
         this.imageUrl = newsApiResponseItem.getImageUrl();
         this.publishedAt = DateConverter.fromString(newsApiResponseItem.getPublishedAt());
 
-        if (category == null) {
-            this.category = "";
-        } else {
-            this.category = category.name();
-        }
+        this.category = Category.getRequestName(category);
+
     }
 
     public void invertFavoriteState() {
