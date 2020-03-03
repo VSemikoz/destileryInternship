@@ -28,19 +28,22 @@ import retrofit2.Response;
 import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
+import ru.vssemikoz.newsfeed.dialogs.PickSorceDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.models.NewsList;
+import ru.vssemikoz.newsfeed.models.Source;
 import ru.vssemikoz.newsfeed.storage.IconicStorage;
 import ru.vssemikoz.newsfeed.storage.NewsApiRepository;
 import ru.vssemikoz.newsfeed.storage.NewsStorage;
 
-public class MainActivity extends AppCompatActivity implements PickCategoryDialog.OnCategorySelectedListener {
+public class MainActivity extends AppCompatActivity implements PickCategoryDialog.OnCategorySelectedListener, PickSorceDialog.OnSourceSelectedListener {
     private String TAG = MainActivity.class.getSimpleName();
     private boolean showOnlyFavoriteNews = false;
     private Category category = Category.ALL;
+    private Source source = Source.ALL;
     private MainApplication mainApplication;
     private NewsStorage newsStorage;
     private Callback<NewsApiResponse> callbackNewsItemList;
@@ -57,10 +60,15 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
         mainApplication = (MainApplication) getApplicationContext();
 
+        View sourceButton = findViewById(R.id.ib_sources);
         ImageButton categoryButton = findViewById(R.id.ib_category);
         favoriteNewsButton = findViewById(R.id.ib_favorite);
         favoriteNewsButton.setImageDrawable(IconicStorage.getWhiteStarBorderless(this));
 
+        sourceButton.setOnClickListener(v -> {
+            DialogFragment sourceDialog = new PickSorceDialog();
+            sourceDialog.show(getSupportFragmentManager(), "sourceDialog");
+        });
         categoryButton.setOnClickListener(v -> {
             DialogFragment categoryDialog = new PickCategoryDialog();
             categoryDialog.show(getSupportFragmentManager(), "categoryDialog");
@@ -101,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     }
 
     private List<NewsItem> getNewsFromDB() {
-        return newsStorage.getNewsFromDB(showOnlyFavoriteNews, category);
+        return newsStorage.getNewsFromDB(showOnlyFavoriteNews, category, source);
     }
 
     private void initRecView() {
@@ -169,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
     private void performCall() {
         NewsApiRepository newsApiRepository = new NewsApiRepository(mainApplication);
-        newsApiRepository.getNewsFromApi(category, callbackNewsItemList);
+        newsApiRepository.getNewsFromApi(category, callbackNewsItemList, source);
     }
 
     private void initNewsStorage() {
@@ -207,7 +215,6 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
     void updateData() {
         news = getNewsFromDB();
-        Log.d(TAG, "updateData: " + news);
         setRecyclerViewOrEmptyView();
         adapter.setNewsList(news);
         adapter.notifyDataSetChanged();
@@ -216,17 +223,49 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
                 Toast.LENGTH_LONG).show();
     }
 
+    Boolean categoryAndSourceNotDefault(){
+        return source != Source.ALL & category != Category.ALL;
+    }
+
+    void showCategorySourceMessageChange(){
+        Toast.makeText(getApplicationContext(),
+                "Only category or source can be selected",
+                Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public void onCategorySelected(Category selectCategory) {
         category = selectCategory;
+        if(categoryAndSourceNotDefault()){
+            source = Source.ALL;
+            showCategorySourceMessageChange();
+        }
         performCall();
         updateCategoryNameOnToolBar();
         updateData();
     }
 
+    @Override
+    public void onSourceSelected(Source selectSource) {
+        source = selectSource;
+        if(categoryAndSourceNotDefault()){
+            category = Category.ALL;
+            showCategorySourceMessageChange();
+        }
+        performCall();
+        updateCategoryNameOnToolBar();
+        updateData();
+    }
+
+    private String GetDisplayCategoryText(){
+        return "Категории: " + Category.getDisplayName(category) +
+                "\n" +
+                "Источники: " + Source.getDisplayName(source);
+    }
+
     private void updateCategoryNameOnToolBar() {
         TextView categoryTextView = findViewById(R.id.tv_category);
-        categoryTextView.setText(Category.getCategoryName(category));
+        categoryTextView.setText(GetDisplayCategoryText());
     }
 
     @Override
@@ -238,6 +277,9 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
         json = gson.toJson(category);
         outState.putString("category", json);
+
+        json = gson.toJson(source);
+        outState.putString("source", json);
 
         outState.putBoolean("showOnlyFavoriteNews", showOnlyFavoriteNews);
     }
@@ -252,6 +294,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         }
 
         category = gson.fromJson(savedInstanceState.getString("category"), Category.class);
+        source = gson.fromJson(savedInstanceState.getString("source"), Source.class);
         showOnlyFavoriteNews = savedInstanceState.getBoolean("showOnlyFavoriteNews");
     }
 }
