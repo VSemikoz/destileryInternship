@@ -11,8 +11,16 @@ public enum Source {
 
     private Integer source;
 
-    public static String getSourceName(Source source) {
+    public static String getRequestName(Source source) {
         return source.toString();
+    }
+
+    public static String getDisplayName(Source source){
+        if (source == Source.ALL){
+            return "Без ограничений";
+        }else {
+            return Source.getRequestName(source);
+        }
     }
 
     Source(Integer source) {
@@ -29,7 +37,7 @@ public enum Source {
         String[] sources = new String[values.length];
 
         for (int i = 0; i < values.length; i++) {
-            sources[i] = getSourceName(values[i]);
+            sources[i] = getDisplayName(values[i]);
         }
         return sources;
     }
