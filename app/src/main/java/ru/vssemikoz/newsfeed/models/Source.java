@@ -15,10 +15,10 @@ public enum Source {
         return source.toString();
     }
 
-    public static String getDisplayName(Source source){
-        if (source == Source.ALL){
+    public static String getDisplayName(Source source) {
+        if (source == Source.ALL) {
             return "Без ограничений";
-        }else {
+        } else {
             return Source.getRequestName(source);
         }
     }

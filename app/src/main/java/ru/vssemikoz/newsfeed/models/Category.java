@@ -20,7 +20,7 @@ public enum Category {
     }
 
     public static String getDisplayName(Category category) {
-        if (category == Category.ALL){
+        if (category == Category.ALL) {
             return "Без ограничений";
         }
         return category.toString();
@@ -37,10 +37,10 @@ public enum Category {
 
     public static String[] getCategoryNameList() {
         Category[] values = Category.values();
-        String[] categories = new String[values .length];
+        String[] categories = new String[values.length];
 
-        for (int i = 0; i < values .length; i++) {
-            categories[i] = getDisplayName(values [i]);
+        for (int i = 0; i < values.length; i++) {
+            categories[i] = getDisplayName(values[i]);
         }
         return categories;
     }

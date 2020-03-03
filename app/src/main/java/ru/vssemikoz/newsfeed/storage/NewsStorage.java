@@ -17,22 +17,22 @@ public class NewsStorage {
     }
 
     public List<NewsItem> getNewsFromDB(boolean favoriteNewsState, Category category, Source source) {
-        if (favoriteNewsState & category == Category.ALL & source == Source.ALL){
+        if (favoriteNewsState & category == Category.ALL & source == Source.ALL) {
             return newsItemDAO.getFavoriteNews();
         }
-        if (favoriteNewsState & category != Category.ALL & source == Source.ALL){
+        if (favoriteNewsState & category != Category.ALL & source == Source.ALL) {
             return newsItemDAO.getFavoriteNewsByCategory(Category.getRequestName(category));
         }
-        if (favoriteNewsState & category == Category.ALL & source != Source.ALL){
+        if (favoriteNewsState & category == Category.ALL & source != Source.ALL) {
             return newsItemDAO.getFavoriteNewsBySource(Source.getRequestName(source));
         }
-        if (!favoriteNewsState & category == Category.ALL & source == Source.ALL){
+        if (!favoriteNewsState & category == Category.ALL & source == Source.ALL) {
             return newsItemDAO.getAll();
         }
-        if (!favoriteNewsState & category != Category.ALL & source == Source.ALL){
+        if (!favoriteNewsState & category != Category.ALL & source == Source.ALL) {
             return newsItemDAO.getNewsByCategory(Category.getRequestName(category));
         }
-        if (!favoriteNewsState & category == Category.ALL & source != Source.ALL){
+        if (!favoriteNewsState & category == Category.ALL & source != Source.ALL) {
             return newsItemDAO.getNewsBySource(Source.getRequestName(source));
         }
         return new ArrayList<>();

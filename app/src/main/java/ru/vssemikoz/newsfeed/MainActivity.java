@@ -223,11 +223,11 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
                 Toast.LENGTH_LONG).show();
     }
 
-    Boolean categoryAndSourceNotDefault(){
+    Boolean categoryAndSourceNotDefault() {
         return source != Source.ALL & category != Category.ALL;
     }
 
-    void showCategorySourceMessageChange(){
+    void showCategorySourceMessageChange() {
         Toast.makeText(getApplicationContext(),
                 "Only category or source can be selected",
                 Toast.LENGTH_LONG).show();
@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     @Override
     public void onCategorySelected(Category selectCategory) {
         category = selectCategory;
-        if(categoryAndSourceNotDefault()){
+        if (categoryAndSourceNotDefault()) {
             source = Source.ALL;
             showCategorySourceMessageChange();
         }
@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     @Override
     public void onSourceSelected(Source selectSource) {
         source = selectSource;
-        if(categoryAndSourceNotDefault()){
+        if (categoryAndSourceNotDefault()) {
             category = Category.ALL;
             showCategorySourceMessageChange();
         }
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         updateData();
     }
 
-    private String GetDisplayCategoryText(){
+    private String GetDisplayCategoryText() {
         return "Категории: " + Category.getDisplayName(category) +
                 "\n" +
                 "Источники: " + Source.getDisplayName(source);

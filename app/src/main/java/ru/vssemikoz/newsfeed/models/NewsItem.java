@@ -42,9 +42,7 @@ public class NewsItem {
         this.url = newsApiResponseItem.getUrl();
         this.imageUrl = newsApiResponseItem.getImageUrl();
         this.publishedAt = DateConverter.fromString(newsApiResponseItem.getPublishedAt());
-
         this.category = Category.getRequestName(category);
-
     }
 
     public void invertFavoriteState() {
