@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">NewsFeed</string>
-    <string name="chose_category_title">Выбрать катигорию</string>
+    <string name="chose_category_title">Выбрать категорию</string>
+    <string name="chose_source_title">Выбрать источник</string>
 
     <string name="category_all">Все</string>
     <string name="category_business">Бизнес</string>
@@ -14,6 +15,6 @@
     <string name="source_all">RT,RBC,LENTA</string>
     <string name="source_RT">RT</string>
     <string name="source_RBC">RBC</string>
-    <string name="source_LENTA">LENTA</string>
+    <string name="source_LENTA">Lenta</string>
 
 </resources>
