@@ -15,7 +15,14 @@ public enum Category {
 
     private Integer categoryId;
 
-    public static String getCategoryName(Category category) {
+    public static String getRequestName(Category category) {
+        return category.toString();
+    }
+
+    public static String getDisplayName(Category category) {
+        if (category == Category.ALL){
+            return "Без ограничений";
+        }
         return category.toString();
     }
 
@@ -33,7 +40,7 @@ public enum Category {
         String[] categories = new String[values .length];
 
         for (int i = 0; i < values .length; i++) {
-            categories[i] = getCategoryName(values [i]);
+            categories[i] = getDisplayName(values [i]);
         }
         return categories;
     }
