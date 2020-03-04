@@ -12,12 +12,12 @@ import androidx.fragment.app.DialogFragment;
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.models.Source;
 
-public class PickSorceDialog extends DialogFragment {
+public class PickSourceDialog extends DialogFragment {
     public interface OnSourceSelectedListener {
         void onSourceSelected(Source selectSource);
     }
 
-    private PickSorceDialog.OnSourceSelectedListener nListener;
+    private PickSourceDialog.OnSourceSelectedListener nListener;
 
     @NonNull
     @Override
@@ -36,7 +36,7 @@ public class PickSorceDialog extends DialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            nListener = (PickSorceDialog.OnSourceSelectedListener) getActivity();
+            nListener = (PickSourceDialog.OnSourceSelectedListener) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString()
                     + " must implement OnSourceSelectedListener");
