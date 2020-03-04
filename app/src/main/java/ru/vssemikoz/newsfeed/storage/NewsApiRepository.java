@@ -16,13 +16,13 @@ public class NewsApiRepository {
 
     public void getNewsFromApi(Category category, Callback<NewsApiResponse> callback) {
         String requestCategory = null;
-        String country = "us";
+        String requestCountry = "ru";
         String KEY = mainApplication.getKEY();
         Call<NewsApiResponse> call;
         if (category != Category.ALL) {
             requestCategory = category.name();
         }
-        call = mainApplication.getNewsApi().getNews(country, requestCategory, KEY);
+        call = mainApplication.getNewsApi().getNews(requestCountry, requestCategory, KEY);
         call.enqueue(callback);
     }
 }
