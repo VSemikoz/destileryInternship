@@ -16,21 +16,21 @@ public class NewsApiRepository {
     }
 
     public void getNewsFromApi(Category category, Callback<NewsApiResponse> callback, Source source) {
+        String requestCategory = null;
+        String requestSource = null;
+        String country = "ru";
         String KEY = mainApplication.getKEY();
-        Call<NewsApiResponse> call = null;
-        if (category == Category.ALL & source == Source.ALL) {
-            call = mainApplication.getNewsApi().getTopNews("ru", KEY);
-        }
-        if (category != Category.ALL & source == Source.ALL) {
-            call = mainApplication.getNewsApi().getNewsByCategory("ru", KEY, category.name());
-        }
-        if (category == Category.ALL & source != Source.ALL) {
-            call = mainApplication.getNewsApi().getNewsBySource(source.toString(), KEY);
-        }
+        Call<NewsApiResponse> call;
 
-        if (call != null) {
-            call.enqueue(callback);
+        if (category != Category.ALL) {
+            requestCategory = category.name();
+            requestSource = null;
         }
+        if (source != Source.ALL) {
+            requestSource = Source.getRequestName(source);
+            country = null;
+        }
+        call = mainApplication.getNewsApi().getNews(country, requestCategory, requestSource, KEY);
+        call.enqueue(callback);
     }
-
 }
