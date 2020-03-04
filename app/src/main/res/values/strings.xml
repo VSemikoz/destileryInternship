@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">NewsFeed</string>
-    <string name="chose_category_title">Выбрать катигорию</string>
+    <string name="chose_category_title">Выбрать категорию</string>
+    <string name="chose_source_title">Выбрать источник</string>
 
+    <string name="display_category_no_limits">Без ограничений</string>
     <string name="category_all">Все</string>
     <string name="category_business">Бизнес</string>
     <string name="category_entertainment">Развлечения</string>
@@ -9,4 +11,12 @@
     <string name="category_science">Наука</string>
     <string name="category_sport">Спорт</string>
     <string name="category_technology">Технологии</string>
+    <string name="no_data_available">no data available</string>
+
+    <string name="display_source_no_limits">Без ограничений</string>
+    <string name="source_all">RT,RBC,LENTA</string>
+    <string name="source_RT">RT</string>
+    <string name="source_RBC">RBC</string>
+    <string name="source_LENTA">Lenta</string>
+
 </resources>

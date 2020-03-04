@@ -7,7 +7,7 @@ import androidx.room.Room;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import ru.vssemikoz.newsfeed.DataBase.NewsAppDataBase;
+import ru.vssemikoz.newsfeed.database.NewsAppDataBase;
 import ru.vssemikoz.newsfeed.api.NewsApi;
 
 public class MainApplication extends Application {
@@ -19,7 +19,7 @@ public class MainApplication extends Application {
     private NewsApi newsApi;
     private NewsAppDataBase newsDataBase;
 
-    public static Context getmContext() {
+    public static Context getContext() {
         return mContext;
     }
 
@@ -29,21 +29,21 @@ public class MainApplication extends Application {
         mContext = this;
         initRetrofit();
         initNewsApi();
-        initNewsDataBase(this);
+        initNewsDatabase(this);
     }
 
-    void initRetrofit(){
+    void initRetrofit() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(MAIN_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
-    void initNewsApi(){
+    void initNewsApi() {
         newsApi = retrofit.create(NewsApi.class);
     }
 
-    void initNewsDataBase(Context context){
+    void initNewsDatabase(Context context) {
         newsDataBase = Room.databaseBuilder(context, NewsAppDataBase.class, "news_data_base")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
@@ -58,7 +58,8 @@ public class MainApplication extends Application {
         return KEY;
     }
 
-    public NewsAppDataBase getNewsDataBase(){
+    public NewsAppDataBase getNewsDataBase() {
         return newsDataBase;
     }
+
 }

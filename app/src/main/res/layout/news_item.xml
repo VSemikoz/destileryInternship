@@ -1,61 +1,101 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+ <androidx.cardview.widget.CardView
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:id="@+id/cv_item"
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     app:cardElevation="@dimen/card_elevation"
+     app:cardCornerRadius="@dimen/card_radius"
+     android:layout_margin="@dimen/margin_8dp"
+     app:cardBackgroundColor="@color/colorAccent">
 
+     <androidx.constraintlayout.widget.ConstraintLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/iv_image"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/news_picture_height"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@mipmap/ic_launcher"
-        tools:src="@tools:sample/backgrounds/scenic"/>
+         <ImageView
+             android:id="@+id/iv_news_image"
+             android:layout_width="0dp"
+             android:layout_height="@dimen/news_feed_item_picture_height"
+             android:scaleType="centerCrop"
+             android:src="@mipmap/ic_launcher"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toTopOf="parent"
+             tools:src="@tools:sample/backgrounds/scenic" />
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_8dp"
-        android:textColor="@color/colorText"
-        android:textSize="@dimen/text_size_title"
-        app:layout_constraintBottom_toTopOf="@+id/iv_image"
-        app:layout_constraintEnd_toEndOf="@+id/iv_image"
-        app:layout_constraintStart_toStartOf="@+id/iv_image"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/lorem" />
+         <TextView
+             android:id="@+id/tv_title"
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+             android:layout_marginBottom="@dimen/margin_8dp"
+             android:textColor="@color/darkColorText"
+             android:textSize="@dimen/newsfeed_item_text_size_title"
+             app:layout_constraintBottom_toTopOf="@+id/iv_news_image"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toTopOf="parent"
+             tools:text="@tools:sample/lorem" />
 
-    <TextView
-        android:id="@+id/tv_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_8dp"
-        android:textColor="@color/colorText"
-        android:textSize="@dimen/text_size_description"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_image"
-        tools:text="@tools:sample/lorem" />
+         <TextView
+             android:id="@+id/tv_description"
+             android:layout_width="0dp"
+             android:layout_height="match_parent"
+             android:layout_marginTop="@dimen/margin_8dp"
+             android:textColor="@color/darkColorText"
+             android:textSize="@dimen/newsfeed_item_text_size_description"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/iv_news_image"
+             tools:text="@tools:sample/lorem" />
 
-    <ImageButton
-        android:id="@+id/ib_follow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_image"
-        app:layout_constraintEnd_toEndOf="@+id/iv_image"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@android:drawable/btn_star_big_on" />
+         <ImageButton
+             android:id="@+id/ib_change_favorite_state"
+             android:layout_width="@dimen/newsitem_change_favorite_state_button_size"
+             android:layout_height="@dimen/newsitem_change_favorite_state_button_size"
+             android:background="@null"
+             app:layout_constraintBottom_toBottomOf="@+id/iv_news_image"
+             app:layout_constraintEnd_toEndOf="@+id/iv_news_image"
+             app:layout_constraintHorizontal_bias="0.95"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/tv_title"
+             app:layout_constraintVertical_bias="0.95" />
 
+         <TextView
+             android:id="@+id/et_datetime"
+             android:layout_width="0dp"
+             android:layout_height="match_parent"
+             app:layout_constraintBottom_toTopOf="@+id/tv_title"
+             app:layout_constraintLeft_toLeftOf="parent"
+             app:layout_constraintRight_toLeftOf="@id/et_author"
+             app:layout_constraintTop_toTopOf="parent"
+             android:textSize="@dimen/newsfeed_item_text_size_datetime"
+             tools:text="@tools:sample/date/ddmmyy" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+         <TextView
+             android:id="@+id/et_author"
+             android:layout_width="0dp"
+             android:layout_height="match_parent"
+             android:gravity="end"
+             app:layout_constraintBottom_toTopOf="@+id/tv_title"
+             app:layout_constraintLeft_toRightOf="@id/et_datetime"
+             app:layout_constraintRight_toRightOf="parent"
+             app:layout_constraintTop_toTopOf="parent"
+             android:textSize="@dimen/newsfeed_item_text_size_author"
+             tools:text="@tools:sample/first_names"/>
+
+         <View
+             android:id="@+id/v_divider"
+             android:layout_width="wrap_content"
+             android:layout_height="@dimen/news_feed_item_divider_height"
+             android:background="@color/colorPrimaryDark"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/tv_description" />
+
+     </androidx.constraintlayout.widget.ConstraintLayout>
+
+ </androidx.cardview.widget.CardView>

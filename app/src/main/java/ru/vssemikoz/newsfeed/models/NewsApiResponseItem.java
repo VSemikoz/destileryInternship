@@ -14,7 +14,7 @@ public class NewsApiResponseItem {
     private String imageUrl;
     private String publishedAt;
 
-    public NewsApiResponseItem(){
+    public NewsApiResponseItem() {
 
     }
 

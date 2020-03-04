@@ -8,69 +8,84 @@
     tools:context=".MainActivity">
 
     <View
-        android:id="@+id/v_category"
+        android:id="@+id/v_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/category_height"
-        android:background="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/rv_news_feed"
+        android:layout_height="@dimen/toolbar_height"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_news_feed"
-        android:layout_width="@dimen/match_constraint"
-        android:layout_height="@dimen/match_constraint"
-        android:background="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/v_buttons"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/v_category" />
+    <com.mikepenz.iconics.view.IconicsImageView
+        android:id="@+id/ib_sources"
+        android:layout_width="@dimen/newsfeed_toolbar_default_icon_size"
+        android:layout_height="@dimen/newsfeed_toolbar_default_icon_size"
+        android:layout_marginEnd="@dimen/newsfeed_toolbar_icon_default_margin"
+        app:layout_constraintEnd_toStartOf="@+id/ib_category"
+        app:layout_constraintStart_toEndOf="@+id/tv_description"
+        app:layout_constraintTop_toTopOf="@+id/v_toolbar"
+        app:layout_constraintBottom_toBottomOf="@+id/v_toolbar"
+        app:iiv_icon="gmd-settings"
+        app:iiv_color="@android:color/white" />
 
-    <View
-        android:id="@+id/v_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/buttons_height"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_news_feed"/>
 
-    <ImageView
-        android:id="@+id/iv_favorite"
-        android:layout_width="@dimen/match_constraint"
-        android:layout_height="@dimen/match_constraint"
-        android:background="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/v_buttons"
-        app:layout_constraintStart_toEndOf="@+id/iv_home"
-        app:layout_constraintTop_toBottomOf="@+id/rv_news_feed"
-        app:layout_constraintVertical_bias="0.625"
-        app:srcCompat="@android:drawable/btn_star_big_on"/>
-
-    <ImageView
-        android:id="@+id/iv_home"
-        android:layout_width="@dimen/match_constraint"
-        android:layout_height="@dimen/match_constraint"
-        android:background="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/iv_favorite"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/v_buttons"
-        app:layout_constraintVertical_bias="0.625"
-        app:srcCompat="?attr/homeAsUpIndicator"/>
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/lightColorText"
+        android:gravity="center"
+        android:textSize="@dimen/newsfeed_text_size_category"
+        app:layout_constraintBottom_toBottomOf="@+id/v_toolbar"
+        app:layout_constraintEnd_toStartOf="@+id/ib_category"
+        app:layout_constraintStart_toEndOf="@+id/ib_favorite"
+        app:layout_constraintTop_toTopOf="@+id/v_toolbar"
+        tools:text="@string/category_health"/>
 
     <ImageButton
         android:id="@+id/ib_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/newsfeed_toolbar_default_icon_size"
+        android:layout_height="@dimen/newsfeed_toolbar_default_icon_size"
         android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/v_category"
-        app:layout_constraintEnd_toEndOf="@+id/v_category"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="@dimen/newsfeed_toolbar_icon_default_margin"
+        app:layout_constraintBottom_toBottomOf="@+id/v_toolbar"
+        app:layout_constraintEnd_toEndOf="@+id/v_toolbar"
+        app:layout_constraintTop_toTopOf="@+id/v_toolbar"
         app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+
+    <ImageButton
+        android:id="@+id/ib_favorite"
+        android:layout_width="@dimen/newsfeed_toolbar_default_icon_size"
+        android:layout_height="@dimen/newsfeed_toolbar_default_icon_size"
+        android:layout_marginStart="@dimen/newsfeed_toolbar_icon_default_margin"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/v_toolbar"
+        app:layout_constraintStart_toStartOf="@+id/v_toolbar"
+        app:layout_constraintTop_toTopOf="@+id/v_toolbar" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_news_feed"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/v_toolbar" />
+
+    <TextView
+        android:id="@+id/tv_empty_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:visibility="visible"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/v_toolbar"
+        android:text="@string/no_data_available" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
