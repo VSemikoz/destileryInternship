@@ -13,10 +13,4 @@
     <string name="category_technology">Технологии</string>
     <string name="no_data_available">no data available</string>
 
-    <string name="display_source_no_limits">Без ограничений</string>
-    <string name="source_all">RT,RBC,LENTA</string>
-    <string name="source_RT">RT</string>
-    <string name="source_RBC">RBC</string>
-    <string name="source_LENTA">Lenta</string>
-
 </resources>

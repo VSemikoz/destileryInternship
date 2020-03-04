@@ -9,6 +9,5 @@ public interface NewsApi {
     @GET("/v2/top-headlines")
     Call<NewsApiResponse> getNews(@Query("country") String country,
                                   @Query("category") String category,
-                                  @Query("sources") String source,
                                   @Query("apiKey") String key);
 }

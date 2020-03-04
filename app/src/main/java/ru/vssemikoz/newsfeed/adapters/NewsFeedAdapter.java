@@ -82,7 +82,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         return newsList.size();
     }
 
-    public class NewsViewHolder extends RecyclerView.ViewHolder {
+    class NewsViewHolder extends RecyclerView.ViewHolder {
         boolean favoriteState;
         final ImageView imageView;
         final TextView title;
@@ -91,7 +91,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         final TextView author;
         final ImageButton changeFavoriteStateButton;
 
-        public NewsViewHolder(View view, onItemClickListener listener) {
+        NewsViewHolder(View view, onItemClickListener listener) {
             super(view);
             imageView = view.findViewById(R.id.iv_news_image);
             title = view.findViewById(R.id.tv_title);

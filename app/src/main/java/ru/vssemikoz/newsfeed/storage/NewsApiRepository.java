@@ -5,7 +5,6 @@ import retrofit2.Callback;
 import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
-import ru.vssemikoz.newsfeed.models.Source;
 
 
 public class NewsApiRepository {
@@ -15,22 +14,15 @@ public class NewsApiRepository {
         this.mainApplication = mainApplication;
     }
 
-    public void getNewsFromApi(Category category, Callback<NewsApiResponse> callback, Source source) {
+    public void getNewsFromApi(Category category, Callback<NewsApiResponse> callback) {
         String requestCategory = null;
-        String requestSource = null;
-        String country = "ru";
+        String country = "us";
         String KEY = mainApplication.getKEY();
         Call<NewsApiResponse> call;
-
         if (category != Category.ALL) {
             requestCategory = category.name();
-            requestSource = null;
         }
-        if (source != Source.ALL) {
-            requestSource = Source.getRequestName(source);
-            country = null;
-        }
-        call = mainApplication.getNewsApi().getNews(country, requestCategory, requestSource, KEY);
+        call = mainApplication.getNewsApi().getNews(country, requestCategory, KEY);
         call.enqueue(callback);
     }
 }
