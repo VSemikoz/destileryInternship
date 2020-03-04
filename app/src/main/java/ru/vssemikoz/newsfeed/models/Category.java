@@ -21,7 +21,7 @@ public enum Category {
 
     public static String getDisplayName(Category category) {
         if (category == Category.ALL) {
-            return "Без ограничений";
+            return MainApplication.getContext().getString(R.string.display_category_no_limits);
         }
         return category.toString();
     }

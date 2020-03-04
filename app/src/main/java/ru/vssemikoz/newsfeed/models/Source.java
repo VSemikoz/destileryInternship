@@ -17,7 +17,7 @@ public enum Source {
 
     public static String getDisplayName(Source source) {
         if (source == Source.ALL) {
-            return "Без ограничений";
+            return MainApplication.getContext().getString(R.string.display_source_no_limits);
         } else {
             return Source.getRequestName(source);
         }
