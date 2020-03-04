@@ -11,5 +11,4 @@ public interface NewsApi {
                                   @Query("category") String category,
                                   @Query("sources") String source,
                                   @Query("apiKey") String key);
-
 }
