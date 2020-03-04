@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     protected void onResume() {
         super.onResume();
         favoriteNewsButton = findViewById(R.id.ib_favorite);
-        updateCategoryNameOnToolBar();
+        updateCategoryNameOnDescription();
         changeFavoriteIcon(favoriteNewsButton);
         if (news.isEmpty()) {
             updateData();
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
             showCategorySourceMessageChange();
         }
         performCall();
-        updateCategoryNameOnToolBar();
+        updateCategoryNameOnDescription();
         updateData();
     }
 
@@ -253,19 +253,19 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
             showCategorySourceMessageChange();
         }
         performCall();
-        updateCategoryNameOnToolBar();
+        updateCategoryNameOnDescription();
         updateData();
     }
 
-    private String getDisplaySelectDescriptionText() {
+    private String getDisplayDescriptionText() {
         return "Категории: " + Category.getDisplayName(category) +
                 "\n" +
                 "Источники: " + Source.getDisplayName(source);
     }
 
-    private void updateCategoryNameOnToolBar() {
-        TextView selectDescriptionTextView = findViewById(R.id.tv_select_description);
-        selectDescriptionTextView.setText(getDisplaySelectDescriptionText());
+    private void updateCategoryNameOnDescription() {
+        TextView descriptionTextView = findViewById(R.id.tv_description);
+        descriptionTextView.setText(getDisplayDescriptionText());
     }
 
     @Override

@@ -23,7 +23,7 @@
         android:layout_height="@dimen/newsfeed_toolbar_default_icon_size"
         android:layout_marginEnd="@dimen/newsfeed_toolbar_icon_default_margin"
         app:layout_constraintEnd_toStartOf="@+id/ib_category"
-        app:layout_constraintStart_toEndOf="@+id/tv_select_description"
+        app:layout_constraintStart_toEndOf="@+id/tv_description"
         app:layout_constraintTop_toTopOf="@+id/v_toolbar"
         app:layout_constraintBottom_toBottomOf="@+id/v_toolbar"
         app:iiv_icon="gmd-settings"
@@ -31,7 +31,7 @@
 
 
     <TextView
-        android:id="@+id/tv_select_description"
+        android:id="@+id/tv_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/lightColorText"
