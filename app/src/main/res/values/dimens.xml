@@ -14,5 +14,8 @@
     <dimen name="newsfeed_text_size_category">16sp</dimen>
     <dimen name="card_radius">8dp</dimen>
     <dimen name="card_elevation">8dp</dimen>
+    <dimen name="newsfeed_toolbar_default_icon_size">32dp</dimen>
+    <dimen name="newsfeed_toolbar_icon_default_margin">8dp</dimen>
+    <dimen name="newsitem_change_favorite_state_button_size">32dp</dimen>
 
 </resources>

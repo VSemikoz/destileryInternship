@@ -13,7 +13,6 @@ import ru.vssemikoz.newsfeed.api.NewsApi;
 public class MainApplication extends Application {
     private final String MAIN_URL = "https://newsapi.org";
     private final String KEY = "c94a57cbbb50497f94a2bb167dc91fc5";
-    private final String NewsSource = "lenta,RT,RBC";
 
     private static Context mContext;
     private Retrofit retrofit;
@@ -63,7 +62,4 @@ public class MainApplication extends Application {
         return newsDataBase;
     }
 
-    public String getNewsSource() {
-        return NewsSource;
-    }
 }

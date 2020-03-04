@@ -19,8 +19,7 @@ public class IconicStorage {
         if (STAR_YELLOW_BORDERLESS == null) {
             STAR_YELLOW_BORDERLESS = new IconicsDrawable(context)
                     .icon(GoogleMaterial.Icon.gmd_star)
-                    .color(IconicsColor.colorInt(Color.YELLOW))
-                    .size(IconicsSize.dp(48));
+                    .color(IconicsColor.colorInt(Color.YELLOW));
         }
         return STAR_YELLOW_BORDERLESS;
     }
@@ -30,7 +29,6 @@ public class IconicStorage {
             STAR_YELLOW_BORDER = new IconicsDrawable(context)
                     .icon(GoogleMaterial.Icon.gmd_star)
                     .color(IconicsColor.colorInt(Color.YELLOW))
-                    .size(IconicsSize.dp(48))
                     .contourColor(IconicsColor.colorInt(Color.BLACK))
                     .contourWidth(IconicsSize.dp(2));
         }
@@ -41,8 +39,7 @@ public class IconicStorage {
         if (STAR_WHITE_BORDERLESS == null) {
             STAR_WHITE_BORDERLESS = new IconicsDrawable(context)
                     .icon(GoogleMaterial.Icon.gmd_star)
-                    .color(IconicsColor.colorInt(Color.WHITE))
-                    .size(IconicsSize.dp(48));
+                    .color(IconicsColor.colorInt(Color.WHITE));
         }
         return STAR_WHITE_BORDERLESS;
     }
@@ -52,7 +49,6 @@ public class IconicStorage {
             STAR_WHITE_BORDER = new IconicsDrawable(context)
                     .icon(GoogleMaterial.Icon.gmd_star)
                     .color(IconicsColor.colorInt(Color.WHITE))
-                    .size(IconicsSize.dp(48))
                     .contourColor(IconicsColor.colorInt(Color.BLACK))
                     .contourWidth(IconicsSize.dp(2));
         }
