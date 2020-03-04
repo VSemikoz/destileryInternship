@@ -1,4 +1,5 @@
- <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+ <androidx.cardview.widget.CardView
+     xmlns:app="http://schemas.android.com/apk/res-auto"
      android:id="@+id/cv_item"
      xmlns:android="http://schemas.android.com/apk/res/android"
      xmlns:tools="http://schemas.android.com/tools"
