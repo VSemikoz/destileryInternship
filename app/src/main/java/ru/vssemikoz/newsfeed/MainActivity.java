@@ -28,7 +28,7 @@ import retrofit2.Response;
 import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
-import ru.vssemikoz.newsfeed.dialogs.PickSorceDialog;
+import ru.vssemikoz.newsfeed.dialogs.PickSourceDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
@@ -39,7 +39,7 @@ import ru.vssemikoz.newsfeed.storage.IconicStorage;
 import ru.vssemikoz.newsfeed.storage.NewsApiRepository;
 import ru.vssemikoz.newsfeed.storage.NewsStorage;
 
-public class MainActivity extends AppCompatActivity implements PickCategoryDialog.OnCategorySelectedListener, PickSorceDialog.OnSourceSelectedListener {
+public class MainActivity extends AppCompatActivity implements PickCategoryDialog.OnCategorySelectedListener, PickSourceDialog.OnSourceSelectedListener {
     private String TAG = MainActivity.class.getSimpleName();
     private boolean showOnlyFavoriteNews = false;
     private Category category = Category.ALL;
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         favoriteNewsButton.setImageDrawable(IconicStorage.getWhiteStarBorderless(this));
 
         sourceButton.setOnClickListener(v -> {
-            DialogFragment sourceDialog = new PickSorceDialog();
+            DialogFragment sourceDialog = new PickSourceDialog();
             sourceDialog.show(getSupportFragmentManager(), "sourceDialog");
         });
         categoryButton.setOnClickListener(v -> {
@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
                 Toast.LENGTH_LONG).show();
     }
 
-    Boolean categoryAndSourceNotDefault() {
+    private Boolean categoryAndSourceNotDefault() {
         return source != Source.ALL & category != Category.ALL;
     }
 
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         updateData();
     }
 
-    private String GetDisplaySelectDescriptionText() {
+    private String getDisplaySelectDescriptionText() {
         return "Категории: " + Category.getDisplayName(category) +
                 "\n" +
                 "Источники: " + Source.getDisplayName(source);
@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
     private void updateCategoryNameOnToolBar() {
         TextView selectDescriptionTextView = findViewById(R.id.tv_select_description);
-        selectDescriptionTextView.setText(GetDisplaySelectDescriptionText());
+        selectDescriptionTextView.setText(getDisplaySelectDescriptionText());
     }
 
     @Override
