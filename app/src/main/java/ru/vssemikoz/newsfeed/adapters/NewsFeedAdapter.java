@@ -1,6 +1,7 @@
 package ru.vssemikoz.newsfeed.adapters;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,12 +71,10 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
             holder.changeFavoriteStateButton.setImageDrawable(IconicStorage.getWhiteStarBorder(context));
         }
 
-        if (newsItem.getImageUrl() != null) {
-            if(!newsItem.getImageUrl().isEmpty()){
-                Picasso.with(context)
-                        .load(newsItem.getImageUrl())
-                        .into(holder.imageView);
-            }
+        if (TextUtils.isEmpty(newsItem.getImageUrl())){
+            Picasso.with(context)
+                    .load(newsItem.getImageUrl())
+                    .into(holder.imageView);
         }
     }
 
