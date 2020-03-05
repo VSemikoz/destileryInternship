@@ -22,13 +22,10 @@ public class NewsStorage {
         if (favoriteNewsState & category != Category.ALL) {
             return newsItemDAO.getFavoriteNewsByCategory(Category.getRequestName(category));
         }
-        if (!favoriteNewsState & category == Category.ALL) {
+        if (category == Category.ALL) {
             return newsItemDAO.getAll();
         }
-        if (!favoriteNewsState & category != Category.ALL) {
-            return newsItemDAO.getNewsByCategory(Category.getRequestName(category));
-        }
-        return new ArrayList<>();
+        return newsItemDAO.getNewsByCategory(Category.getRequestName(category));
     }
 
     public void updateNews(NewsItem item) {

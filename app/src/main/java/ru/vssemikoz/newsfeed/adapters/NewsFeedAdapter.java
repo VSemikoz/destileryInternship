@@ -74,9 +74,10 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         if (!TextUtils.isEmpty(newsItem.getImageUrl())) {
             Picasso.with(context)
                     .load(newsItem.getImageUrl())
+                    .error(R.drawable.no_image_found)
                     .into(holder.imageView);
         } else {
-            holder.imageView.setImageResource(R.mipmap.ic_launcher);
+            holder.imageView.setImageResource(R.drawable.no_image_found);
         }
     }
 
