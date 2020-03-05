@@ -15,14 +15,14 @@ public class NewsApiRepository {
     }
 
     public void getNewsFromApi(Category category, Callback<NewsApiResponse> callback) {
-        String requestCategory = null;
-        String requestCountry = "ru";
+        String categoryKey = null;
+        String countryKey = "ru";
         String KEY = mainApplication.getKEY();
         Call<NewsApiResponse> call;
         if (category != Category.ALL) {
-            requestCategory = category.name();
+            categoryKey = category.name();
         }
-        call = mainApplication.getNewsApi().getNews(requestCountry, requestCategory, KEY);
+        call = mainApplication.getNewsApi().getNews(countryKey, categoryKey, KEY);
         call.enqueue(callback);
     }
 }
