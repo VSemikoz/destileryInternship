@@ -1,6 +1,5 @@
 package ru.vssemikoz.newsfeed.storage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
@@ -16,10 +15,10 @@ public class NewsStorage {
     }
 
     public List<NewsItem> getNewsFromDB(boolean favoriteNewsState, Category category) {
-        if (favoriteNewsState & category == Category.ALL) {
+        if (favoriteNewsState && category == Category.ALL) {
             return newsItemDAO.getFavoriteNews();
         }
-        if (favoriteNewsState & category != Category.ALL) {
+        if (favoriteNewsState && category != Category.ALL) {
             return newsItemDAO.getFavoriteNewsByCategory(Category.getRequestName(category));
         }
         if (category == Category.ALL) {
