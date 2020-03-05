@@ -15,11 +15,12 @@ public class NewsStorage {
     }
 
     public List<NewsItem> getNewsFromDB(boolean favoriteNewsState, Category category) {
-        if (favoriteNewsState && category == Category.ALL) {
-            return newsItemDAO.getFavoriteNews();
-        }
-        if (favoriteNewsState && category != Category.ALL) {
-            return newsItemDAO.getFavoriteNewsByCategory(Category.getRequestName(category));
+        if (favoriteNewsState) {
+            if (category == Category.ALL) {
+                return newsItemDAO.getFavoriteNews();
+            } else {
+                return newsItemDAO.getFavoriteNewsByCategory(Category.getRequestName(category));
+            }
         }
         if (category == Category.ALL) {
             return newsItemDAO.getAll();
