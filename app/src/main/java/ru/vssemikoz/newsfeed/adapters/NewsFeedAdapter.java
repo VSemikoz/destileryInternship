@@ -71,10 +71,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
             holder.changeFavoriteStateButton.setImageDrawable(IconicStorage.getWhiteStarBorder(context));
         }
 
-        if (TextUtils.isEmpty(newsItem.getImageUrl())){
+        if (!TextUtils.isEmpty(newsItem.getImageUrl())) {
             Picasso.with(context)
                     .load(newsItem.getImageUrl())
                     .into(holder.imageView);
+        } else {
+            holder.imageView.setImageResource(R.mipmap.ic_launcher);
         }
     }
 
