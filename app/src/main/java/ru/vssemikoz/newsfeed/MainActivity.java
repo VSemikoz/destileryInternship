@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     private RecyclerView recyclerView;
     private TextView emptyView;
     private ImageButton favoriteNewsButton;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
         mainApplication = (MainApplication) getApplicationContext();
 
+        progressBar = findViewById(R.id.progress_bar);
         ImageButton categoryButton = findViewById(R.id.ib_category);
         favoriteNewsButton = findViewById(R.id.ib_favorite);
         favoriteNewsButton.setImageDrawable(IconicStorage.getWhiteStarBorderless(this));
@@ -171,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     private void performCall() {
         NewsApiRepository newsApiRepository = new NewsApiRepository(mainApplication);
         newsApiRepository.getNewsFromApi(category, callbackNewsItemList);
+        progressBar.setVisibility(ProgressBar.VISIBLE);
     }
 
     private void initNewsStorage() {
@@ -188,11 +192,13 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
                 }
                 newsStorage.insertUnique(getNewsItemListByResponse(response, category));
                 updateData();
+                progressBar.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
             public void onFailure(Call<NewsApiResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure " + Objects.requireNonNull(t.getMessage()));
+                progressBar.setVisibility(ProgressBar.INVISIBLE);
             }
         };
     }
