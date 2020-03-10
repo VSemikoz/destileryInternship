@@ -1,5 +1,6 @@
 package ru.vssemikoz.newsfeed.adapters;
 
+
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,78 +15,35 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.storage.IconicStorage;
 import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
-public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsViewHolder> {
-    private List<NewsItem> newsList;
-    private Context context;
-    private onItemClickListener mListener;
+public class NewsFeedAdapter extends BaseAdapter {
+    private onNewsItemClickListener listener;
 
-    public interface onItemClickListener {
+    public interface onNewsItemClickListener extends OnRecyclerItemClickListener{
         void onChangeFavoriteStateClick(int position);
-
         void onNewsImageClick(int position);
     }
 
-    public void setOnItemClickListener(onItemClickListener listener) {
-        this.mListener = listener;
-    }
-
     public NewsFeedAdapter(Context context) {
-        this.context = context;
+        super(context);
     }
 
-    public void setNewsList(List<NewsItem> newsList) {
-        this.newsList = newsList;
+    public void setOnItemClickListener(onNewsItemClickListener mListener) {
+        super.setOnItemClickListener(mListener);
+        this.listener = mListener;
     }
 
-    public List<NewsItem> getNewsList() {
-        return newsList;
-    }
-
-    @NonNull
     @Override
-    public NewsFeedAdapter.NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BaseHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item, parent, false);
-        return new NewsViewHolder(view, mListener);
+        return new NewsFeedAdapter.NewsViewHolder(view, listener);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
-        NewsItem newsItem = newsList.get(position);
-        holder.title.setText(newsItem.getTitle());
-        holder.description.setText(newsItem.getDescription());
-        holder.favoriteState = newsItem.isFavorite();
-        holder.dateTime.setText(DateConverter.fromDateToUIFormat(newsItem.getPublishedAt()));
-        holder.author.setText(newsItem.getAuthor());
-
-        if (holder.favoriteState) {
-            holder.changeFavoriteStateButton.setImageDrawable(IconicStorage.getYellowStarBorder(context));
-        } else {
-            holder.changeFavoriteStateButton.setImageDrawable(IconicStorage.getWhiteStarBorder(context));
-        }
-
-        if (!TextUtils.isEmpty(newsItem.getImageUrl())) {
-            Picasso.with(context)
-                    .load(newsItem.getImageUrl())
-                    .error(R.drawable.no_image_found)
-                    .into(holder.imageView);
-        } else {
-            holder.imageView.setImageResource(R.drawable.no_image_found);
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        return newsList.size();
-    }
-
-    class NewsViewHolder extends RecyclerView.ViewHolder {
+    public class NewsViewHolder extends BaseHolder {
         boolean favoriteState;
         final ImageView imageView;
         final TextView title;
@@ -94,7 +52,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
         final TextView author;
         final ImageButton changeFavoriteStateButton;
 
-        NewsViewHolder(View view, onItemClickListener listener) {
+
+        NewsViewHolder(View view, onNewsItemClickListener listener) {
             super(view);
             imageView = view.findViewById(R.id.iv_news_image);
             title = view.findViewById(R.id.tv_title);
@@ -122,5 +81,32 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsVi
                 }
             });
         }
+
+        @Override
+        public void onBind(Object item, OnRecyclerItemClickListener listener) {
+            super.onBind(item, listener);
+            NewsItem newsItem = (NewsItem) item;
+            title.setText(newsItem.getTitle());
+            description.setText(newsItem.getDescription());
+            favoriteState = newsItem.isFavorite();
+            dateTime.setText(DateConverter.fromDateToUIFormat(newsItem.getPublishedAt()));
+            author.setText(newsItem.getAuthor());
+
+            if (favoriteState) {
+                changeFavoriteStateButton.setImageDrawable(IconicStorage.getYellowStarBorder(getContext()));
+            } else {
+                changeFavoriteStateButton.setImageDrawable(IconicStorage.getWhiteStarBorder(getContext()));
+            }
+
+            if (!TextUtils.isEmpty(newsItem.getImageUrl())) {
+                Picasso.with(getContext())
+                        .load(newsItem.getImageUrl())
+                        .error(R.drawable.no_image_found)
+                        .into(imageView);
+            } else {
+                imageView.setImageResource(R.drawable.no_image_found);
+            }
+        }
     }
+
 }
