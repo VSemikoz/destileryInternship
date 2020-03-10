@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:elevation="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/rv_news_feed"
+        app:layout_constraintStart_toStartOf="@+id/rv_news_feed"
+        app:layout_constraintTop_toTopOf="@+id/rv_news_feed"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_news_feed"
+        android:theme="@style/CircularProgress" />
+
     <View
         android:id="@+id/v_toolbar"
         android:layout_width="match_parent"
