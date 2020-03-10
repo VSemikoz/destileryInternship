@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import ru.vssemikoz.newsfeed.R;
@@ -23,8 +25,9 @@ import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 public class NewsFeedAdapter extends BaseAdapter {
     private onNewsItemClickListener listener;
 
-    public interface onNewsItemClickListener extends OnRecyclerItemClickListener{
+    public interface onNewsItemClickListener extends OnRecyclerItemClickListener {
         void onChangeFavoriteStateClick(int position);
+
         void onNewsImageClick(int position);
     }
 
@@ -51,6 +54,7 @@ public class NewsFeedAdapter extends BaseAdapter {
         final TextView dateTime;
         final TextView author;
         final ImageButton changeFavoriteStateButton;
+        final ProgressBar progressBar;
 
 
         NewsViewHolder(View view, onNewsItemClickListener listener) {
@@ -61,6 +65,7 @@ public class NewsFeedAdapter extends BaseAdapter {
             dateTime = view.findViewById(R.id.et_datetime);
             author = view.findViewById(R.id.et_author);
             changeFavoriteStateButton = view.findViewById(R.id.ib_change_favorite_state);
+            progressBar = view.findViewById(R.id.image_progress_bar);
 
             changeFavoriteStateButton.setOnClickListener(v -> {
                 if (listener != null) {
@@ -98,14 +103,27 @@ public class NewsFeedAdapter extends BaseAdapter {
                 changeFavoriteStateButton.setImageDrawable(IconicStorage.getWhiteStarBorder(getContext()));
             }
 
+            progressBar.setVisibility(ProgressBar.VISIBLE);
             if (!TextUtils.isEmpty(newsItem.getImageUrl())) {
                 Picasso.with(getContext())
                         .load(newsItem.getImageUrl())
                         .error(R.drawable.no_image_found)
-                        .into(imageView);
+                        .into(imageView, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                progressBar.setVisibility(ProgressBar.GONE);
+                            }
+
+                            @Override
+                            public void onError() {
+                            }
+                        });
             } else {
                 imageView.setImageResource(R.drawable.no_image_found);
+                progressBar.setVisibility(ProgressBar.GONE);
             }
+
+
         }
     }
 
