@@ -25,8 +25,8 @@ import java.util.Objects;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
+import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
@@ -85,8 +85,8 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         if (news.isEmpty()) {
             updateData();
         }
-        if (adapter.getNewsList() == null) {
-            adapter.setNewsList(news);
+        if (adapter.getItems() == null) {
+            adapter.setItems(news);
         }
         initRecycleViewData();
     }
@@ -107,8 +107,10 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         recyclerView = findViewById(R.id.rv_news_feed);
         emptyView = findViewById(R.id.tv_empty_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
         adapter = new NewsFeedAdapter(getApplicationContext());
-        adapter.setOnItemClickListener(new NewsFeedAdapter.onItemClickListener() {
+        adapter.setOnItemClickListener(new NewsFeedAdapter.onNewsItemClickListener() {
             @Override
             public void onChangeFavoriteStateClick(int position) {
                 changeFavoriteState(position);
@@ -207,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
     void updateData() {
         news = getNewsFromDB();
         setRecyclerViewOrEmptyView();
-        adapter.setNewsList(news);
+        adapter.setItems(news);
         adapter.notifyDataSetChanged();
         Toast.makeText(getApplicationContext(),
                 "DBSize: " + news.size(),
