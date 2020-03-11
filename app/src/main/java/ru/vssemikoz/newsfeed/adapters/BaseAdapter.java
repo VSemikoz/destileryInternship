@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder<T>> {
@@ -16,7 +18,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     interface OnRecyclerItemClickListener {
     }
 
-    public BaseAdapter(Context context){
+    BaseAdapter(Context context){
         this.context = context;
     }
 
@@ -28,7 +30,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         return items;
     }
 
-    public void setOnItemClickListener(OnRecyclerItemClickListener listener) {
+    void setOnItemClickListener(OnRecyclerItemClickListener listener) {
         this.listener = listener;
     }
 
@@ -36,7 +38,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         return listener;
     }
 
-    public Context getContext() {
+    Context getContext() {
         return context;
     }
 
@@ -44,6 +46,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         this.context = context;
     }
 
+    @NotNull
     @Override
     public abstract BaseViewHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType);
 
