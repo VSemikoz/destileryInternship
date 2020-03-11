@@ -20,7 +20,7 @@ import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.storage.IconicStorage;
 import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
-public class NewsFeedAdapter extends BaseAdapter {
+public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
     private onNewsItemClickListener listener;
 
     public interface onNewsItemClickListener extends OnRecyclerItemClickListener{
@@ -43,7 +43,7 @@ public class NewsFeedAdapter extends BaseAdapter {
         return new NewsFeedAdapter.NewsViewHolder(view, listener);
     }
 
-    public class NewsViewHolder extends BaseViewHolder {
+    public class NewsViewHolder extends BaseViewHolder<NewsItem> {
         boolean favoriteState;
         final ImageView imageView;
         final TextView title;
@@ -83,9 +83,7 @@ public class NewsFeedAdapter extends BaseAdapter {
         }
 
         @Override
-        public void onBind(Object item, OnRecyclerItemClickListener listener) {
-            super.onBind(item, listener);
-            NewsItem newsItem = (NewsItem) item;
+        public void onBind(NewsItem newsItem, OnRecyclerItemClickListener listener) {
             title.setText(newsItem.getTitle());
             description.setText(newsItem.getDescription());
             favoriteState = newsItem.isFavorite();
