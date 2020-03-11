@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
             showOnlyFavoriteNews = !showOnlyFavoriteNews;
             changeFavoriteIcon(favoriteNewsButton);
             updateData();
+            setRecyclerViewOrEmptyView();
         });
 
         initRecView();
@@ -130,12 +131,11 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         NewsItem item = news.get(position);
         item.invertFavoriteState();
         newsStorage.updateNews(item);
-        setRecyclerViewOrEmptyView();
         if (!item.isFavorite() && showOnlyFavoriteNews) {
             news.remove(position);
             adapter.notifyItemRemoved(position);
             if (news.isEmpty()) {
-                setRecyclerViewOrEmptyView();
+                setEmptyViewOnDisplay();
             }
         } else {
             adapter.notifyItemChanged(position);
@@ -156,24 +156,33 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
         }
     }
 
+    void setEmptyViewOnDisplay() {
+        recyclerView.setVisibility(View.GONE);
+        emptyView.setVisibility(View.VISIBLE);
+    }
+
+    void setRecyclerViewOnDisplay() {
+        recyclerView.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.GONE);
+    }
+
     void setRecyclerViewOrEmptyView() {
         if (news.isEmpty()) {
-            recyclerView.setVisibility(View.GONE);
-            emptyView.setVisibility(View.VISIBLE);
+            setEmptyViewOnDisplay();
         } else {
-            recyclerView.setVisibility(View.VISIBLE);
-            emptyView.setVisibility(View.GONE);
+            setRecyclerViewOnDisplay();
         }
     }
 
     private void initRecycleViewData() {
         recyclerView.setAdapter(adapter);
-        setRecyclerViewOrEmptyView();
+        setEmptyViewOnDisplay();
     }
 
     private void performCall() {
         NewsApiRepository newsApiRepository = new NewsApiRepository(mainApplication);
         newsApiRepository.getNewsFromApi(category, callbackNewsItemList);
+        setEmptyViewOnDisplay();
         progressBar.setVisibility(ProgressBar.VISIBLE);
     }
 
@@ -192,13 +201,15 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
                 }
                 newsStorage.insertUnique(getNewsItemListByResponse(response, category));
                 updateData();
-                progressBar.setVisibility(ProgressBar.INVISIBLE);
+                setRecyclerViewOrEmptyView();
+                progressBar.setVisibility(ProgressBar.GONE);
             }
 
             @Override
             public void onFailure(Call<NewsApiResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure " + Objects.requireNonNull(t.getMessage()));
-                progressBar.setVisibility(ProgressBar.INVISIBLE);
+                setRecyclerViewOrEmptyView();
+                progressBar.setVisibility(ProgressBar.GONE);
             }
         };
     }
@@ -214,7 +225,6 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
     void updateData() {
         news = getNewsFromDB();
-        setRecyclerViewOrEmptyView();
         adapter.setItems(news);
         adapter.notifyDataSetChanged();
         Toast.makeText(getApplicationContext(),
