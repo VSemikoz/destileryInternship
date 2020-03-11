@@ -6,9 +6,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
-public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>> {
+public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder<T>> {
     private List<T> items;
     private OnRecyclerItemClickListener listener;
     private Context context;
@@ -16,7 +18,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
     interface OnRecyclerItemClickListener {
     }
 
-    public BaseAdapter(Context context){
+    BaseAdapter(Context context){
         this.context = context;
     }
 
@@ -28,7 +30,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
         return items;
     }
 
-    public void setOnItemClickListener(OnRecyclerItemClickListener listener) {
+    void setOnItemClickListener(OnRecyclerItemClickListener listener) {
         this.listener = listener;
     }
 
@@ -36,7 +38,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
         return listener;
     }
 
-    public Context getContext() {
+    Context getContext() {
         return context;
     }
 
@@ -44,11 +46,12 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
         this.context = context;
     }
 
+    @NotNull
     @Override
-    public abstract BaseHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType);
+    public abstract BaseViewHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType);
 
     @Override
-    public void onBindViewHolder(@NonNull BaseHolder<T> holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder<T> holder, int position) {
         T item = items.get(position);
         holder.onBind(item, listener);
     }
