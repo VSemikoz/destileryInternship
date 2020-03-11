@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>> {
+public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder<T>> {
     private List<T> items;
     private OnRecyclerItemClickListener listener;
     private Context context;
@@ -45,10 +45,10 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
     }
 
     @Override
-    public abstract BaseHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType);
+    public abstract BaseViewHolder<T> onCreateViewHolder(@NonNull ViewGroup parent, int viewType);
 
     @Override
-    public void onBindViewHolder(@NonNull BaseHolder<T> holder, int position) {
+    public void onBindViewHolder(@NonNull BaseViewHolder<T> holder, int position) {
         T item = items.get(position);
         holder.onBind(item, listener);
     }

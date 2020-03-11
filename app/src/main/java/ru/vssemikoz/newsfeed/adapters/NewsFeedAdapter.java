@@ -38,12 +38,12 @@ public class NewsFeedAdapter extends BaseAdapter {
     }
 
     @Override
-    public BaseHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item, parent, false);
         return new NewsFeedAdapter.NewsViewHolder(view, listener);
     }
 
-    public class NewsViewHolder extends BaseHolder {
+    public class NewsViewHolder extends BaseViewHolder {
         boolean favoriteState;
         final ImageView imageView;
         final TextView title;
