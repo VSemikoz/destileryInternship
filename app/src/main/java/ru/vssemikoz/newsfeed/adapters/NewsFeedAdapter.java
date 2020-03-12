@@ -25,31 +25,30 @@ import ru.vssemikoz.newsfeed.storage.IconicStorage;
 import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
 public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
-    private onNewsItemClickListener listener;
 
-    public interface onNewsItemClickListener extends OnRecyclerItemClickListener {
+    public interface OnNewsItemClickListener extends OnRecyclerItemClickListener {
         void onChangeFavoriteStateClick(int position);
 
-        void onNewsImageClick(int position);
+        @Override
+        void OnRecyclerItemClick(int position);
     }
 
     public NewsFeedAdapter(Context context) {
         super(context);
     }
 
-    public void setOnItemClickListener(onNewsItemClickListener mListener) {
+    public void setOnItemClickListener(OnNewsItemClickListener mListener) {
         super.setOnItemClickListener(mListener);
-        this.listener = mListener;
     }
 
     @NotNull
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item, parent, false);
-        return new NewsFeedAdapter.NewsViewHolder(view, listener);
+        return new NewsFeedAdapter.NewsViewHolder(view, getListener());
     }
 
-    public class NewsViewHolder extends BaseViewHolder<NewsItem> {
+     class NewsViewHolder extends BaseViewHolder<NewsItem> {
         boolean favoriteState;
         final ImageView imageView;
         final TextView title;
@@ -60,8 +59,9 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
         final ProgressBar progressBar;
 
 
-        NewsViewHolder(View view, onNewsItemClickListener listener) {
+        NewsViewHolder(View view, OnRecyclerItemClickListener listener) {//жду базовый
             super(view);
+            OnNewsItemClickListener finalListener = (OnNewsItemClickListener) listener;
             imageView = view.findViewById(R.id.iv_news_image);
             title = view.findViewById(R.id.tv_title);
             description = view.findViewById(R.id.tv_description);
@@ -71,20 +71,20 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
             progressBar = view.findViewById(R.id.image_progress_bar);
 
             changeFavoriteStateButton.setOnClickListener(v -> {
-                if (listener != null) {
+                if (finalListener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        listener.onChangeFavoriteStateClick(position);
+                        finalListener.onChangeFavoriteStateClick(position);
                         favoriteState = !favoriteState;
                     }
                 }
             });
 
             imageView.setOnClickListener(v -> {
-                if (listener != null) {
+                if (finalListener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        listener.onNewsImageClick(position);
+                        finalListener.OnRecyclerItemClick(position);
                     }
                 }
             });
@@ -127,5 +127,4 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
 
         }
     }
-
 }
