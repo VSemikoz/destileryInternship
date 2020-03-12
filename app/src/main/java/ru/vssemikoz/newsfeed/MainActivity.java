@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
     private void initRecycleViewData() {
         recyclerView.setAdapter(adapter);
-        setEmptyViewOnDisplay();
+        setRecyclerViewOrEmptyView();
     }
 
     private void performCall() {
