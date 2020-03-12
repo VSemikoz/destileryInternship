@@ -16,6 +16,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
     private Context context;
 
     interface OnRecyclerItemClickListener {
+        void OnRecyclerItemClick(int position);
     }
 
     BaseAdapter(Context context){
