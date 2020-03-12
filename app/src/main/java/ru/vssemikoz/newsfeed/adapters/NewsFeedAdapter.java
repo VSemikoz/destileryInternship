@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Callback;
@@ -50,6 +51,7 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
 
      class NewsViewHolder extends BaseViewHolder<NewsItem> {
         boolean favoriteState;
+        final CardView cardView;
         final ImageView imageView;
         final TextView title;
         final TextView description;
@@ -62,6 +64,7 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
         NewsViewHolder(View view, OnRecyclerItemClickListener listener) {//жду базовый
             super(view);
             OnNewsItemClickListener finalListener = (OnNewsItemClickListener) listener;
+            cardView = view.findViewById(R.id.cv_item);
             imageView = view.findViewById(R.id.iv_news_image);
             title = view.findViewById(R.id.tv_title);
             description = view.findViewById(R.id.tv_description);
@@ -80,7 +83,7 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
                 }
             });
 
-            imageView.setOnClickListener(v -> {
+            cardView.setOnClickListener(v -> {
                 if (finalListener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
