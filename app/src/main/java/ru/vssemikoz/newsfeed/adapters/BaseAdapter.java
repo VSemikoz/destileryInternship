@@ -35,16 +35,12 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         this.listener = listener;
     }
 
-    public OnRecyclerItemClickListener getListener() {
+    OnRecyclerItemClickListener getListener() {
         return listener;
     }
 
     Context getContext() {
         return context;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
     }
 
     @NotNull
