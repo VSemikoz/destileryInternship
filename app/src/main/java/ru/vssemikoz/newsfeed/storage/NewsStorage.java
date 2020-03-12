@@ -1,12 +1,10 @@
 package ru.vssemikoz.newsfeed.storage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.models.Source;
 
 public class NewsStorage {
 
@@ -16,26 +14,18 @@ public class NewsStorage {
         this.newsItemDAO = newsItemDAO;
     }
 
-    public List<NewsItem> getNewsFromDB(boolean favoriteNewsState, Category category, Source source) {
-        if (favoriteNewsState & category == Category.ALL & source == Source.ALL) {
-            return newsItemDAO.getFavoriteNews();
+    public List<NewsItem> getNewsFromDB(boolean favoriteNewsState, Category category) {
+        if (favoriteNewsState) {
+            if (category == Category.ALL) {
+                return newsItemDAO.getFavoriteNews();
+            } else {
+                return newsItemDAO.getFavoriteNewsByCategory(Category.getRequestName(category));
+            }
         }
-        if (favoriteNewsState & category != Category.ALL & source == Source.ALL) {
-            return newsItemDAO.getFavoriteNewsByCategory(Category.getRequestName(category));
-        }
-        if (favoriteNewsState & category == Category.ALL & source != Source.ALL) {
-            return newsItemDAO.getFavoriteNewsBySource(Source.getRequestName(source));
-        }
-        if (!favoriteNewsState & category == Category.ALL & source == Source.ALL) {
+        if (category == Category.ALL) {
             return newsItemDAO.getAll();
         }
-        if (!favoriteNewsState & category != Category.ALL & source == Source.ALL) {
-            return newsItemDAO.getNewsByCategory(Category.getRequestName(category));
-        }
-        if (!favoriteNewsState & category == Category.ALL & source != Source.ALL) {
-            return newsItemDAO.getNewsBySource(Source.getRequestName(source));
-        }
-        return new ArrayList<>();
+        return newsItemDAO.getNewsByCategory(Category.getRequestName(category));
     }
 
     public void updateNews(NewsItem item) {

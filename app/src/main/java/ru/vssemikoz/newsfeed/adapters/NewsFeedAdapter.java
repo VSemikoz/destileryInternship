@@ -1,123 +1,133 @@
 package ru.vssemikoz.newsfeed.adapters;
 
+
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.storage.IconicStorage;
 import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
-public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.NewsViewHolder> {
-    private List<NewsItem> newsList;
-    private Context context;
-    private onItemClickListener mListener;
+public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
 
-    public interface onItemClickListener {
+    public interface OnNewsItemClickListener extends OnRecyclerItemClickListener {
         void onChangeFavoriteStateClick(int position);
 
-        void onNewsImageClick(int position);
-    }
-
-    public void setOnItemClickListener(onItemClickListener listener) {
-        this.mListener = listener;
+        @Override
+        void OnRecyclerItemClick(int position);
     }
 
     public NewsFeedAdapter(Context context) {
-        this.context = context;
+        super(context);
     }
 
-    public void setNewsList(List<NewsItem> newsList) {
-        this.newsList = newsList;
+    public void setOnItemClickListener(OnNewsItemClickListener mListener) {
+        super.setOnItemClickListener(mListener);
     }
 
-    public List<NewsItem> getNewsList() {
-        return newsList;
-    }
-
-
-    @NonNull
+    @NotNull
     @Override
-    public NewsFeedAdapter.NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item, parent, false);
-        return new NewsViewHolder(view, mListener);
+        return new NewsFeedAdapter.NewsViewHolder(view, getListener());
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
-        NewsItem newsItem = newsList.get(position);
-        holder.title.setText(newsItem.getTitle());
-        holder.description.setText(newsItem.getDescription());
-        holder.favoriteState = newsItem.isFavorite();
-        holder.dateTime.setText(DateConverter.fromDateToUIFormat(newsItem.getPublishedAt()));
-        holder.author.setText(newsItem.getAuthor());
-
-        if (holder.favoriteState) {
-            holder.changeFavoriteStateButton.setImageDrawable(IconicStorage.getYellowStarBorder(context));
-        } else {
-            holder.changeFavoriteStateButton.setImageDrawable(IconicStorage.getWhiteStarBorder(context));
-        }
-
-        if (newsItem.getImageUrl() != null) {
-            Picasso.with(context)
-                    .load(newsItem.getImageUrl())
-                    .into(holder.imageView);
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        return newsList.size();
-    }
-
-    public class NewsViewHolder extends RecyclerView.ViewHolder {
+     class NewsViewHolder extends BaseViewHolder<NewsItem> {
         boolean favoriteState;
+        final CardView cardView;
         final ImageView imageView;
         final TextView title;
         final TextView description;
         final TextView dateTime;
         final TextView author;
         final ImageButton changeFavoriteStateButton;
+        final ProgressBar progressBar;
 
-        public NewsViewHolder(View view, onItemClickListener listener) {
+
+        NewsViewHolder(View view, OnRecyclerItemClickListener listener) {//жду базовый
             super(view);
+            OnNewsItemClickListener finalListener = (OnNewsItemClickListener) listener;
+            cardView = view.findViewById(R.id.cv_item);
             imageView = view.findViewById(R.id.iv_news_image);
             title = view.findViewById(R.id.tv_title);
             description = view.findViewById(R.id.tv_description);
             dateTime = view.findViewById(R.id.et_datetime);
             author = view.findViewById(R.id.et_author);
             changeFavoriteStateButton = view.findViewById(R.id.ib_change_favorite_state);
+            progressBar = view.findViewById(R.id.image_progress_bar);
 
             changeFavoriteStateButton.setOnClickListener(v -> {
-                if (listener != null) {
+                if (finalListener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        listener.onChangeFavoriteStateClick(position);
+                        finalListener.onChangeFavoriteStateClick(position);
                         favoriteState = !favoriteState;
                     }
                 }
             });
 
-            imageView.setOnClickListener(v -> {
-                if (listener != null) {
+            cardView.setOnClickListener(v -> {
+                if (finalListener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        listener.onNewsImageClick(position);
+                        finalListener.OnRecyclerItemClick(position);
                     }
                 }
             });
+        }
+
+        @Override
+        public void onBind(NewsItem newsItem, OnRecyclerItemClickListener listener) {
+            title.setText(newsItem.getTitle());
+            description.setText(newsItem.getDescription());
+            favoriteState = newsItem.isFavorite();
+            dateTime.setText(DateConverter.fromDateToUIFormat(newsItem.getPublishedAt()));
+            author.setText(newsItem.getAuthor());
+
+            if (favoriteState) {
+                changeFavoriteStateButton.setImageDrawable(IconicStorage.getYellowStarBorder(getContext()));
+            } else {
+                changeFavoriteStateButton.setImageDrawable(IconicStorage.getWhiteStarBorder(getContext()));
+            }
+
+            progressBar.setVisibility(ProgressBar.VISIBLE);
+            if (!TextUtils.isEmpty(newsItem.getImageUrl())) {
+                Picasso.with(getContext())
+                        .load(newsItem.getImageUrl())
+                        .error(R.drawable.no_image_found)
+                        .into(imageView, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                progressBar.setVisibility(ProgressBar.GONE);
+                            }
+
+                            @Override
+                            public void onError() {
+                            }
+                        });
+            } else {
+                imageView.setImageResource(R.drawable.no_image_found);
+                progressBar.setVisibility(ProgressBar.GONE);
+            }
+
+
         }
     }
 }

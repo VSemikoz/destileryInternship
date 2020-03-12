@@ -19,17 +19,11 @@ public interface NewsItemDAO {
     @Query("SELECT * FROM NewsItem WHERE category == :category ORDER BY published_at DESC")
     List<NewsItem> getNewsByCategory(String category);
 
-    @Query("SELECT * FROM NewsItem WHERE author == :source ORDER BY published_at DESC")
-    List<NewsItem> getNewsBySource(String source);
-
     @Query("SELECT * FROM NewsItem WHERE is_favorite == 1 ORDER BY published_at DESC")
     List<NewsItem> getFavoriteNews();
 
     @Query("SELECT * FROM NewsItem WHERE is_favorite == 1 and category == :category ORDER BY published_at DESC")
     List<NewsItem> getFavoriteNewsByCategory(String category);
-
-    @Query("SELECT * FROM NewsItem WHERE is_favorite == 1 and author == :source ORDER BY published_at DESC")
-    List<NewsItem> getFavoriteNewsBySource(String source);
 
     @Insert
     void insertAll(List<NewsItem> newsItems);
