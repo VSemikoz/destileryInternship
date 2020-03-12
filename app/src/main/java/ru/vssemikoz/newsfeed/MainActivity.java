@@ -114,14 +114,14 @@ public class MainActivity extends AppCompatActivity implements PickCategoryDialo
 
 
         adapter = new NewsFeedAdapter(getApplicationContext());
-        adapter.setOnItemClickListener(new NewsFeedAdapter.onNewsItemClickListener() {
+        adapter.setOnItemClickListener(new NewsFeedAdapter.OnNewsItemClickListener() {
             @Override
             public void onChangeFavoriteStateClick(int position) {
                 changeFavoriteState(position);
             }
 
             @Override
-            public void onNewsImageClick(int position) {
+            public void OnRecyclerItemClick(int position) {
                 showNewsInBrowserByUrl(position);
             }
         });
