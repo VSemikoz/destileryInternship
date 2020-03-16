@@ -22,7 +22,7 @@ public class NewsFeedActivity extends AppCompatActivity {
                 (NewsFeedFragment) getSupportFragmentManager().findFragmentById(R.id.newsfeed_content_frame);
         if (newsFeedFragment == null){
             // TODO: 16.03.2020
-//            newsFeedFragment = NewsFeedFragment.newInstance();
+            newsFeedFragment = NewsFeedFragment.newInstance();
 //            ActivityUtils.addFragmentToActivity(
 //                    getSupportFragmentManager(), tasksFragment, R.id.contentFrame);
         }
