@@ -1,18 +1,22 @@
 package ru.vssemikoz.newsfeed.newsfeed;
 
 import android.content.Context;
-import android.widget.ImageButton;
+
+import java.util.List;
 
 import ru.vssemikoz.newsfeed.BasePresenter;
 import ru.vssemikoz.newsfeed.BaseView;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
 import ru.vssemikoz.newsfeed.models.Category;
+import ru.vssemikoz.newsfeed.models.NewsItem;
 
 public interface NewsFeedContract {
 
     interface View extends BaseView<Presenter> {
 
-        void changeFavoriteIcon(ImageButton button);
+        void showNews();
+
+        void setFavoriteIcon();
 
         void setEmptyViewOnDisplay();
 
@@ -42,6 +46,10 @@ public interface NewsFeedContract {
         void setShowFavorite(Boolean showOnlyFavorite);
 
         Boolean getShowFavorite();
+
+        List<NewsItem> getNews();
+
+        void invertFavoriteState();
 
     }
 }
