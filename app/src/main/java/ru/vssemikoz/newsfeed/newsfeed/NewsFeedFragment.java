@@ -170,7 +170,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View 
 
     void onCategorySelected(Category selectCategory) {
         presenter.setCategory(selectCategory);
-//        performCall();
         updateCategoryNameOnDescription();
         updateNews();
         fillFragmentByView();
