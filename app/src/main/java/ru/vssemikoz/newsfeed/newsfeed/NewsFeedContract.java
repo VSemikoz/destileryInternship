@@ -23,7 +23,7 @@ public interface NewsFeedContract {
         void setCategoryTitle(Category category);
     }
 
-    interface Presenter extends BasePresenter{
+    interface Presenter extends BasePresenter {
         void updateNews();
 
         void invertFavoriteState();

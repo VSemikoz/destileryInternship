@@ -34,7 +34,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private MainApplication mainApplication;
     private NewsStorage newsStorage;
 
-    NewsFeedPresenter(NewsFeedContract.View tasksView, MainApplication mainApplication){
+    NewsFeedPresenter(NewsFeedContract.View tasksView, MainApplication mainApplication) {
         view = checkNotNull(tasksView, "tasksView cannot be null!");
         view.setPresenter(this);
         this.mainApplication = mainApplication;
@@ -98,10 +98,9 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Override
     public void invertFavoriteState() {
         showOnlyFavorite = !showOnlyFavorite;
-        Log.d(TAG, "invertFavoriteState: "+ showOnlyFavorite);
+        Log.d(TAG, "invertFavoriteState: " + showOnlyFavorite);
         view.setFavoriteIcon(showOnlyFavorite);
         loadNewsFromApi();
-//        loadNewsFromDB();
     }
 
     @Override

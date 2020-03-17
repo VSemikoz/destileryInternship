@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,10 +42,11 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     private TextView emptyView;
     private ImageButton favoriteNewsButton;
     private ImageButton categoryButton;
-    private ProgressBar progressBar;// TODO: 16.03.2020 implement progress bar on loads
+    private ProgressBar progressBar;
     private TextView descriptionView;
 
-    public NewsFeedFragment(){}
+    public NewsFeedFragment() {
+    }
 
     static NewsFeedFragment newInstance() {
         return new NewsFeedFragment();
@@ -59,20 +59,12 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
         context = Objects.requireNonNull(getActivity()).getApplicationContext();
         adapter = new NewsFeedAdapter(context);
-
-//        if (savedInstanceState != null) {
-//            Category category = (Category) savedInstanceState.getSerializable(CURRENT_CATEGORY);
-//            Boolean showFavoriteNews = savedInstanceState.getBoolean(CURRENT_SHOW_FAVORITE);
-//            presenter.setShowFavorite(showFavoriteNews);
-//            presenter.setCategory(category);
-//        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         updateCategoryNameOnDescription(Category.getDisplayName(Category.ALL));
-//        setFavoriteIcon();
         presenter.start();
     }
 
@@ -100,10 +92,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
         });
         categoryButton.setOnClickListener(v -> {
-            DialogFragment categoryDialog = new PickCategoryDialog();
-            categoryDialog.onAttachFragment(this);
-            categoryDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
-                    "categoryDialog");
+            Navigator.openCategoryDialogFragment(this, Objects.requireNonNull(getActivity()));
         });
         return root;
     }
@@ -128,7 +117,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
     }
 
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         adapter = new NewsFeedAdapter(context);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
