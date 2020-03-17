@@ -25,6 +25,7 @@ import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
+import ru.vssemikoz.newsfeed.navigator.Navigator;
 import ru.vssemikoz.newsfeed.storage.IconicStorage;
 
 import static androidx.core.util.Preconditions.checkNotNull;
@@ -169,6 +170,12 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     public NewsFeedAdapter getAdapter() {
         return adapter;
     }
+
+    @Override
+    public void openNews(String url) {
+        Navigator.openWebView(url, context);
+    }
+
     @Override
     public void onCategorySelected(Category selectCategory) {
         presenter.setCategory(selectCategory);

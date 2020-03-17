@@ -23,13 +23,14 @@ import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 import ru.vssemikoz.newsfeed.models.NewsItem;
+import ru.vssemikoz.newsfeed.navigator.Navigator;
 import ru.vssemikoz.newsfeed.storage.NewsApiRepository;
 import ru.vssemikoz.newsfeed.storage.NewsStorage;
 
 import static androidx.core.util.Preconditions.checkNotNull;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
-    private final NewsFeedContract.View newsFeedView;
+    private final NewsFeedContract.View newsFeedView;// TODO: 17.03.2020 rename into view
 
     private String TAG = NewsFeedPresenter.class.getName();
     private boolean showOnlyFavorite = false;
@@ -121,15 +122,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private void showNewsInBrowserByUrl(int position) {
         NewsItem item = news.get(position);
         String url = item.getUrl();
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setPackage("com.android.chrome");
-        try {
-            newsFeedView.getContext().startActivity(intent);
-        } catch (ActivityNotFoundException ex) {
-            intent.setPackage(null);
-            newsFeedView.getContext().startActivity(intent);
-        }
+        newsFeedView.openNews(url);
     }
 
     private List<NewsItem> getNewsFromDB() {
@@ -142,6 +135,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private void initNewsItemListCallback() {
+        // TODO: 17.03.2020 extract in network layer
         callbackNewsItemList = new Callback<NewsApiResponse>() {
             @Override
             public void onResponse(@NotNull Call<NewsApiResponse> call, @NotNull Response<NewsApiResponse> response) {

@@ -27,10 +27,12 @@ public interface NewsFeedContract {
         Context getContext();
 
         NewsFeedAdapter getAdapter();
+
+        void openNews(String url);
     }
 
     interface Presenter extends BasePresenter{
-
+        // TODO: 17.03.2020 ничего не возвращает (get) использовать больше show (set)
         void loadNews();
 
         String getDisplayDescriptionText();
