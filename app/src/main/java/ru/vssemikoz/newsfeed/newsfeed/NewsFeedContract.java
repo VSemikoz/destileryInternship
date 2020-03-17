@@ -13,7 +13,7 @@ public interface NewsFeedContract {
 
         void showNewsDetailsUI(String url);
 
-        void fillFragmentByView(List<NewsItem> news);
+        void updateNewsListUI(List<NewsItem> news);
 
         void setFavoriteIcon(Boolean showOnlyFavorite);
 

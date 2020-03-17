@@ -180,8 +180,8 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     }
 
     @Override
-    public void fillFragmentByView(List<NewsItem> news) {
-        Log.d(TAG, "fillFragmentByView: ");
+    public void updateNewsListUI(List<NewsItem> news) {
+        Log.d(TAG, "updateNewsListUI: ");
         if (news == null || news.isEmpty()) {
             setEmptyViewOnDisplay();
         } else {

@@ -75,7 +75,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
             news.remove(position);
             view.removeNewsItem(position);
             if (news.isEmpty()){
-                view.fillFragmentByView(null);
+                view.updateNewsListUI(null);
             }
         } else {
             view.updateNewsItem(position);
@@ -110,7 +110,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         Log.d(TAG, "invertFavoriteState: " + showOnlyFavorite);
         view.setFavoriteIcon(showOnlyFavorite);
         loadNewsFromDB();
-        view.fillFragmentByView(news);
+        view.updateNewsListUI(news);
     }
 
     @Override
@@ -147,7 +147,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                 newsStorage.insertUnique(getNewsItemListByResponse(response, category));
                 Log.d(TAG, "onResponse: ");
                 loadNewsFromDB();
-                view.fillFragmentByView(news);
+                view.updateNewsListUI(news);
             }
 
             @Override
