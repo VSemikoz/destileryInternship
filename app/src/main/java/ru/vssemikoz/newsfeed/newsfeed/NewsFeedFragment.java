@@ -148,22 +148,41 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         updateCategoryNameOnDescription(Category.getDisplayName(category));
     }
 
+    @Override
+    public void updateNewsItem(int position) {
+        adapter.notifyItemChanged(position);
+    }
+
+    @Override
+    public void removeNewsItem(int position) {
+        adapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void showProgressBar() {
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        progressBar.setVisibility(ProgressBar.GONE);
+
+    }
+
     private void setEmptyViewOnDisplay() {
         recyclerView.setVisibility(View.GONE);
         emptyView.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(ProgressBar.VISIBLE);
     }
 
     private void setRecyclerViewOnDisplay() {
         recyclerView.setVisibility(View.VISIBLE);
         emptyView.setVisibility(View.GONE);
-        progressBar.setVisibility(ProgressBar.GONE);
     }
 
     @Override
     public void fillFragmentByView(List<NewsItem> news) {
         Log.d(TAG, "fillFragmentByView: ");
-        if (news.isEmpty()) {
+        if (news == null || news.isEmpty()) {
             setEmptyViewOnDisplay();
         } else {
             setRecyclerViewOnDisplay();

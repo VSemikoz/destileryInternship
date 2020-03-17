@@ -18,6 +18,14 @@ public interface NewsFeedContract {
         void setFavoriteIcon(Boolean showOnlyFavorite);
 
         void setCategoryTitle(Category category);
+
+        void updateNewsItem(int position);
+
+        void removeNewsItem(int position);
+
+        void showProgressBar();
+
+        void hideProgressBar();
     }
 
     interface Presenter extends BasePresenter {
