@@ -14,44 +14,31 @@ public interface NewsFeedContract {
 
     interface View extends BaseView<Presenter> {
 
-        void showNews();
-
-        void setFavoriteIcon();
-
-        void setEmptyViewOnDisplay();
-
-        void setRecyclerViewOnDisplay();
-
-        void updateCategoryNameOnDescription();
-
-        Context getContext();
-
-        NewsFeedAdapter getAdapter();
-
         void openNews(String url);
+
+        void fillFragmentByView(List<NewsItem> news);
+
+        void setFavoriteIcon(Boolean showOnlyFavorite);
+
+        void setCategoryTitle(Category category);
     }
 
     interface Presenter extends BasePresenter{
-        // TODO: 17.03.2020 ничего не возвращает (get) использовать больше show (set)
-        void loadNews();
-
-        String getDisplayDescriptionText();
-
-        void openNewsDetails(int position);
-
-        void changeFavoriteState(int position);
-
-        void setCategory(Category category);
-
-        Category getCategory();
-
-        void setShowFavorite(Boolean showOnlyFavorite);
-
-        Boolean getShowFavorite();
-
-        List<NewsItem> getNews();
+        void updateNews();
 
         void invertFavoriteState();
 
+        void openNewsDetails(int position);
+
+        void changeNewsFavoriteState(int position);
+
+        // TODO: 17.03.2020 remove setters ang getters
+        void setCategory(Category category);
+
+        void setShowFavorite(Boolean showOnlyFavorite);
+
+        Category getCategory();
+
+        Boolean getShowFavorite();
     }
 }
