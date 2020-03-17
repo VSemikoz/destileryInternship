@@ -148,13 +148,13 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         updateCategoryNameOnDescription(Category.getDisplayName(category));
     }
 
-    public void setEmptyViewOnDisplay() {
+    private void setEmptyViewOnDisplay() {
         recyclerView.setVisibility(View.GONE);
         emptyView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(ProgressBar.VISIBLE);
     }
 
-    public void setRecyclerViewOnDisplay() {
+    private void setRecyclerViewOnDisplay() {
         recyclerView.setVisibility(View.VISIBLE);
         emptyView.setVisibility(View.GONE);
         progressBar.setVisibility(ProgressBar.GONE);
@@ -178,7 +178,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         adapter.notifyDataSetChanged();
     }
 
-    public void updateCategoryNameOnDescription(String category) {
+    private void updateCategoryNameOnDescription(String category) {
         Log.d(TAG, "updateCategoryNameOnDescription: ");
         descriptionView.setText(category);
     }

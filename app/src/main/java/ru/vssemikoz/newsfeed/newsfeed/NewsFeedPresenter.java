@@ -50,12 +50,12 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         loadNewsFromApi();
     }
 
-    public void loadNewsFromApi() {
+    private void loadNewsFromApi() {
         Log.d(TAG, "loadNewsFromApi: ");
         performCall();
     }
 
-    public void loadNewsFromDB() {
+    private void loadNewsFromDB() {
         Log.d(TAG, "loadNewsFromDB: ");
         news = getNewsFromDB();
     }
