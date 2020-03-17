@@ -33,6 +33,8 @@ import static androidx.core.util.Preconditions.checkNotNull;
 public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         PickCategoryDialog.OnCategorySelectedListener {
     private String TAG = NewsFeedFragment.class.getName();
+    private String CURRENT_CATEGORY = "CURRENT_CATEGORY";
+    private String CURRENT_SHOW_FAVORITE = "CURRENT_SHOW_FAVORITE";
 
     private NewsFeedContract.Presenter presenter;
     private Context context;
@@ -52,22 +54,31 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: ");
         super.onCreate(savedInstanceState);
 
         context = Objects.requireNonNull(getActivity()).getApplicationContext();
         adapter = new NewsFeedAdapter(context);
+
+//        if (savedInstanceState != null) {
+//            Category category = (Category) savedInstanceState.getSerializable(CURRENT_CATEGORY);
+//            Boolean showFavoriteNews = savedInstanceState.getBoolean(CURRENT_SHOW_FAVORITE);
+//            presenter.setShowFavorite(showFavoriteNews);
+//            presenter.setCategory(category);
+//        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        updateCategoryNameOnDescription();
-        setFavoriteIcon();
+        updateCategoryNameOnDescription(Category.getDisplayName(Category.ALL));
+//        setFavoriteIcon();
         presenter.start();
     }
 
     @Override
     public void setPresenter(NewsFeedContract.Presenter presenter) {
+        Log.d(TAG, "setPresenter: ");
         this.presenter = checkNotNull(presenter);
     }
 
@@ -86,9 +97,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         initRecyclerView();
         favoriteNewsButton.setOnClickListener(v -> {
             presenter.invertFavoriteState();
-            setFavoriteIcon();
-            updateNews();
-            fillFragmentByView();
 
         });
         categoryButton.setOnClickListener(v -> {
@@ -100,6 +108,26 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         return root;
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(CURRENT_CATEGORY, presenter.getCategory());
+        outState.putBoolean(CURRENT_SHOW_FAVORITE, presenter.getShowFavorite());
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            Category category = (Category) savedInstanceState.getSerializable(CURRENT_CATEGORY);
+            Boolean showFavoriteNews = savedInstanceState.getBoolean(CURRENT_SHOW_FAVORITE);
+            presenter.setShowFavorite(showFavoriteNews);
+            presenter.setCategory(category);
+        }
+
+    }
+
     private void initRecyclerView(){
         adapter = new NewsFeedAdapter(context);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -107,7 +135,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         adapter.setOnItemClickListener(new NewsFeedAdapter.OnNewsItemClickListener() {
             @Override
             public void onChangeFavoriteStateClick(int position) {
-                presenter.changeFavoriteState(position);
+                presenter.changeNewsFavoriteState(position);
             }
 
             @Override
@@ -118,17 +146,8 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     }
 
     @Override
-    public void showNews() {
-        Log.d(TAG, "showNews: " + presenter.getNews());
-        setRecyclerViewOnDisplay();
-        List<NewsItem> newsItems = presenter.getNews();
-        adapter.setItems(newsItems);
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void setFavoriteIcon() {
-        if (presenter.getShowFavorite()) {
+    public void setFavoriteIcon(Boolean showOnlyFavorite) {
+        if (showOnlyFavorite) {
             favoriteNewsButton.setImageDrawable(IconicStorage.getYellowStarBorderless(context));
         } else {
             favoriteNewsButton.setImageDrawable(IconicStorage.getWhiteStarBorderless(context));
@@ -136,39 +155,43 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     }
 
     @Override
+    public void setCategoryTitle(Category category) {
+        updateCategoryNameOnDescription(Category.getDisplayName(category));
+    }
+
     public void setEmptyViewOnDisplay() {
         recyclerView.setVisibility(View.GONE);
         emptyView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(ProgressBar.VISIBLE);
     }
 
-    @Override
     public void setRecyclerViewOnDisplay() {
         recyclerView.setVisibility(View.VISIBLE);
         emptyView.setVisibility(View.GONE);
+        progressBar.setVisibility(ProgressBar.GONE);
     }
 
-    private void fillFragmentByView() {
-        if (presenter.getNews().isEmpty()) {
+    @Override
+    public void fillFragmentByView(List<NewsItem> news) {
+        Log.d(TAG, "fillFragmentByView: ");
+        if (news.isEmpty()) {
             setEmptyViewOnDisplay();
         } else {
             setRecyclerViewOnDisplay();
+            showNews(news);
         }
     }
 
-    @Override
-    public void updateCategoryNameOnDescription() {
-        descriptionView.setText(presenter.getDisplayDescriptionText());
+    private void showNews(List<NewsItem> news) {
+        Log.d(TAG, "showNews: " + news);
+        setRecyclerViewOnDisplay();
+        adapter.setItems(news);
+        adapter.notifyDataSetChanged();
     }
 
-    @Nullable
-    @Override
-    public Context getContext() {
-        return context;
-    }
-
-    @Override
-    public NewsFeedAdapter getAdapter() {
-        return adapter;
+    public void updateCategoryNameOnDescription(String category) {
+        Log.d(TAG, "updateCategoryNameOnDescription: ");
+        descriptionView.setText(category);
     }
 
     @Override
@@ -179,15 +202,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Override
     public void onCategorySelected(Category selectCategory) {
         presenter.setCategory(selectCategory);
-        updateCategoryNameOnDescription();
-        updateNews();
-        fillFragmentByView();
-    }
-
-    private void updateNews(){
-        Log.d(TAG, "updateNews: ");
-        presenter.loadNews();
-        adapter.setItems(presenter.getNews());
-        adapter.notifyDataSetChanged();
+        updateCategoryNameOnDescription(Category.getDisplayName(selectCategory));
+        presenter.updateNews();
     }
 }

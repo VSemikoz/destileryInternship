@@ -12,7 +12,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ru.vssemikoz.newsfeed.MainApplication;
-import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
@@ -45,21 +44,20 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     public void start() {
         initNewsItemListCallback();
         initNewsStorage();
-        Log.d(TAG, "start: ");
-        loadNews();
-        view.showNews();
+        Log.d(TAG, "start: " + showOnlyFavorite);
+        view.setFavoriteIcon(showOnlyFavorite);
+        view.setCategoryTitle(category);
+        loadNewsFromApi();
     }
 
-    @Override
-    public void loadNews() {
+    public void loadNewsFromApi() {
+        Log.d(TAG, "loadNewsFromApi: ");
         performCall();
-        news = getNewsFromDB();
     }
 
-    @Override
-    public String getDisplayDescriptionText() {
-        return mainApplication.getString(R.string.tv_category_string_prefix) +
-                Category.getDisplayName(category);
+    public void loadNewsFromDB() {
+        Log.d(TAG, "loadNewsFromDB: ");
+        news = getNewsFromDB();
     }
 
     @Override
@@ -68,23 +66,16 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     @Override
-    public void changeFavoriteState(int position) {
+    public void changeNewsFavoriteState(int position) {
         NewsItem item = news.get(position);
         item.invertFavoriteState();
         newsStorage.updateNews(item);
-        if (!item.isFavorite() && showOnlyFavorite) {
-            news.remove(position);
-            view.getAdapter().notifyItemRemoved(position);
-            if (news.isEmpty()) {
-                view.setEmptyViewOnDisplay();
-            }
-        } else {
-            view.getAdapter().notifyItemChanged(position);
-        }
+        updateNews();
     }
 
     @Override
     public void setCategory(Category category) {
+        Log.d(TAG, "setCategory: ");
         this.category = category;
     }
 
@@ -95,6 +86,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Override
     public void setShowFavorite(Boolean showOnlyFavorite) {
+        Log.d(TAG, "setShowFavorite: " + showOnlyFavorite);
         this.showOnlyFavorite = showOnlyFavorite;
     }
 
@@ -104,13 +96,18 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     @Override
-    public List<NewsItem> getNews() {
-        return news;
+    public void invertFavoriteState() {
+        showOnlyFavorite = !showOnlyFavorite;
+        Log.d(TAG, "invertFavoriteState: "+ showOnlyFavorite);
+        view.setFavoriteIcon(showOnlyFavorite);
+        loadNewsFromApi();
+//        loadNewsFromDB();
     }
 
     @Override
-    public void invertFavoriteState() {
-        showOnlyFavorite = !showOnlyFavorite;
+    public void updateNews() {
+        Log.d(TAG, "updateNews: ");
+        loadNewsFromApi();
     }
 
     private void showNewsInBrowserByUrl(int position) {
@@ -139,8 +136,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                 }
                 newsStorage.insertUnique(getNewsItemListByResponse(response, category));
                 Log.d(TAG, "onResponse: ");
-                view.getAdapter().setItems(news);
-                view.getAdapter().notifyDataSetChanged();
+                loadNewsFromDB();
+                view.fillFragmentByView(news);
             }
 
             @Override
