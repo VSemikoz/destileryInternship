@@ -70,7 +70,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         NewsItem item = news.get(position);
         item.invertFavoriteState();
         newsStorage.updateNews(item);
-        updateNews();
+        updateNewsFromApi();
     }
 
     @Override
@@ -104,15 +104,15 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     @Override
-    public void updateNews() {
-        Log.d(TAG, "updateNews: ");
+    public void updateNewsFromApi() {
+        Log.d(TAG, "updateNewsFromApi: ");
         loadNewsFromApi();
     }
 
     private void showNewsInBrowserByUrl(int position) {
         NewsItem item = news.get(position);
         String url = item.getUrl();
-        view.openNews(url);
+        view.showNewsDetailsUI(url);
     }
 
     private List<NewsItem> getNewsFromDB() {

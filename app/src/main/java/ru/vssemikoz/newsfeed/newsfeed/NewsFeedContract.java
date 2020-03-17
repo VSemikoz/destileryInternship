@@ -1,12 +1,9 @@
 package ru.vssemikoz.newsfeed.newsfeed;
 
-import android.content.Context;
-
 import java.util.List;
 
 import ru.vssemikoz.newsfeed.BasePresenter;
 import ru.vssemikoz.newsfeed.BaseView;
-import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
@@ -14,7 +11,7 @@ public interface NewsFeedContract {
 
     interface View extends BaseView<Presenter> {
 
-        void openNews(String url);
+        void showNewsDetailsUI(String url);
 
         void fillFragmentByView(List<NewsItem> news);
 
@@ -24,7 +21,8 @@ public interface NewsFeedContract {
     }
 
     interface Presenter extends BasePresenter {
-        void updateNews();
+
+        void updateNewsFromApi();
 
         void invertFavoriteState();
 
