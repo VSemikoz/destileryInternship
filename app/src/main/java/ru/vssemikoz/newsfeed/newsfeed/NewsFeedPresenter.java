@@ -52,6 +52,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     private void loadNewsFromApi() {
         Log.d(TAG, "loadNewsFromApi: ");
+        view.showProgressBar();
         performCall();
     }
 
@@ -70,7 +71,15 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         NewsItem item = news.get(position);
         item.invertFavoriteState();
         newsStorage.updateNews(item);
-        updateNewsFromApi();
+        if (showOnlyFavorite && !item.isFavorite()){
+            news.remove(position);
+            view.removeNewsItem(position);
+            if (news.isEmpty()){
+                view.fillFragmentByView(null);
+            }
+        } else {
+            view.updateNewsItem(position);
+        }
     }
 
     @Override
@@ -100,7 +109,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         showOnlyFavorite = !showOnlyFavorite;
         Log.d(TAG, "invertFavoriteState: " + showOnlyFavorite);
         view.setFavoriteIcon(showOnlyFavorite);
-        loadNewsFromApi();
+        loadNewsFromDB();
+        view.fillFragmentByView(news);
     }
 
     @Override
@@ -129,6 +139,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         callbackNewsItemList = new Callback<NewsApiResponse>() {
             @Override
             public void onResponse(@NotNull Call<NewsApiResponse> call, @NotNull Response<NewsApiResponse> response) {
+                view.hideProgressBar();
                 if (!response.isSuccessful()) {
                     Log.d(TAG, "onResponse " + response.code());
                     return;
@@ -141,6 +152,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
             @Override
             public void onFailure(@NotNull Call<NewsApiResponse> call, @NotNull Throwable t) {
+                view.hideProgressBar();
                 Log.d(TAG, "onFailure " + Objects.requireNonNull(t.getMessage()));
             }
         };
