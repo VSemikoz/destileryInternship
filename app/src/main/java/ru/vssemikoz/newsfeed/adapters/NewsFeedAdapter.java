@@ -120,6 +120,7 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
 
                             @Override
                             public void onError() {
+                                progressBar.setVisibility(ProgressBar.GONE);
                             }
                         });
             } else {
