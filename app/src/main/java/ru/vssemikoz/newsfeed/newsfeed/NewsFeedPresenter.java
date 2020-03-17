@@ -1,10 +1,6 @@
 package ru.vssemikoz.newsfeed.newsfeed;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
-import android.widget.ProgressBar;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -17,20 +13,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
-import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
 import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.navigator.Navigator;
 import ru.vssemikoz.newsfeed.storage.NewsApiRepository;
 import ru.vssemikoz.newsfeed.storage.NewsStorage;
 
 import static androidx.core.util.Preconditions.checkNotNull;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
-    private final NewsFeedContract.View newsFeedView;// TODO: 17.03.2020 rename into view
+    private final NewsFeedContract.View view;
 
     private String TAG = NewsFeedPresenter.class.getName();
     private boolean showOnlyFavorite = false;
@@ -42,8 +36,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private NewsStorage newsStorage;
 
     NewsFeedPresenter(NewsFeedContract.View tasksView, MainApplication mainApplication){
-        newsFeedView = checkNotNull(tasksView, "tasksView cannot be null!");
-        newsFeedView.setPresenter(this);
+        view = checkNotNull(tasksView, "tasksView cannot be null!");
+        view.setPresenter(this);
         this.mainApplication = mainApplication;
     }
 
@@ -53,7 +47,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         initNewsStorage();
         Log.d(TAG, "start: ");
         loadNews();
-        newsFeedView.showNews();
+        view.showNews();
     }
 
     @Override
@@ -80,12 +74,12 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         newsStorage.updateNews(item);
         if (!item.isFavorite() && showOnlyFavorite) {
             news.remove(position);
-            newsFeedView.getAdapter().notifyItemRemoved(position);
+            view.getAdapter().notifyItemRemoved(position);
             if (news.isEmpty()) {
-                newsFeedView.setEmptyViewOnDisplay();
+                view.setEmptyViewOnDisplay();
             }
         } else {
-            newsFeedView.getAdapter().notifyItemChanged(position);
+            view.getAdapter().notifyItemChanged(position);
         }
     }
 
@@ -122,7 +116,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private void showNewsInBrowserByUrl(int position) {
         NewsItem item = news.get(position);
         String url = item.getUrl();
-        newsFeedView.openNews(url);
+        view.openNews(url);
     }
 
     private List<NewsItem> getNewsFromDB() {
@@ -145,8 +139,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                 }
                 newsStorage.insertUnique(getNewsItemListByResponse(response, category));
                 Log.d(TAG, "onResponse: ");
-                newsFeedView.getAdapter().setItems(news);
-                newsFeedView.getAdapter().notifyDataSetChanged();
+                view.getAdapter().setItems(news);
+                view.getAdapter().notifyDataSetChanged();
             }
 
             @Override
