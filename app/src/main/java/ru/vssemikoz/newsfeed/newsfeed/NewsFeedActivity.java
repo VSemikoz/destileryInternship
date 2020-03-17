@@ -10,11 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
-import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.utils.TypeConverters.ActivityUtils;
 
-public class NewsFeedActivity extends AppCompatActivity implements PickCategoryDialog.OnCategorySelectedListener{
+public class NewsFeedActivity extends AppCompatActivity{
     private String TAG = NewsFeedActivity.class.getName();
     private NewsFeedPresenter newsFeedPresenter;
     private NewsFeedFragment newsFeedFragment;
@@ -53,10 +52,5 @@ public class NewsFeedActivity extends AppCompatActivity implements PickCategoryD
     public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
         outState.putSerializable(CURRENT_CATEGORY, newsFeedPresenter.getCategory());
         outState.getBoolean(CURRENT_SHOW_FAVORITE, newsFeedPresenter.getShowFavorite());
-    }
-
-    @Override
-    public void onCategorySelected(Category selectCategory) {
-        newsFeedFragment.onCategorySelected(selectCategory);
     }
 }

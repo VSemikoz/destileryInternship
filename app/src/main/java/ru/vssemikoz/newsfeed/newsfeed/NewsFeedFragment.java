@@ -29,7 +29,8 @@ import ru.vssemikoz.newsfeed.storage.IconicStorage;
 
 import static androidx.core.util.Preconditions.checkNotNull;
 
-public class NewsFeedFragment extends Fragment implements NewsFeedContract.View {
+public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
+        PickCategoryDialog.OnCategorySelectedListener {
     private String TAG = NewsFeedFragment.class.getName();
 
     private NewsFeedContract.Presenter presenter;
@@ -91,6 +92,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View 
         });
         categoryButton.setOnClickListener(v -> {
             DialogFragment categoryDialog = new PickCategoryDialog();
+            categoryDialog.onAttachFragment(this);
             categoryDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
                     "categoryDialog");
         });
@@ -167,8 +169,8 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View 
     public NewsFeedAdapter getAdapter() {
         return adapter;
     }
-
-    void onCategorySelected(Category selectCategory) {
+    @Override
+    public void onCategorySelected(Category selectCategory) {
         presenter.setCategory(selectCategory);
         updateCategoryNameOnDescription();
         updateNews();
