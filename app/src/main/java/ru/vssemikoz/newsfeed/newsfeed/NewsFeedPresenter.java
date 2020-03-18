@@ -170,8 +170,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private void performCall() {
-        NewsApiRepository newsApiRepository = new NewsApiRepository(mainApplication);
-        newsApiRepository.getNewsFromApi(category, callbackNewsItemList);
+        NewsApiRepository repository = new NewsApiRepository(mainApplication);
+        repository.getNewsFromApi(category, callbackNewsItemList);
     }
 
     private List<NewsItem> getNewsItemListByResponse(Response<NewsApiResponse> response, Category category) {
