@@ -1,4 +1,4 @@
-package ru.vssemikoz.newsfeed.utils.TypeConverters;
+package ru.vssemikoz.newsfeed.utils;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,5 +17,4 @@ public class ActivityUtils {
         transaction.add(frameId, fragment);
         transaction.commit();
     }
-
 }
