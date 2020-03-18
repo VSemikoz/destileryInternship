@@ -20,12 +20,10 @@ public class NewsFeedActivity extends AppCompatActivity {
 
         NewsFeedFragment newsFeedFragment = (NewsFeedFragment) getSupportFragmentManager().findFragmentById(R.id.newsfeed_content_frame);
         if (newsFeedFragment == null) {
-
-            newsFeedFragment = NewsFeedFragment.newInstance();
+            /* TODO: 18.03.2020 extract mainApplication in constructor */
+            newsFeedFragment = NewsFeedFragment.newInstance(mainApplication);
             ActivityUtils.addFragmentToActivity(
                     getSupportFragmentManager(), newsFeedFragment, R.id.newsfeed_content_frame);
         }
-
-        new NewsFeedPresenter(newsFeedFragment, mainApplication);
     }
 }

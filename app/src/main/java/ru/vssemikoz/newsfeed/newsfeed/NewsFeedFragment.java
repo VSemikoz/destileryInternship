@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import java.util.Objects;
 
+import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
@@ -47,12 +48,19 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     private ProgressBar progressBar;
     private TextView descriptionView;
 
-    public NewsFeedFragment() {
+    public NewsFeedFragment(MainApplication mainApplication) {
+        presenter =  new NewsFeedPresenter(this, mainApplication);
     }
 
-    static NewsFeedFragment newInstance() {
-        return new NewsFeedFragment();
+    public static NewsFeedFragment newInstance(MainApplication mainApplication) {
+
+        Bundle args = new Bundle();
+
+        NewsFeedFragment fragment = new NewsFeedFragment(mainApplication);
+        fragment.setArguments(args);
+        return fragment;
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,8 +104,8 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
         });
         categoryButton.setOnClickListener(v -> {
-            DialogFragment categoryDialog = new PickCategoryDialog();
-            categoryDialog.onAttachFragment(this);
+            PickCategoryDialog categoryDialog = new PickCategoryDialog();
+            categoryDialog.setListener(this);
             categoryDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
                     "categoryDialog");
         });
