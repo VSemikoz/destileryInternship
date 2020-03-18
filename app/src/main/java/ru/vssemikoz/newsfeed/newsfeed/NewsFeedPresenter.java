@@ -176,8 +176,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     private List<NewsItem> getNewsItemListByResponse(Response<NewsApiResponse> response, Category category) {
         List<NewsItem> news = new ArrayList<>();
-        List<NewsApiResponseItem> newsApiResponseItems = Objects.requireNonNull(response.body()).getNewsApiResponseItemList();
-        for (NewsApiResponseItem newsApiResponseItem : newsApiResponseItems) {
+        List<NewsApiResponseItem> responseItems = Objects.requireNonNull(response.body()).getNewsApiResponseItemList();
+        for (NewsApiResponseItem newsApiResponseItem : responseItems) {
             news.add(new NewsItem(newsApiResponseItem, category));
         }
         return news;
