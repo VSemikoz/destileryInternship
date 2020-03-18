@@ -64,7 +64,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate: ");
         super.onCreate(savedInstanceState);
 
         context = Objects.requireNonNull(getActivity()).getApplicationContext();
@@ -82,7 +81,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
     @Override
     public void setPresenter(NewsFeedContract.Presenter presenter) {
-        Log.d(TAG, "setPresenter: ");
         this.presenter = checkNotNull(presenter);
     }
 
@@ -196,7 +194,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
     @Override
     public void updateNewsListUI(List<NewsItem> news) {
-        Log.d(TAG, "updateNewsListUI: ");
         if (news == null || news.isEmpty()) {
             setEmptyViewOnDisplay();
         } else {
@@ -206,14 +203,12 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     }
 
     private void showNews(List<NewsItem> news) {
-        Log.d(TAG, "showNews: " + news);
         setRecyclerViewOnDisplay();
         adapter.setItems(news);
         adapter.notifyDataSetChanged();
     }
 
     private void updateCategoryNameOnDescription(String category) {
-        Log.d(TAG, "updateCategoryNameOnDescription: ");
         descriptionView.setText(category);
     }
 

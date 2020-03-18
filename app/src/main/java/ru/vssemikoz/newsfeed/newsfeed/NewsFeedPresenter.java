@@ -44,20 +44,17 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     public void start() {
         initNewsItemListCallback();
         initNewsStorage();
-        Log.d(TAG, "start: " + showOnlyFavorite);
         view.setFavoriteIcon(showOnlyFavorite);
         view.setCategoryTitle(category);
         loadNewsFromApi();
     }
 
     private void loadNewsFromApi() {
-        Log.d(TAG, "loadNewsFromApi: ");
         view.showProgressBar();
         performCall();
     }
 
     private void loadNewsFromDB() {
-        Log.d(TAG, "loadNewsFromDB: ");
         news = getNewsFromDB();
     }
 
@@ -84,7 +81,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Override
     public void setCategory(Category category) {
-        Log.d(TAG, "setCategory: ");
         this.category = category;
     }
 
@@ -95,7 +91,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Override
     public void setShowFavorite(Boolean showOnlyFavorite) {
-        Log.d(TAG, "setShowFavorite: " + showOnlyFavorite);
         this.showOnlyFavorite = showOnlyFavorite;
     }
 
@@ -107,7 +102,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Override
     public void invertFavoriteState() {
         showOnlyFavorite = !showOnlyFavorite;
-        Log.d(TAG, "invertFavoriteState: " + showOnlyFavorite);
         view.setFavoriteIcon(showOnlyFavorite);
         loadNewsFromDB();
         view.updateNewsListUI(news);
@@ -115,7 +109,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Override
     public void updateNewsFromApi() {
-        Log.d(TAG, "updateNewsFromApi: ");
         loadNewsFromApi();
     }
 
@@ -144,7 +137,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                     Log.d(TAG, "onResponse " + response.code());
                     return;
                 }
-                newsStorage.insertUnique(getNewsItemListByResponse(response, category));
+                newsStorage.insertUnique(getNewsItemListByResponse(response, category));// TODO: 18.03.2020 mapresponsetonewsitems
                 Log.d(TAG, "onResponse: ");
                 loadNewsFromDB();
                 view.updateNewsListUI(news);
@@ -159,7 +152,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private void performCall() {
-        Log.d(TAG, "performCall: ");
         NewsApiRepository newsApiRepository = new NewsApiRepository(mainApplication);
         newsApiRepository.getNewsFromApi(category, callbackNewsItemList);
     }
