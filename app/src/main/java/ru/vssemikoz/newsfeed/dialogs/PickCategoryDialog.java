@@ -17,7 +17,7 @@ public class PickCategoryDialog extends DialogFragment {
         void onCategorySelected(Category selectCategory);
     }
 
-    private OnCategorySelectedListener nListener;
+    private OnCategorySelectedListener listener;
 
     @NonNull
     @Override
@@ -27,7 +27,7 @@ public class PickCategoryDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.chose_category_title)
                 .setItems(categories, (dialog, which) -> {
-                    nListener.onCategorySelected(Category.values()[which]);
+                    listener.onCategorySelected(Category.values()[which]);
                 });
         return builder.create();
     }
@@ -37,7 +37,7 @@ public class PickCategoryDialog extends DialogFragment {
         super.onAttachFragment(childFragment);
 
         try {
-            this.nListener = (OnCategorySelectedListener) childFragment;
+            this.listener = (OnCategorySelectedListener) childFragment;
         } catch (ClassCastException e) {
             throw new ClassCastException(childFragment.toString() + "implement listener");
         }

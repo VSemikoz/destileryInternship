@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +35,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     private String TAG = NewsFeedFragment.class.getName();
     private String CURRENT_CATEGORY = "CURRENT_CATEGORY";
     private String CURRENT_SHOW_FAVORITE = "CURRENT_SHOW_FAVORITE";
+    private Navigator navigator;
 
     private NewsFeedContract.Presenter presenter;
     private Context context;
@@ -59,6 +61,8 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
         context = Objects.requireNonNull(getActivity()).getApplicationContext();
         adapter = new NewsFeedAdapter(context);
+        navigator = new Navigator();
+
     }
 
     @Override
@@ -92,7 +96,10 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
         });
         categoryButton.setOnClickListener(v -> {
-            Navigator.openCategoryDialogFragment(this, Objects.requireNonNull(getActivity()));
+            DialogFragment categoryDialog = new PickCategoryDialog();
+            categoryDialog.onAttachFragment(this);
+            categoryDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
+                    "categoryDialog");
         });
         return root;
     }
@@ -204,7 +211,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
     @Override
     public void showNewsDetailsUI(String url) {
-        Navigator.openWebView(url, context);
+        navigator.openWebView(url, context);
     }
 
     @Override
