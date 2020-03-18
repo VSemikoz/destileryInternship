@@ -44,8 +44,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     public void start() {
         initNewsItemListCallback();
         initNewsStorage();
-        view.setFavoriteIcon(showOnlyFavorite);
-        view.setCategoryTitle(category);
         loadNewsFromApi();
     }
 
@@ -97,6 +95,14 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Override
     public Boolean getShowFavorite() {
         return this.showOnlyFavorite;
+    }
+
+    @Override
+    public void initStartValues() {
+        category = Category.ALL;
+        showOnlyFavorite = false;
+        view.setFavoriteIcon(showOnlyFavorite);
+        view.setCategoryTitle(category);
     }
 
     @Override

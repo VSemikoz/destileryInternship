@@ -45,5 +45,7 @@ public interface NewsFeedContract {
         Category getCategory();
 
         Boolean getShowFavorite();
+
+        void initStartValues();
     }
 }

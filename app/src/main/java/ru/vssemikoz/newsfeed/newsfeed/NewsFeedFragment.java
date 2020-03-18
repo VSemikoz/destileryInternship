@@ -48,11 +48,11 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     private ProgressBar progressBar;
     private TextView descriptionView;
 
-    public NewsFeedFragment(MainApplication mainApplication) {
+    private NewsFeedFragment(MainApplication mainApplication) {
         presenter =  new NewsFeedPresenter(this, mainApplication);
     }
 
-    public static NewsFeedFragment newInstance(MainApplication mainApplication) {
+    static NewsFeedFragment newInstance(MainApplication mainApplication) {
 
         Bundle args = new Bundle();
 
@@ -75,7 +75,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Override
     public void onResume() {
         super.onResume();
-        updateCategoryNameOnDescription(Category.getDisplayName(Category.ALL));
+        presenter.initStartValues();
         presenter.start();
     }
 
