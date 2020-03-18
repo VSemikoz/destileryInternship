@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.models.Category;
@@ -32,14 +31,7 @@ public class PickCategoryDialog extends DialogFragment {
         return builder.create();
     }
 
-    @Override
-        public void onAttachFragment(@NonNull Fragment childFragment) {
-        super.onAttachFragment(childFragment);
-
-        try {
-            this.listener = (OnCategorySelectedListener) childFragment;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(childFragment.toString() + "implement listener");
-        }
+    public void setListener(OnCategorySelectedListener listener) {
+        this.listener = listener;
     }
 }
