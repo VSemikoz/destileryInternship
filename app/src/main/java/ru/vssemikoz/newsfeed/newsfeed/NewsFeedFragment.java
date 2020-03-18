@@ -2,7 +2,6 @@ package ru.vssemikoz.newsfeed.newsfeed;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,9 +51,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     }
 
     static NewsFeedFragment newInstance(MainApplication mainApplication) {
-
         Bundle args = new Bundle();
-
         NewsFeedFragment fragment = new NewsFeedFragment(mainApplication);
         fragment.setArguments(args);
         return fragment;
@@ -65,11 +61,9 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         context = Objects.requireNonNull(getActivity()).getApplicationContext();
         adapter = new NewsFeedAdapter(context);
         navigator = new Navigator();
-
     }
 
     @Override
@@ -98,9 +92,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         categoryButton = root.findViewById(R.id.ib_category);
         initRecyclerView();
         favoriteNewsButton.setOnClickListener(v -> presenter.invertFavoriteState());
-        categoryButton.setOnClickListener(v -> {
-            presenter.onCategoryButtonClick();
-        });
+        categoryButton.setOnClickListener(v -> presenter.onCategoryButtonClick());
         return root;
     }
 
