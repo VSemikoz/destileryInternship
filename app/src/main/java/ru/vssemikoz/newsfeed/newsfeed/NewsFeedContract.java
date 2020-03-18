@@ -13,8 +13,6 @@ public interface NewsFeedContract {
 
     interface View extends BaseView<Presenter> {
 
-        void showNewsDetailsUI(String url);
-
         void setEmptyViewOnDisplay();
 
         void setRecyclerViewOnDisplay(List<NewsItem> news);
@@ -42,7 +40,7 @@ public interface NewsFeedContract {
 
         void invertFavoriteState();
 
-        void openNewsDetails(int position);
+        void openNewsDetails(int position, Context context);
 
         void changeNewsFavoriteState(int position);
 
@@ -59,7 +57,5 @@ public interface NewsFeedContract {
         void onCategoryButtonClick();
 
         void onUpdateNewsList();
-
-        void openWebView(String url, Context context);
     }
 }

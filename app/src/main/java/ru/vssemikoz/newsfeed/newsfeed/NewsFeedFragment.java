@@ -128,7 +128,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
             @Override
             public void OnRecyclerItemClick(int position) {
-                presenter.openNewsDetails(position);
+                presenter.openNewsDetails(position, context);
             }
         });
     }
@@ -197,11 +197,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
     private void updateCategoryNameOnDescription(String category) {
         descriptionView.setText(category);
-    }
-
-    @Override
-    public void showNewsDetailsUI(String url) {
-        presenter.openWebView(url, context);
     }
 
     @Override

@@ -14,7 +14,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
-import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
@@ -60,10 +59,11 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     @Override
-    public void openNewsDetails(int position) {
+    public void openNewsDetails(int position, Context context) {
         NewsItem item = news.get(position);
         String url = item.getUrl();
-        view.showNewsDetailsUI(url);
+        Navigator navigator = new Navigator();
+        navigator.openWebView(url, context);
     }
 
     @Override
@@ -122,12 +122,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         } else {
             view.setRecyclerViewOnDisplay(news);
         }
-    }
-
-    @Override
-    public void openWebView(String url, Context context) {
-        Navigator navigator = new Navigator();
-        navigator.openWebView(url, context);
     }
 
     @Override
