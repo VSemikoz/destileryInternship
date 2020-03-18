@@ -38,7 +38,6 @@ public interface NewsFeedContract {
 
         void changeNewsFavoriteState(int position);
 
-        // TODO: 17.03.2020 remove setters ang getters
         void setCategory(Category category);
 
         void setShowFavorite(Boolean showOnlyFavorite);
