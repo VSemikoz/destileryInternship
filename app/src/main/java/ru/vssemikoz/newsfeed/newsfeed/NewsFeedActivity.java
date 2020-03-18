@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
-import ru.vssemikoz.newsfeed.utils.TypeConverters.ActivityUtils;
+import ru.vssemikoz.newsfeed.utils.ActivityUtils;
 
 public class NewsFeedActivity extends AppCompatActivity {
     private String TAG = NewsFeedActivity.class.getName();
