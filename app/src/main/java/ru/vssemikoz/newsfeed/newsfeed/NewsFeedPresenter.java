@@ -70,10 +70,10 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter, NewsApiRep
         NewsItem item = news.get(position);
         item.invertFavoriteState();
         newsStorage.updateNews(item);
-        if (showOnlyFavorite && !item.isFavorite()){
+        if (showOnlyFavorite && !item.isFavorite()) {
             news.remove(position);
             view.removeNewsItem(position);
-            if (news.isEmpty()){
+            if (news.isEmpty()) {
                 view.updateNewsListUI();
             }
         } else {

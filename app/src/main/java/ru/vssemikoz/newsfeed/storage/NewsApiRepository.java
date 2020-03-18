@@ -14,8 +14,9 @@ public class NewsApiRepository {
     private Callback<NewsApiResponse> callbackNewsItemList;
     private RequestListener listener;
 
-    public interface RequestListener{
+    public interface RequestListener {
         void onApiRequestSuccess(Response<NewsApiResponse> response);
+
         void onApiRequestFailure(Throwable t);
     }
 
@@ -40,7 +41,7 @@ public class NewsApiRepository {
     }
 
     private Callback<NewsApiResponse> getCallbackNewsItemList() {
-        if (callbackNewsItemList == null){
+        if (callbackNewsItemList == null) {
             initNewsItemListCallback();
         }
         return callbackNewsItemList;

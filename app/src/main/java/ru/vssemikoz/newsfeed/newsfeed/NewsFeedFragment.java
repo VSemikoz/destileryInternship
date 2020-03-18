@@ -47,7 +47,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     private TextView descriptionView;
 
     private NewsFeedFragment(MainApplication mainApplication) {
-        presenter =  new NewsFeedPresenter(this, mainApplication);
+        presenter = new NewsFeedPresenter(this, mainApplication);
     }
 
     static NewsFeedFragment newInstance(MainApplication mainApplication) {
@@ -169,10 +169,10 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
     @Override
     public void showCategoryDialog() {
-            PickCategoryDialog categoryDialog = new PickCategoryDialog();
-            categoryDialog.setListener(this);
-            categoryDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
-                    "categoryDialog");
+        PickCategoryDialog categoryDialog = new PickCategoryDialog();
+        categoryDialog.setListener(this);
+        categoryDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
+                "categoryDialog");
     }
 
     @Override
