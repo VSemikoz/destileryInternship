@@ -3,28 +3,22 @@ package ru.vssemikoz.newsfeed.newsfeed;
 import android.content.Context;
 import android.util.Log;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import ru.vssemikoz.newsfeed.MainApplication;
-import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
-import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.navigator.Navigator;
 import ru.vssemikoz.newsfeed.storage.NewsApiRepository;
 import ru.vssemikoz.newsfeed.storage.NewsStorage;
+import ru.vssemikoz.newsfeed.utils.Mappers;
 
 import static androidx.core.util.Preconditions.checkNotNull;
 
-public class NewsFeedPresenter implements NewsFeedContract.Presenter {
+public class NewsFeedPresenter implements NewsFeedContract.Presenter, NewsApiRepository.RequestListener {
     private final NewsFeedContract.View view;
 
     private String TAG = NewsFeedPresenter.class.getName();
@@ -32,9 +26,9 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private Category category = Category.ALL;
     private List<NewsItem> news;
 
-    private Callback<NewsApiResponse> callbackNewsItemList;
     private MainApplication mainApplication;
     private NewsStorage newsStorage;
+    private NewsApiRepository repository;
 
     NewsFeedPresenter(NewsFeedContract.View tasksView, MainApplication mainApplication) {
         view = checkNotNull(tasksView, "tasksView cannot be null!");
@@ -44,9 +38,14 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Override
     public void start() {
-        initNewsItemListCallback();
+        initApiStorage();
         initNewsStorage();
         loadNewsFromApi();
+    }
+
+    private void initApiStorage() {
+        repository = new NewsApiRepository(mainApplication);
+        repository.setListener(this);
     }
 
     private void loadNewsFromApi() {
@@ -145,41 +144,27 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         newsStorage = new NewsStorage(mainApplication);
     }
 
-    private void initNewsItemListCallback() {
-        // TODO: 17.03.2020 extract in network layer
-        callbackNewsItemList = new Callback<NewsApiResponse>() {
-            @Override
-            public void onResponse(@NotNull Call<NewsApiResponse> call, @NotNull Response<NewsApiResponse> response) {
-                view.hideProgressBar();
-                if (!response.isSuccessful()) {
-                    Log.d(TAG, "onResponse " + response.code());
-                    return;
-                }
-                newsStorage.insertUnique(getNewsItemListByResponse(response, category));// TODO: 18.03.2020 mapresponsetonewsitems
-                Log.d(TAG, "onResponse: ");
-                loadNewsFromDB();
-                view.updateNewsListUI();
-            }
-
-            @Override
-            public void onFailure(@NotNull Call<NewsApiResponse> call, @NotNull Throwable t) {
-                view.hideProgressBar();
-                Log.d(TAG, "onFailure " + Objects.requireNonNull(t.getMessage()));
-            }
-        };
-    }
-
     private void performCall() {
-        NewsApiRepository repository = new NewsApiRepository(mainApplication);
-        repository.getNewsFromApi(category, callbackNewsItemList);
+        repository.getNewsFromApi(category);
     }
 
-    private List<NewsItem> getNewsItemListByResponse(Response<NewsApiResponse> response, Category category) {
-        List<NewsItem> news = new ArrayList<>();
-        List<NewsApiResponseItem> responseItems = Objects.requireNonNull(response.body()).getNewsApiResponseItemList();
-        for (NewsApiResponseItem newsApiResponseItem : responseItems) {
-            news.add(new NewsItem(newsApiResponseItem, category));
+    @Override
+    public void onApiRequestSuccess(Response<NewsApiResponse> response) {
+        view.hideProgressBar();
+        if (!response.isSuccessful()) {
+            Log.d(TAG, "onResponse " + response.code());
+            return;
         }
-        return news;
+        List<NewsItem> news = Mappers.mapResponseToNewsItems(response, category);
+        newsStorage.insertUnique(news);
+        Log.d(TAG, "onResponse: ");
+        loadNewsFromDB();
+        view.updateNewsListUI();
+    }
+
+    @Override
+    public void onApiRequestFailure(Throwable t) {
+        view.hideProgressBar();
+        Log.d(TAG, "onFailure " + Objects.requireNonNull(t.getMessage()));
     }
 }

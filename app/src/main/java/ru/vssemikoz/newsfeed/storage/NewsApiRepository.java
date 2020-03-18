@@ -15,8 +15,8 @@ public class NewsApiRepository {
     private RequestListener listener;
 
     public interface RequestListener{
-        void onRequestSuccess(Response<NewsApiResponse> response);
-        void onRequestFailure(Throwable t);
+        void onApiRequestSuccess(Response<NewsApiResponse> response);
+        void onApiRequestFailure(Throwable t);
     }
 
     public NewsApiRepository(MainApplication mainApplication) {
@@ -50,12 +50,12 @@ public class NewsApiRepository {
         callbackNewsItemList = new Callback<NewsApiResponse>() {
             @Override
             public void onResponse(@NotNull Call<NewsApiResponse> call, @NotNull Response<NewsApiResponse> response) {
-                listener.onRequestSuccess(response);
+                listener.onApiRequestSuccess(response);
             }
 
             @Override
             public void onFailure(@NotNull Call<NewsApiResponse> call, @NotNull Throwable t) {
-                listener.onRequestFailure(t);
+                listener.onApiRequestFailure(t);
             }
         };
     }
