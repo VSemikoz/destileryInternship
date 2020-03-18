@@ -2,6 +2,7 @@ package ru.vssemikoz.newsfeed.storage;
 
 import java.util.List;
 
+import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
@@ -10,8 +11,8 @@ public class NewsStorage {
 
     private NewsItemDAO newsItemDAO;
 
-    public NewsStorage(NewsItemDAO newsItemDAO) {
-        this.newsItemDAO = newsItemDAO;
+    public NewsStorage(MainApplication mainApplication) {
+        this.newsItemDAO = mainApplication.getNewsDataBase().newsItemDAO();
     }
 
     public List<NewsItem> getNewsFromDB(boolean favoriteNewsState, Category category) {

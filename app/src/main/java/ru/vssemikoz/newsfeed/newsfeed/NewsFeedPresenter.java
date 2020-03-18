@@ -142,8 +142,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private void initNewsStorage() {
-        NewsItemDAO newsItemDAO = mainApplication.getNewsDataBase().newsItemDAO();
-        newsStorage = new NewsStorage(newsItemDAO);
+        newsStorage = new NewsStorage(mainApplication);
     }
 
     private void initNewsItemListCallback() {
