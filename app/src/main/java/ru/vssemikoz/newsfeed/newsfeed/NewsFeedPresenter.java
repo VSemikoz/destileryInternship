@@ -1,5 +1,6 @@
 package ru.vssemikoz.newsfeed.newsfeed;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +19,7 @@ import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 import ru.vssemikoz.newsfeed.models.NewsItem;
+import ru.vssemikoz.newsfeed.navigator.Navigator;
 import ru.vssemikoz.newsfeed.storage.NewsApiRepository;
 import ru.vssemikoz.newsfeed.storage.NewsStorage;
 
@@ -59,7 +61,9 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Override
     public void openNewsDetails(int position) {
-        showNewsInBrowserByUrl(position);
+        NewsItem item = news.get(position);
+        String url = item.getUrl();
+        view.showNewsDetailsUI(url);
     }
 
     @Override
@@ -121,6 +125,12 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     @Override
+    public void openWebView(String url, Context context) {
+        Navigator navigator = new Navigator();
+        navigator.openWebView(url, context);
+    }
+
+    @Override
     public void invertFavoriteState() {
         showOnlyFavorite = !showOnlyFavorite;
         view.setFavoriteIcon(showOnlyFavorite);
@@ -131,12 +141,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Override
     public void updateNewsFromApi() {
         loadNewsFromApi();
-    }
-
-    private void showNewsInBrowserByUrl(int position) {
-        NewsItem item = news.get(position);
-        String url = item.getUrl();
-        view.showNewsDetailsUI(url);
     }
 
     private List<NewsItem> getNewsFromDB() {

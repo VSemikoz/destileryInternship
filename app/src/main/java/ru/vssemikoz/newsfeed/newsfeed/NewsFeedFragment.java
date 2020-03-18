@@ -201,7 +201,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
     @Override
     public void showNewsDetailsUI(String url) {
-        navigator.openWebView(url, context);
+        presenter.openWebView(url, context);
     }
 
     @Override

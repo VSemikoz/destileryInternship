@@ -1,5 +1,7 @@
 package ru.vssemikoz.newsfeed.newsfeed;
 
+import android.content.Context;
+
 import java.util.List;
 
 import ru.vssemikoz.newsfeed.BasePresenter;
@@ -57,5 +59,7 @@ public interface NewsFeedContract {
         void onCategoryButtonClick();
 
         void onUpdateNewsList();
+
+        void openWebView(String url, Context context);
     }
 }
