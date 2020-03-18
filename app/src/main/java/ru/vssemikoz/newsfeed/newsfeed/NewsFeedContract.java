@@ -13,7 +13,11 @@ public interface NewsFeedContract {
 
         void showNewsDetailsUI(String url);
 
-        void updateNewsListUI(List<NewsItem> news);
+        void setEmptyViewOnDisplay();
+
+        void setRecyclerViewOnDisplay(List<NewsItem> news);
+
+        void updateNewsListUI();
 
         void setFavoriteIcon(Boolean showOnlyFavorite);
 
@@ -51,5 +55,7 @@ public interface NewsFeedContract {
         void initStartValues();
 
         void onCategoryButtonClick();
+
+        void onUpdateNewsList();
     }
 }

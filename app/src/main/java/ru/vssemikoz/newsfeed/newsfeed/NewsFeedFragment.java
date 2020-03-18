@@ -183,30 +183,24 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
                     "categoryDialog");
     }
 
-    private void setEmptyViewOnDisplay() {
+    @Override
+    public void setEmptyViewOnDisplay() {
         recyclerView.setVisibility(View.GONE);
         emptyView.setVisibility(View.VISIBLE);
     }
 
-    private void setRecyclerViewOnDisplay() {
+    @Override
+    public void setRecyclerViewOnDisplay(List<NewsItem> news) {
         recyclerView.setVisibility(View.VISIBLE);
         emptyView.setVisibility(View.GONE);
+        adapter.setItems(news);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void updateNewsListUI(List<NewsItem> news) {
-        if (news == null || news.isEmpty()) {
-            setEmptyViewOnDisplay();
-        } else {
-            setRecyclerViewOnDisplay();
-            showNews(news);
-        }
-    }
+    public void updateNewsListUI() {
+        presenter.onUpdateNewsList();
 
-    private void showNews(List<NewsItem> news) {
-        setRecyclerViewOnDisplay();
-        adapter.setItems(news);
-        adapter.notifyDataSetChanged();
     }
 
     private void updateCategoryNameOnDescription(String category) {

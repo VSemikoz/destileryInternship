@@ -71,7 +71,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
             news.remove(position);
             view.removeNewsItem(position);
             if (news.isEmpty()){
-                view.updateNewsListUI(null);
+                view.updateNewsListUI();
             }
         } else {
             view.updateNewsItem(position);
@@ -112,11 +112,20 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     @Override
+    public void onUpdateNewsList() {
+        if (news == null || news.isEmpty()) {
+            view.setEmptyViewOnDisplay();
+        } else {
+            view.setRecyclerViewOnDisplay(news);
+        }
+    }
+
+    @Override
     public void invertFavoriteState() {
         showOnlyFavorite = !showOnlyFavorite;
         view.setFavoriteIcon(showOnlyFavorite);
         loadNewsFromDB();
-        view.updateNewsListUI(news);
+        view.updateNewsListUI();
     }
 
     @Override
@@ -152,7 +161,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                 newsStorage.insertUnique(getNewsItemListByResponse(response, category));// TODO: 18.03.2020 mapresponsetonewsitems
                 Log.d(TAG, "onResponse: ");
                 loadNewsFromDB();
-                view.updateNewsListUI(news);
+                view.updateNewsListUI();
             }
 
             @Override
