@@ -13,6 +13,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
+import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
@@ -103,6 +104,11 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         showOnlyFavorite = false;
         view.setFavoriteIcon(showOnlyFavorite);
         view.setCategoryTitle(category);
+    }
+
+    @Override
+    public void onCategoryButtonClick() {
+        view.showCategoryDialog();
     }
 
     @Override

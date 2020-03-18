@@ -26,6 +26,8 @@ public interface NewsFeedContract {
         void showProgressBar();
 
         void hideProgressBar();
+
+        void showCategoryDialog();
     }
 
     interface Presenter extends BasePresenter {
@@ -47,5 +49,7 @@ public interface NewsFeedContract {
         Boolean getShowFavorite();
 
         void initStartValues();
+
+        void onCategoryButtonClick();
     }
 }

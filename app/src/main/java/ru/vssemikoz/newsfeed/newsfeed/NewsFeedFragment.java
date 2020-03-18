@@ -99,10 +99,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         initRecyclerView();
         favoriteNewsButton.setOnClickListener(v -> presenter.invertFavoriteState());
         categoryButton.setOnClickListener(v -> {
-            PickCategoryDialog categoryDialog = new PickCategoryDialog();
-            categoryDialog.setListener(this);
-            categoryDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
-                    "categoryDialog");
+            presenter.onCategoryButtonClick();
         });
         return root;
     }
@@ -176,6 +173,14 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Override
     public void hideProgressBar() {
         progressBar.setVisibility(ProgressBar.GONE);
+    }
+
+    @Override
+    public void showCategoryDialog() {
+            PickCategoryDialog categoryDialog = new PickCategoryDialog();
+            categoryDialog.setListener(this);
+            categoryDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
+                    "categoryDialog");
     }
 
     private void setEmptyViewOnDisplay() {
