@@ -97,10 +97,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         descriptionView = root.findViewById(R.id.tv_description);
         categoryButton = root.findViewById(R.id.ib_category);
         initRecyclerView();
-        favoriteNewsButton.setOnClickListener(v -> {
-            presenter.invertFavoriteState();
-
-        });
+        favoriteNewsButton.setOnClickListener(v -> presenter.invertFavoriteState());
         categoryButton.setOnClickListener(v -> {
             PickCategoryDialog categoryDialog = new PickCategoryDialog();
             categoryDialog.setListener(this);
@@ -179,7 +176,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Override
     public void hideProgressBar() {
         progressBar.setVisibility(ProgressBar.GONE);
-
     }
 
     private void setEmptyViewOnDisplay() {
