@@ -30,7 +30,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter, NewsApiRep
     private NewsStorage newsStorage;
     private NewsApiRepository repository;
 
-    NewsFeedPresenter(NewsFeedContract.View tasksView) {
+    public NewsFeedPresenter(NewsFeedContract.View tasksView) {
         view = checkNotNull(tasksView, "tasksView cannot be null!");
         view.setPresenter(this);
         this.mainApplication = MainApplication.getInstance();
