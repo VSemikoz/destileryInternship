@@ -12,7 +12,6 @@ import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 public class NewsApiRepository {
     private MainApplication mainApplication;
     private Callback<NewsApiResponse> callbackNewsItemList;
-    private RequestListener listener;
 
     public interface RequestListener {
         void onApiRequestSuccess(Response<NewsApiResponse> response);
@@ -24,11 +23,7 @@ public class NewsApiRepository {
         this.mainApplication = mainApplication;
     }
 
-    public void setListener(RequestListener listener) {
-        this.listener = listener;
-    }
-
-    public void getNewsFromApi(Category category) {
+    public void getNewsFromApi(Category category, RequestListener listener) {
         String categoryKey = null;
         String countryKey = "ru";
         String KEY = mainApplication.getKEY();
@@ -37,17 +32,17 @@ public class NewsApiRepository {
             categoryKey = category.name();
         }
         call = mainApplication.getNewsApi().getNews(countryKey, categoryKey, KEY);
-        call.enqueue(getCallbackNewsItemList());
+        call.enqueue(getCallbackNewsItemList(listener));
     }
 
-    private Callback<NewsApiResponse> getCallbackNewsItemList() {
+    private Callback<NewsApiResponse> getCallbackNewsItemList(RequestListener listener) {
         if (callbackNewsItemList == null) {
-            initNewsItemListCallback();
+            initNewsItemListCallback(listener);
         }
         return callbackNewsItemList;
     }
 
-    private void initNewsItemListCallback() {
+    private void initNewsItemListCallback(RequestListener listener) {
         callbackNewsItemList = new Callback<NewsApiResponse>() {
             @Override
             public void onResponse(@NotNull Call<NewsApiResponse> call, @NotNull Response<NewsApiResponse> response) {

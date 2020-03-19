@@ -18,7 +18,7 @@ import ru.vssemikoz.newsfeed.utils.Mappers;
 
 import static androidx.core.util.Preconditions.checkNotNull;
 
-public class NewsFeedPresenter implements NewsFeedContract.Presenter, NewsApiRepository.RequestListener {
+public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private final NewsFeedContract.View view;
 
     private String TAG = NewsFeedPresenter.class.getName();
@@ -46,7 +46,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter, NewsApiRep
 
     private void initApiStorage() {
         repository = new NewsApiRepository(mainApplication);
-        repository.setListener(this);
     }
 
     private void loadNewsFromApi() {
@@ -146,26 +145,26 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter, NewsApiRep
     }
 
     private void performCall() {
-        repository.getNewsFromApi(category);
-    }
+        repository.getNewsFromApi(category, new NewsApiRepository.RequestListener() {
+            @Override
+            public void onApiRequestSuccess(Response<NewsApiResponse> response) {
+                view.hideProgressBar();
+                if (!response.isSuccessful()) {
+                    Log.d(TAG, "onResponse " + response.code());
+                    return;
+                }
+                List<NewsItem> news = Mappers.mapResponseToNewsItems(response, category);
+                newsStorage.insertUnique(news);
+                Log.d(TAG, "onResponse: ");
+                loadNewsFromDB();
+                view.updateNewsListUI();
+            }
 
-    @Override
-    public void onApiRequestSuccess(Response<NewsApiResponse> response) {
-        view.hideProgressBar();
-        if (!response.isSuccessful()) {
-            Log.d(TAG, "onResponse " + response.code());
-            return;
-        }
-        List<NewsItem> news = Mappers.mapResponseToNewsItems(response, category);
-        newsStorage.insertUnique(news);
-        Log.d(TAG, "onResponse: ");
-        loadNewsFromDB();
-        view.updateNewsListUI();
-    }
-
-    @Override
-    public void onApiRequestFailure(Throwable t) {
-        view.hideProgressBar();
-        Log.d(TAG, "onFailure " + Objects.requireNonNull(t.getMessage()));
+            @Override
+            public void onApiRequestFailure(Throwable t) {
+                view.hideProgressBar();
+                Log.d(TAG, "onFailure " + Objects.requireNonNull(t.getMessage()));
+            }
+        });
     }
 }
