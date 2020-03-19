@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import java.util.Objects;
 
-import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
@@ -71,17 +70,24 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.newsfeed_frag, container, false);
-        //initcontrols
-        recyclerView = root.findViewById(R.id.rv_news_feed);// TODO: 19.03.2020 initviews
+        initControls(root);
+        favoriteNewsButton.setOnClickListener(v -> presenter.invertFavoriteState());
+        categoryButton.setOnClickListener(v -> presenter.onCategoryButtonClick());
+        return root;
+    }
+
+    private void initControls(View root) {
+        initViews(root);
+    }
+
+    private void initViews(View root) {
         emptyView = root.findViewById(R.id.tv_empty_view);
         favoriteNewsButton = root.findViewById(R.id.ib_favorite);
         progressBar = root.findViewById(R.id.progress_bar);
         descriptionView = root.findViewById(R.id.tv_description);
         categoryButton = root.findViewById(R.id.ib_category);
+        recyclerView = root.findViewById(R.id.rv_news_feed);
         initRecyclerView();
-        favoriteNewsButton.setOnClickListener(v -> presenter.invertFavoriteState());
-        categoryButton.setOnClickListener(v -> presenter.onCategoryButtonClick());
-        return root;
     }
 
     @Override
