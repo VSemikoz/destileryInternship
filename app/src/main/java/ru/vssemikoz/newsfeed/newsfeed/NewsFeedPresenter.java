@@ -38,6 +38,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter, NewsApiRep
 
     @Override
     public void start() {
+        initStartValues();
         initApiStorage();
         initNewsStorage();
         loadNewsFromApi();

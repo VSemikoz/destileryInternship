@@ -58,7 +58,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Override
     public void onResume() {
         super.onResume();
-        presenter.initStartValues();// TODO: 19.03.2020 обьединить в 1 фкнуцию только start
         presenter.start();
     }
 
