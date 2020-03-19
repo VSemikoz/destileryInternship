@@ -16,12 +16,9 @@ public class NewsFeedActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.newsfeed_act);
-        MainApplication mainApplication = (MainApplication) getApplicationContext();
-
         NewsFeedFragment newsFeedFragment = (NewsFeedFragment) getSupportFragmentManager().findFragmentById(R.id.newsfeed_content_frame);
         if (newsFeedFragment == null) {
-            /* TODO: 18.03.2020 extract mainApplication in constructor */
-            newsFeedFragment = NewsFeedFragment.newInstance(mainApplication);
+            newsFeedFragment = new NewsFeedFragment();
             ActivityUtils.addFragmentToActivity(
                     getSupportFragmentManager(), newsFeedFragment, R.id.newsfeed_content_frame);
         }

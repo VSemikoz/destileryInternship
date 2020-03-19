@@ -44,17 +44,9 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     private ProgressBar progressBar;
     private TextView descriptionView;
 
-    private NewsFeedFragment(MainApplication mainApplication) {
-        presenter = new NewsFeedPresenter(this, mainApplication);
+    public NewsFeedFragment() {
+        presenter = new NewsFeedPresenter(this);
     }
-
-    static NewsFeedFragment newInstance(MainApplication mainApplication) {
-        Bundle args = new Bundle();
-        NewsFeedFragment fragment = new NewsFeedFragment(mainApplication);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,7 +58,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Override
     public void onResume() {
         super.onResume();
-        presenter.initStartValues();
+        presenter.initStartValues();// TODO: 19.03.2020 обьединить в 1 фкнуцию только start
         presenter.start();
     }
 
@@ -80,8 +72,8 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.newsfeed_frag, container, false);
-
-        recyclerView = root.findViewById(R.id.rv_news_feed);
+        //initcontrols
+        recyclerView = root.findViewById(R.id.rv_news_feed);// TODO: 19.03.2020 initviews
         emptyView = root.findViewById(R.id.tv_empty_view);
         favoriteNewsButton = root.findViewById(R.id.ib_favorite);
         progressBar = root.findViewById(R.id.progress_bar);
