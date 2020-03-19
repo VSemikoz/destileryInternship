@@ -14,19 +14,19 @@ public class MainApplication extends Application {
     private final String MAIN_URL = "https://newsapi.org";
     private final String KEY = "c94a57cbbb50497f94a2bb167dc91fc5";
 
-    private static Context mContext;
+    private static MainApplication instance;
     private Retrofit retrofit;
     private NewsApi newsApi;
     private NewsAppDataBase newsDataBase;
 
-    public static Context getContext() {
-        return mContext;
+    public static MainApplication getInstance() {
+        return instance;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext = this;
+        instance = this;
         initRetrofit();
         initNewsApi();
         initNewsDatabase(this);
@@ -61,5 +61,4 @@ public class MainApplication extends Application {
     public NewsAppDataBase getNewsDataBase() {
         return newsDataBase;
     }
-
 }
