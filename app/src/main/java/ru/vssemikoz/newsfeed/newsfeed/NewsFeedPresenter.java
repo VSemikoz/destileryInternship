@@ -101,7 +101,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         return this.showOnlyFavorite;
     }
 
-    @Override
     public void initStartValues() {
         category = Category.ALL;
         showOnlyFavorite = false;
