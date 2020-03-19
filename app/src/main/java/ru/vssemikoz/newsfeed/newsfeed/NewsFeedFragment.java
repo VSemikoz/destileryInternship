@@ -24,7 +24,6 @@ import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.navigator.Navigator;
 import ru.vssemikoz.newsfeed.storage.IconicStorage;
 
 import static androidx.core.util.Preconditions.checkNotNull;
@@ -34,7 +33,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     private String TAG = NewsFeedFragment.class.getName();
     private String CURRENT_CATEGORY = "CURRENT_CATEGORY";
     private String CURRENT_SHOW_FAVORITE = "CURRENT_SHOW_FAVORITE";
-    private Navigator navigator;
 
     private NewsFeedContract.Presenter presenter;
     private Context context;
@@ -63,7 +61,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         super.onCreate(savedInstanceState);
         context = Objects.requireNonNull(getActivity()).getApplicationContext();
         adapter = new NewsFeedAdapter(context);
-        navigator = new Navigator();
     }
 
     @Override
