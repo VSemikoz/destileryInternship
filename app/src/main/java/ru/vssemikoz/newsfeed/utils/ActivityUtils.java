@@ -10,11 +10,11 @@ import static androidx.core.util.Preconditions.checkNotNull;
 public class ActivityUtils {
 
     public static void addFragmentToActivity(@NonNull FragmentManager fragmentManager,
-                                             @NonNull Fragment fragment, int frameId) {
+                                             @NonNull Fragment fragment, int containerId) {
         checkNotNull(fragmentManager);
         checkNotNull(fragment);
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(frameId, fragment);
+        transaction.add(containerId, fragment);
         transaction.commit();
     }
 }
