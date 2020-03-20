@@ -186,7 +186,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Override
     public void updateNewsListUI() {
         presenter.onUpdateNewsList();
-
     }
 
     private void updateCategoryNameOnDescription(String category) {
