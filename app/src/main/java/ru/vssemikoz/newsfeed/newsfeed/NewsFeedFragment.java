@@ -29,7 +29,6 @@ import static androidx.core.util.Preconditions.checkNotNull;
 
 public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         PickCategoryDialog.OnCategorySelectedListener {
-    private String TAG = NewsFeedFragment.class.getName();
     private String CURRENT_CATEGORY = "CURRENT_CATEGORY";
     private String CURRENT_SHOW_FAVORITE = "CURRENT_SHOW_FAVORITE";
 

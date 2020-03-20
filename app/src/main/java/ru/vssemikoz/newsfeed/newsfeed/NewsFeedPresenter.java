@@ -154,7 +154,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                 }
                 List<NewsItem> news = Mappers.mapResponseToNewsItems(response, category);
                 newsStorage.insertUnique(news);
-                Log.d(TAG, "onResponse: ");
                 loadNewsFromDB();
                 view.updateNewsListUI();
             }
@@ -162,7 +161,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
             @Override
             public void onApiRequestFailure(Throwable t) {
                 view.hideProgressBar();
-                Log.d(TAG, "onFailure " + Objects.requireNonNull(t.getMessage()));
+                Log.d(TAG, "onFailure " + t.getMessage());
             }
         });
     }
