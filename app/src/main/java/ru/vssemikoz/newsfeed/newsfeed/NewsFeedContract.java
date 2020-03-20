@@ -17,8 +17,6 @@ public interface NewsFeedContract {
 
         void setRecyclerViewOnDisplay(List<NewsItem> news);
 
-        void updateNewsListUI();
-
         void setFavoriteIcon(Boolean showOnlyFavorite);
 
         void setCategoryTitle(Category category);

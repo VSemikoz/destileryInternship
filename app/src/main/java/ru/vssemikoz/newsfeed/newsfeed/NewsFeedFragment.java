@@ -182,11 +182,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         adapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void updateNewsListUI() {
-        presenter.onUpdateNewsList();
-    }
-
     private void updateCategoryNameOnDescription(String category) {
         descriptionView.setText(category);
     }
