@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Response;
 import ru.vssemikoz.newsfeed.MainApplication;
@@ -12,9 +11,9 @@ import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.navigator.Navigator;
-import ru.vssemikoz.newsfeed.storage.NewsApiRepository;
-import ru.vssemikoz.newsfeed.storage.NewsStorage;
-import ru.vssemikoz.newsfeed.utils.Mappers;
+import ru.vssemikoz.newsfeed.data.NewsApiRepository;
+import ru.vssemikoz.newsfeed.data.NewsStorage;
+import ru.vssemikoz.newsfeed.data.mappers.NewsItemMapper;
 
 import static androidx.core.util.Preconditions.checkNotNull;
 
@@ -150,7 +149,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                     Log.d(TAG, "onResponse " + response.code());
                     return;
                 }
-                List<NewsItem> news = Mappers.mapResponseToNewsItems(response, category);
+                List<NewsItem> news = NewsItemMapper.mapResponseToNewsItems(response, category);
                 newsStorage.insertUnique(news);
                 loadNewsFromDB();
                 updateNewsListUI();

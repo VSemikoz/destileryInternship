@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.storage.IconicStorage;
+import ru.vssemikoz.newsfeed.data.IconicStorage;
 import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
 public class NewsFeedAdapter extends BaseAdapter<NewsItem> {

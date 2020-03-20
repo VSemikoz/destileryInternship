@@ -1,4 +1,4 @@
-package ru.vssemikoz.newsfeed.storage;
+package ru.vssemikoz.newsfeed.data;
 
 import android.content.Context;
 import android.graphics.Color;
