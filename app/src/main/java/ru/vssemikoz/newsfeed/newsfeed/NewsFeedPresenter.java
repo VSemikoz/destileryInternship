@@ -81,7 +81,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         }
     }
 
-    void updateNewsListUI(){
+    private void updateNewsListUI(){
         if (news == null || news.isEmpty()) {
             view.setEmptyViewOnDisplay();
         } else {
@@ -108,7 +108,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         return this.showOnlyFavorite;
     }
 
-    public void initStartValues() {
+    private void initStartValues() {
         category = Category.ALL;
         showOnlyFavorite = false;
         view.setFavoriteIcon(showOnlyFavorite);
@@ -118,15 +118,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Override
     public void onCategoryButtonClick() {
         view.showCategoryDialog();
-    }
-
-    @Override
-    public void onUpdateNewsList() {
-        if (news == null || news.isEmpty()) {
-            view.setEmptyViewOnDisplay();
-        } else {
-            view.setRecyclerViewOnDisplay(news);
-        }
     }
 
     @Override

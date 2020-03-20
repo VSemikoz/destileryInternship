@@ -51,7 +51,5 @@ public interface NewsFeedContract {
         Boolean getShowFavorite();
 
         void onCategoryButtonClick();
-
-        void onUpdateNewsList();
     }
 }
