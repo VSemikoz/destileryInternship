@@ -69,7 +69,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.newsfeed_frag, container, false);
+        View root = inflater.inflate(R.layout.fragment_news_feed, container, false);
         initControls(root);
         return root;
     }

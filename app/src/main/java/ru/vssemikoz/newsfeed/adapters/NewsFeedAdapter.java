@@ -45,7 +45,7 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
     @NotNull
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_feed_item, parent, false);
         return new NewsFeedAdapter.NewsViewHolder(view, getListener());
     }
 
