@@ -19,9 +19,9 @@ import ru.vssemikoz.newsfeed.utils.Mappers;
 import static androidx.core.util.Preconditions.checkNotNull;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
+    private static final String TAG = NewsFeedPresenter.class.getName();
     private final NewsFeedContract.View view;
 
-    private String TAG = NewsFeedPresenter.class.getName();
     private boolean showOnlyFavorite = false;
     private Category category = Category.ALL;
     private List<NewsItem> news;
