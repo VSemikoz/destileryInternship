@@ -50,7 +50,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     private void loadNewsFromApi() {
         view.showProgressBar();
-        performCall();
+        processNewsApiResponse();
     }
 
     private void loadNewsFromDB() {
@@ -143,7 +143,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         newsStorage = new NewsStorage(mainApplication);
     }
 
-    private void performCall() {
+    private void processNewsApiResponse() {
         repository.getNewsFromApi(category, new NewsApiRepository.RequestListener() {
             @Override
             public void onApiRequestSuccess(Response<NewsApiResponse> response) {
