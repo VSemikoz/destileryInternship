@@ -71,13 +71,13 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.newsfeed_frag, container, false);
         initControls(root);
-        favoriteNewsButton.setOnClickListener(v -> presenter.invertFavoriteState());
-        categoryButton.setOnClickListener(v -> presenter.onCategoryButtonClick());
         return root;
     }
 
     private void initControls(View root) {
         initViews(root);
+        favoriteNewsButton.setOnClickListener(v -> presenter.invertFavoriteState());
+        categoryButton.setOnClickListener(v -> presenter.onCategoryButtonClick());
     }
 
     private void initViews(View root) {
