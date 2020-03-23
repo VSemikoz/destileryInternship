@@ -169,13 +169,13 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     }
 
     @Override
-    public void setEmptyViewOnDisplay() {
+    public void showEmptyView() {
         recyclerView.setVisibility(View.GONE);
         emptyView.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void setRecyclerViewOnDisplay(List<NewsItem> news) {
+    public void showList(List<NewsItem> news) {
         recyclerView.setVisibility(View.VISIBLE);
         emptyView.setVisibility(View.GONE);
         adapter.setItems(news);

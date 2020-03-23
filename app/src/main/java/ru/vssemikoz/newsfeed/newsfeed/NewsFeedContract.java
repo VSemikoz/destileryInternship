@@ -13,9 +13,9 @@ public interface NewsFeedContract {
 
     interface View extends BaseView<Presenter> {
 
-        void setEmptyViewOnDisplay();
+        void showEmptyView();
 
-        void setRecyclerViewOnDisplay(List<NewsItem> news);
+        void showList(List<NewsItem> news);
 
         void setFavoriteIcon(Boolean showOnlyFavorite);
 

@@ -82,9 +82,9 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     private void updateNewsListUI(){
         if (news == null || news.isEmpty()) {
-            view.setEmptyViewOnDisplay();
+            view.showEmptyView();
         } else {
-            view.setRecyclerViewOnDisplay(news);
+            view.showList(news);
         }
     }
     @Override
