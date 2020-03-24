@@ -23,27 +23,36 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private static final String TAG = NewsFeedPresenter.class.getName();
     private final NewsFeedContract.View view;
 
-    private boolean showOnlyFavorite = false;
-    private Category category = Category.ALL;
+    @Inject
+    boolean showOnlyFavorite;
+
+    @Inject
+    Category category;
     private List<NewsItem> news;
 
-    private MainApplication mainApplication;
-    private NewsStorage newsStorage;
-    private NewsApiRepository repository;
+    @Inject
+    MainApplication mainApplication;
+
+    @Inject
+    NewsStorage newsStorage;
+
+    @Inject
+    NewsApiRepository repository;
 
     @Inject
     public NewsFeedPresenter(NewsFeedFragment view) {
         this.view = checkNotNull(view, "tasksView cannot be null!");
         //unnecessary presenter setter
 //        this.view.setPresenter(this);
-        this.mainApplication = MainApplication.getInstance();
     }
 
     @Override
     public void start() {
+        MainApplication.getPresenterComponent().inject(this);
+        Log.d(TAG, "start: " + repository);
         initStartValues();
-        initApiStorage();
-        initNewsStorage();
+//        initApiStorage();
+//        initNewsStorage();
         loadNewsFromApi();
     }
 
@@ -112,8 +121,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private void initStartValues() {
-        category = Category.ALL;
-        showOnlyFavorite = false;
         view.setFavoriteIcon(showOnlyFavorite);
         view.setCategoryTitle(category);
     }

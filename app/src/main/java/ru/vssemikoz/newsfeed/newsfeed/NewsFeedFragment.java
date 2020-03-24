@@ -20,10 +20,9 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
+import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
-import ru.vssemikoz.newsfeed.di.DaggerNewsFeedFragmentComponent;
-import ru.vssemikoz.newsfeed.di.NewsFeedPresenterModule;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
@@ -39,8 +38,10 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
     @Inject
     NewsFeedPresenter presenter;// change type from Contract.Presenter to  NewsFeedPresenter
-    private Context context;
-    private NewsFeedAdapter adapter;
+    @Inject
+    Context context;
+    @Inject
+    NewsFeedAdapter adapter;
     private RecyclerView recyclerView;
     private TextView emptyView;
     private ImageButton favoriteNewsButton;
@@ -49,24 +50,17 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     private TextView descriptionView;
 
     @Inject
-    public NewsFeedFragment() {
-//        presenter = new NewsFeedPresenter(this);
-    }
+    public NewsFeedFragment() {}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: 24.03.2020  build Dagger component here cause need to send existing fragment as parameter
-        DaggerNewsFeedFragmentComponent.builder()
-                .newsFeedPresenterModule(new NewsFeedPresenterModule(this))
-                .build()
-                .inject(this);
-//        presenter = DaggerNewsFeedComponent.builder()
-//                .newsFeedModule(new NewsFeedPresenterModule(this))
+        MainApplication.getFragmentComponent(this).inject(this);
+//        DaggerNewsFeedFragmentComponent.builder()
+//                .newsFeedFragmentModule(new NewsFeedFragmentModule(this))
 //                .build()
-//                .getPresenter();
-        context = Objects.requireNonNull(getActivity()).getApplicationContext();
-        adapter = new NewsFeedAdapter(context);
+//                .inject(this);
     }
 
     @Override
