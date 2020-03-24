@@ -2,19 +2,44 @@ package ru.vssemikoz.newsfeed.di;
 
 import dagger.Module;
 import dagger.Provides;
-import ru.vssemikoz.newsfeed.newsfeed.NewsFeedFragment;
-import ru.vssemikoz.newsfeed.newsfeed.NewsFeedPresenter;
+import ru.vssemikoz.newsfeed.MainApplication;
+import ru.vssemikoz.newsfeed.data.NewsApiRepository;
+import ru.vssemikoz.newsfeed.data.NewsStorage;
+import ru.vssemikoz.newsfeed.models.Category;
 
 @Module
 public class NewsFeedPresenterModule {
-    private NewsFeedFragment fragment;
+    private MainApplication application;
 
-    public NewsFeedPresenterModule(NewsFeedFragment fragment) {
-        this.fragment = fragment;
+    public MainApplication getApplication() {
+        if (application == null){
+            application = MainApplication.getInstance();
+        }
+        return application;
     }
 
     @Provides
-    NewsFeedPresenter providePresenter(){
-        return new NewsFeedPresenter(fragment);
+    boolean provideFavoriteState(){
+        return false;
+    }
+
+    @Provides
+    Category provideCategory(){
+        return Category.ALL;
+    }
+
+    @Provides
+    MainApplication provideApplication(){
+        return getApplication();
+    }
+
+    @Provides
+    NewsStorage provideNewsStorage(){
+        return new NewsStorage(getApplication());
+    }
+
+    @Provides
+    NewsApiRepository getNewsApiRepository(){
+        return new NewsApiRepository(getApplication());
     }
 }
