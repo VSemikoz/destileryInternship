@@ -12,5 +12,6 @@
     <string name="category_sport">Спорт</string>
     <string name="category_technology">Технологии</string>
     <string name="no_data_available">no data available</string>
+    <string name="display_category_prefix">Категория:</string>
 
 </resources>

@@ -2,7 +2,6 @@ package ru.vssemikoz.newsfeed.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,7 +16,7 @@ public class PickCategoryDialog extends DialogFragment {
         void onCategorySelected(Category selectCategory);
     }
 
-    private OnCategorySelectedListener nListener;
+    private OnCategorySelectedListener listener;
 
     @NonNull
     @Override
@@ -27,19 +26,12 @@ public class PickCategoryDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.chose_category_title)
                 .setItems(categories, (dialog, which) -> {
-                    nListener.onCategorySelected(Category.values()[which]);
+                    listener.onCategorySelected(Category.values()[which]);
                 });
         return builder.create();
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            nListener = (OnCategorySelectedListener) getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " must implement OnCategorySelectedListener");
-        }
+    public void setListener(OnCategorySelectedListener listener) {
+        this.listener = listener;
     }
 }

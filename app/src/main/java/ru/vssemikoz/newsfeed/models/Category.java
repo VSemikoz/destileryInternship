@@ -21,7 +21,7 @@ public enum Category {
 
     public static String getDisplayName(Category category) {
         if (category == Category.ALL) {
-            return MainApplication.getContext().getString(R.string.display_category_no_limits);
+            return MainApplication.getInstance().getString(R.string.display_category_no_limits);
         }
         return category.toString();
     }
@@ -32,7 +32,7 @@ public enum Category {
 
     @Override
     public String toString() {
-        return MainApplication.getContext().getString(categoryId);
+        return MainApplication.getInstance().getString(categoryId);
     }
 
     public static String[] getCategoryNameList() {

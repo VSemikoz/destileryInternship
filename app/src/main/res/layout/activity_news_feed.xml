@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".newsfeed.NewsFeedActivity">
 
-    <fragment
-        android:id="@+id/fr_news_feed"
-        android:name="ru.vssemikoz.newsfeed.fragments.NewsFeedFragment"
+    <FrameLayout
+        android:id="@+id/newsfeed_content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

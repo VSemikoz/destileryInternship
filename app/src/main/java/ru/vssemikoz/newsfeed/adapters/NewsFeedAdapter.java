@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.storage.IconicStorage;
+import ru.vssemikoz.newsfeed.data.IconicStorage;
 import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
 public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
@@ -45,7 +45,7 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
     @NotNull
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_feed_item, parent, false);
         return new NewsFeedAdapter.NewsViewHolder(view, getListener());
     }
 
@@ -120,6 +120,7 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
 
                             @Override
                             public void onError() {
+                                progressBar.setVisibility(ProgressBar.GONE);
                             }
                         });
             } else {
