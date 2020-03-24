@@ -9,8 +9,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ru.vssemikoz.newsfeed.database.NewsAppDataBase;
 import ru.vssemikoz.newsfeed.api.NewsApi;
+import ru.vssemikoz.newsfeed.di.NewsFeedComponent;
 
 public class MainApplication extends Application {
+    private static NewsFeedComponent component;
     private final String MAIN_URL = "https://newsapi.org";
     private final String KEY = "c94a57cbbb50497f94a2bb167dc91fc5";
 
@@ -23,9 +25,15 @@ public class MainApplication extends Application {
         return instance;
     }
 
+    public static NewsFeedComponent getComponent(){
+        return component;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+//        component = DaggerNewsFeedComponent.builder().build();
+
         instance = this;
         initRetrofit();
         initNewsApi();
