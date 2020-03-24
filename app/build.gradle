@@ -42,4 +42,8 @@ dependencies {
 
     implementation 'com.mikepenz:google-material-typeface:3.0.1.4.original-kotlin@aar'
     implementation 'androidx.cardview:cardview:1.0.0'
+
+    api 'com.google.dagger:dagger:2.16'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.16'
+    compileOnly 'javax.annotation:jsr250-api:1.0'
 }
