@@ -34,7 +34,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Inject
     public NewsFeedPresenter(NewsFeedFragment view) {
         this.view = checkNotNull(view, "tasksView cannot be null!");
-        this.view.setPresenter(this);
+        //unnecessary presenter setter
+//        this.view.setPresenter(this);
         this.mainApplication = MainApplication.getInstance();
     }
 

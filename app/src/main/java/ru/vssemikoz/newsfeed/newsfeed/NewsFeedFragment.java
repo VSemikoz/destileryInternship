@@ -2,7 +2,6 @@ package ru.vssemikoz.newsfeed.newsfeed;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +22,8 @@ import javax.inject.Inject;
 
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
-import ru.vssemikoz.newsfeed.di.DaggerNewsFeedComponent;
-import ru.vssemikoz.newsfeed.di.NewsFeedModule;
+import ru.vssemikoz.newsfeed.di.DaggerNewsFeedFragmentComponent;
+import ru.vssemikoz.newsfeed.di.NewsFeedPresenterModule;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
@@ -38,8 +37,8 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     private String CURRENT_CATEGORY = "CURRENT_CATEGORY";
     private String CURRENT_SHOW_FAVORITE = "CURRENT_SHOW_FAVORITE";
 
-//    @Inject
-    NewsFeedContract.Presenter presenter;
+    @Inject
+    NewsFeedPresenter presenter;// change type from Contract.Presenter to  NewsFeedPresenter
     private Context context;
     private NewsFeedAdapter adapter;
     private RecyclerView recyclerView;
@@ -57,12 +56,15 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        presenter = DaggerNewsFeedComponent.builder()
-                .newsFeedModule(new NewsFeedModule(this))
+        // TODO: 24.03.2020  build Dagger component here cause need to send existing fragment as parameter
+        DaggerNewsFeedFragmentComponent.builder()
+                .newsFeedPresenterModule(new NewsFeedPresenterModule(this))
                 .build()
-                .getPresenter();
-//        MainApplication.getComponent().newsFeedModule(new NewsFeedModule(this)).build().inject(this);
-//        presenter = MainApplication.getComponent().getPresenter();
+                .inject(this);
+//        presenter = DaggerNewsFeedComponent.builder()
+//                .newsFeedModule(new NewsFeedPresenterModule(this))
+//                .build()
+//                .getPresenter();
         context = Objects.requireNonNull(getActivity()).getApplicationContext();
         adapter = new NewsFeedAdapter(context);
     }
@@ -75,7 +77,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
     @Override
     public void setPresenter(NewsFeedContract.Presenter presenter) {
-        this.presenter = checkNotNull(presenter);
+        this.presenter = (NewsFeedPresenter) checkNotNull(presenter);
     }
 
     @Nullable

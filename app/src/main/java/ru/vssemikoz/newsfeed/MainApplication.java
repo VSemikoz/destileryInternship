@@ -9,10 +9,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ru.vssemikoz.newsfeed.database.NewsAppDataBase;
 import ru.vssemikoz.newsfeed.api.NewsApi;
-import ru.vssemikoz.newsfeed.di.NewsFeedComponent;
+import ru.vssemikoz.newsfeed.di.NewsFeedFragmentComponent;
 
 public class MainApplication extends Application {
-    private static NewsFeedComponent component;
+    private static NewsFeedFragmentComponent component;
     private final String MAIN_URL = "https://newsapi.org";
     private final String KEY = "c94a57cbbb50497f94a2bb167dc91fc5";
 
@@ -25,14 +25,17 @@ public class MainApplication extends Application {
         return instance;
     }
 
-    public static NewsFeedComponent getComponent(){
+    public static NewsFeedFragmentComponent getComponent(){
         return component;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-//        component = DaggerNewsFeedComponent.builder().build();
+        // TODO: 24.03.2020 don't know how provide in  NewsFeedPresenterModule(...) existing fragment
+//        component = DaggerNewsFeedFragmentComponent.builder()
+//                .newsFeedPresenterModule(new NewsFeedPresenterModule(new NewsFeedFragment()))
+//                .build();
 
         instance = this;
         initRetrofit();

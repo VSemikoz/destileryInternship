@@ -6,10 +6,10 @@ import ru.vssemikoz.newsfeed.newsfeed.NewsFeedFragment;
 import ru.vssemikoz.newsfeed.newsfeed.NewsFeedPresenter;
 
 @Module
-public class NewsFeedModule {
+public class NewsFeedPresenterModule {
     private NewsFeedFragment fragment;
 
-    public NewsFeedModule(NewsFeedFragment fragment) {
+    public NewsFeedPresenterModule(NewsFeedFragment fragment) {
         this.fragment = fragment;
     }
 
