@@ -5,6 +5,8 @@ import android.util.Log;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import retrofit2.Response;
 import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.models.Category;
@@ -29,7 +31,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private NewsStorage newsStorage;
     private NewsApiRepository repository;
 
-    public NewsFeedPresenter(NewsFeedContract.View view) {
+    @Inject
+    public NewsFeedPresenter(NewsFeedFragment view) {
         this.view = checkNotNull(view, "tasksView cannot be null!");
         this.view.setPresenter(this);
         this.mainApplication = MainApplication.getInstance();

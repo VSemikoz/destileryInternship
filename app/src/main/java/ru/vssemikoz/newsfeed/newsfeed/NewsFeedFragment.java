@@ -2,6 +2,7 @@ package ru.vssemikoz.newsfeed.newsfeed;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
+import ru.vssemikoz.newsfeed.di.DaggerNewsFeedComponent;
+import ru.vssemikoz.newsfeed.di.NewsFeedModule;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
@@ -29,10 +34,12 @@ import static androidx.core.util.Preconditions.checkNotNull;
 
 public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         PickCategoryDialog.OnCategorySelectedListener {
+    private static final String TAG = NewsFeedFragment.class.getName();
     private String CURRENT_CATEGORY = "CURRENT_CATEGORY";
     private String CURRENT_SHOW_FAVORITE = "CURRENT_SHOW_FAVORITE";
 
-    private NewsFeedContract.Presenter presenter;
+//    @Inject
+    NewsFeedContract.Presenter presenter;
     private Context context;
     private NewsFeedAdapter adapter;
     private RecyclerView recyclerView;
@@ -42,13 +49,20 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     private ProgressBar progressBar;
     private TextView descriptionView;
 
+    @Inject
     public NewsFeedFragment() {
-        presenter = new NewsFeedPresenter(this);
+//        presenter = new NewsFeedPresenter(this);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        presenter = DaggerNewsFeedComponent.builder()
+                .newsFeedModule(new NewsFeedModule(this))
+                .build()
+                .getPresenter();
+//        MainApplication.getComponent().newsFeedModule(new NewsFeedModule(this)).build().inject(this);
+//        presenter = MainApplication.getComponent().getPresenter();
         context = Objects.requireNonNull(getActivity()).getApplicationContext();
         adapter = new NewsFeedAdapter(context);
     }
