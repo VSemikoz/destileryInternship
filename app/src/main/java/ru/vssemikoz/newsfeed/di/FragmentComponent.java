@@ -1,9 +1,9 @@
 package ru.vssemikoz.newsfeed.di;
 
-import dagger.Component;
+import dagger.Subcomponent;
 import ru.vssemikoz.newsfeed.newsfeed.NewsFeedFragment;
 
-@Component(modules = {NewsFeedFragmentModule.class})
-public interface NewsFeedFragmentComponent {
+@Subcomponent
+public interface FragmentComponent {
     void inject(NewsFeedFragment fragment);
 }

@@ -40,7 +40,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     NewsFeedPresenter presenter;// change type from Contract.Presenter to  NewsFeedPresenter
     @Inject
     Context context;
-    @Inject
     NewsFeedAdapter adapter;
     private RecyclerView recyclerView;
     private TextView emptyView;
@@ -55,12 +54,8 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: 24.03.2020  build Dagger component here cause need to send existing fragment as parameter
-        MainApplication.getFragmentComponent(this).inject(this);
-//        DaggerNewsFeedFragmentComponent.builder()
-//                .newsFeedFragmentModule(new NewsFeedFragmentModule(this))
-//                .build()
-//                .inject(this);
+
+        MainApplication.getApplicationComponent().fragmentComponent().inject(this);
     }
 
     @Override

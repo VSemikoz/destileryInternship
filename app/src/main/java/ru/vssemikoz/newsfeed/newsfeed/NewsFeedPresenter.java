@@ -21,34 +21,31 @@ import static androidx.core.util.Preconditions.checkNotNull;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private static final String TAG = NewsFeedPresenter.class.getName();
-    private final NewsFeedContract.View view;
+    private final NewsFeedContract.View view = null;
 
-    @Inject
     boolean showOnlyFavorite;
-
-    @Inject
     Category category;
     private List<NewsItem> news;
 
     @Inject
     MainApplication mainApplication;
 
-    @Inject
+//    @Inject
     NewsStorage newsStorage;
 
-    @Inject
+//    @Inject
     NewsApiRepository repository;
 
     @Inject
-    public NewsFeedPresenter(NewsFeedFragment view) {
-        this.view = checkNotNull(view, "tasksView cannot be null!");
+    public NewsFeedPresenter() {
+//        this.view = checkNotNull(view, "tasksView cannot be null!");
         //unnecessary presenter setter
 //        this.view.setPresenter(this);
     }
 
     @Override
     public void start() {
-        MainApplication.getPresenterComponent().inject(this);
+//        MainApplication.getPresenterComponent().inject(this);
         Log.d(TAG, "start: " + repository);
         initStartValues();
 //        initApiStorage();

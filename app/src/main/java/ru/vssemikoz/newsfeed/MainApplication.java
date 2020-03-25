@@ -2,25 +2,18 @@ package ru.vssemikoz.newsfeed;
 
 import android.app.Application;
 import android.content.Context;
-
 import androidx.room.Room;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import ru.vssemikoz.newsfeed.database.NewsAppDataBase;
 import ru.vssemikoz.newsfeed.api.NewsApi;
-
-import ru.vssemikoz.newsfeed.di.DaggerNewsFeedFragmentComponent;
-import ru.vssemikoz.newsfeed.di.DaggerNewsFeedPresenterComponent;
-import ru.vssemikoz.newsfeed.di.NewsFeedFragmentComponent;
-import ru.vssemikoz.newsfeed.di.NewsFeedFragmentModule;
-import ru.vssemikoz.newsfeed.di.NewsFeedPresenterComponent;
-import ru.vssemikoz.newsfeed.di.NewsFeedPresenterModule;
-import ru.vssemikoz.newsfeed.newsfeed.NewsFeedFragment;
+import ru.vssemikoz.newsfeed.database.NewsAppDataBase;
+import ru.vssemikoz.newsfeed.di.ApplicationComponent;
+import ru.vssemikoz.newsfeed.di.ApplicationModule;
+import ru.vssemikoz.newsfeed.di.DaggerApplicationComponent;
 
 public class MainApplication extends Application {
-    private static NewsFeedPresenterComponent presenterComponent;
-    private static NewsFeedFragmentComponent fragmentComponent;
+    private static ApplicationComponent applicationComponent;
     private final String MAIN_URL = "https://newsapi.org";
     private final String KEY = "c94a57cbbb50497f94a2bb167dc91fc5";
 
@@ -33,24 +26,16 @@ public class MainApplication extends Application {
         return instance;
     }
 
-    public static NewsFeedPresenterComponent getPresenterComponent(){
-        return presenterComponent;
+    public static ApplicationComponent getApplicationComponent(){
+        return applicationComponent;
     }
-
-    public static NewsFeedFragmentComponent getFragmentComponent(NewsFeedFragment fragment){
-        // TODO: 24.03.2020 don't know how provide in  NewsFeedFragmentModule(...) existing fragment
-        return fragmentComponent = DaggerNewsFeedFragmentComponent.builder()
-                .newsFeedFragmentModule(new NewsFeedFragmentModule(fragment))
-                .build();
-    }
-
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        presenterComponent = DaggerNewsFeedPresenterComponent.builder()
-                .newsFeedPresenterModule(new NewsFeedPresenterModule())
+        applicationComponent = DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(this))
                 .build();
 
         instance = this;

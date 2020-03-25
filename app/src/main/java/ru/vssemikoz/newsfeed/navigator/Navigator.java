@@ -5,7 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import javax.inject.Inject;
+
 public class Navigator {
+
+    @Inject
+    public Navigator() {
+    }
+
     public void openWebView(String url, Context context) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
