@@ -37,9 +37,10 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     private String CURRENT_SHOW_FAVORITE = "CURRENT_SHOW_FAVORITE";
 
     @Inject
-    NewsFeedPresenter presenter;// change type from Contract.Presenter to  NewsFeedPresenter
+    NewsFeedContract.Presenter presenter;
     @Inject
     Context context;
+    @Inject
     NewsFeedAdapter adapter;
     private RecyclerView recyclerView;
     private TextView emptyView;
@@ -56,6 +57,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         super.onCreate(savedInstanceState);
 
         MainApplication.getApplicationComponent().fragmentComponent().inject(this);
+        presenter.setView(this);
     }
 
     @Override
@@ -64,9 +66,10 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         presenter.start();
     }
 
+    //unnecessary method; maybe delete that?
     @Override
     public void setPresenter(NewsFeedContract.Presenter presenter) {
-        this.presenter = (NewsFeedPresenter) checkNotNull(presenter);
+        this.presenter = checkNotNull(presenter);
     }
 
     @Nullable
