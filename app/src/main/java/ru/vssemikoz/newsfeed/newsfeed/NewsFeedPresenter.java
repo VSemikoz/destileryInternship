@@ -17,36 +17,29 @@ import ru.vssemikoz.newsfeed.data.NewsApiRepository;
 import ru.vssemikoz.newsfeed.data.NewsStorage;
 import ru.vssemikoz.newsfeed.data.mappers.NewsItemMapper;
 
-import static androidx.core.util.Preconditions.checkNotNull;
-
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private static final String TAG = NewsFeedPresenter.class.getName();
-    private final NewsFeedContract.View view = null;
+    private NewsFeedContract.View view;
 
-    boolean showOnlyFavorite;
-    Category category;
+    private boolean showOnlyFavorite = false;
+    private Category category = Category.ALL;
     private List<NewsItem> news;
 
     @Inject
     MainApplication mainApplication;
 
-//    @Inject
+    @Inject
     NewsStorage newsStorage;
 
-//    @Inject
+    @Inject
     NewsApiRepository repository;
 
     @Inject
-    public NewsFeedPresenter() {
-//        this.view = checkNotNull(view, "tasksView cannot be null!");
-        //unnecessary presenter setter
-//        this.view.setPresenter(this);
-    }
+    public NewsFeedPresenter() {}
 
     @Override
     public void start() {
-//        MainApplication.getPresenterComponent().inject(this);
-        Log.d(TAG, "start: " + repository);
+        Log.d(TAG, "start: " + mainApplication);
         initStartValues();
 //        initApiStorage();
 //        initNewsStorage();
@@ -125,6 +118,11 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Override
     public void onCategoryButtonClick() {
         view.showCategoryDialog();
+    }
+
+    @Override
+    public void setView(NewsFeedContract.View view) {
+        this.view = view;
     }
 
     @Override
