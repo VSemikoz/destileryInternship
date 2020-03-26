@@ -48,7 +48,8 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     private TextView descriptionView;
 
     @Inject
-    public NewsFeedFragment() {}
+    public NewsFeedFragment() {
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

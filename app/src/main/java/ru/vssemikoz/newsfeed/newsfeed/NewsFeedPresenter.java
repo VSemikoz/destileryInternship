@@ -33,7 +33,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     NewsApiRepository repository;
 
     @Inject
-    public NewsFeedPresenter() {}
+    public NewsFeedPresenter() {
+    }
 
     @Override
     public void start() {
@@ -75,13 +76,14 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         }
     }
 
-    private void updateNewsListUI(){
+    private void updateNewsListUI() {
         if (news == null || news.isEmpty()) {
             view.showEmptyView();
         } else {
             view.showList(news);
         }
     }
+
     @Override
     public void setCategory(Category category) {
         this.category = category;
@@ -135,7 +137,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private void requestNewsFromApi() {
-        repository.getNewsFromApi(category, new NewsApiRepository.RequestListener(){
+        repository.getNewsFromApi(category, new NewsApiRepository.RequestListener() {
             @Override
             public void onRequestSuccess(Response<NewsApiResponse> response) {
                 view.hideProgressBar();

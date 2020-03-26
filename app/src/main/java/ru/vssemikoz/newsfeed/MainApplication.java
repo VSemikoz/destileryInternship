@@ -19,7 +19,7 @@ public class MainApplication extends Application {
         return instance;
     }
 
-    public static ApplicationComponent getApplicationComponent(){
+    public static ApplicationComponent getApplicationComponent() {
         return applicationComponent;
     }
 
