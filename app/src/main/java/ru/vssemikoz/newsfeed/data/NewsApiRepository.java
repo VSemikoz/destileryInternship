@@ -5,12 +5,14 @@ import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ru.vssemikoz.newsfeed.MainApplication;
+import ru.vssemikoz.newsfeed.api.NewsApi;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 
 public class NewsApiRepository {
-    private MainApplication mainApplication;
+    // TODO: 26.03.2020 into gradle config
+    private static final String KEY = "c94a57cbbb50497f94a2bb167dc91fc5";
+    private NewsApi newsApi;
 
     public interface RequestListener {
         void onApiRequestSuccess(Response<NewsApiResponse> response);
@@ -18,19 +20,18 @@ public class NewsApiRepository {
         void onApiRequestFailure(Throwable t);
     }
 
-    public NewsApiRepository(MainApplication mainApplication) {
-        this.mainApplication = mainApplication;
+    public NewsApiRepository(NewsApi newsApi) {
+        this.newsApi = newsApi;
     }
 
     public void getNewsFromApi(Category category, RequestListener listener) {
         String categoryKey = null;
         String countryKey = "ru";
-        String KEY = mainApplication.getKEY();
         Call<NewsApiResponse> call;
         if (category != Category.ALL) {
             categoryKey = category.name();
         }
-        call = mainApplication.getNewsApi().getNews(countryKey, categoryKey, KEY);
+        call = newsApi.getNews(countryKey, categoryKey, KEY);
         call.enqueue(getNewsApiCallBack(listener));
     }
 

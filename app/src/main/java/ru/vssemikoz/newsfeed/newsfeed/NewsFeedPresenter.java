@@ -46,9 +46,9 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         loadNewsFromApi();
     }
 
-    private void initApiStorage() {
-        repository = new NewsApiRepository(mainApplication);
-    }
+//    private void initApiStorage() {
+//        repository = new NewsApiRepository(mainApplication);
+//    }
 
     private void loadNewsFromApi() {
         view.showProgressBar();
