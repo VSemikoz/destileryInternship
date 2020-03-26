@@ -10,9 +10,8 @@ import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 
 public class NewsApiRepository {
-    // TODO: 26.03.2020 into gradle config
-    private static final String KEY = "c94a57cbbb50497f94a2bb167dc91fc5";
     private NewsApi newsApi;
+    private String apiKey;
 
     public interface RequestListener {
         void onApiRequestSuccess(Response<NewsApiResponse> response);
@@ -20,8 +19,9 @@ public class NewsApiRepository {
         void onApiRequestFailure(Throwable t);
     }
 
-    public NewsApiRepository(NewsApi newsApi) {
+    public NewsApiRepository(NewsApi newsApi, String apiKey) {
         this.newsApi = newsApi;
+        this.apiKey = apiKey;
     }
 
     public void getNewsFromApi(Category category, RequestListener listener) {
@@ -29,9 +29,9 @@ public class NewsApiRepository {
         String countryKey = "ru";
         Call<NewsApiResponse> call;
         if (category != Category.ALL) {
-            categoryKey = category.name();
+            categoryKey = Category.getRequestName(category);
         }
-        call = newsApi.getNews(countryKey, categoryKey, KEY);
+        call = newsApi.getNews(countryKey, categoryKey, apiKey);
         call.enqueue(getNewsApiCallBack(listener));
     }
 
