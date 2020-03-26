@@ -12,6 +12,7 @@ import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 public class NewsApiRepository {
     private NewsApi newsApi;
     private String apiKey;
+    private String countryKey;
 
     public interface RequestListener {
         void onApiRequestSuccess(Response<NewsApiResponse> response);
@@ -19,14 +20,15 @@ public class NewsApiRepository {
         void onApiRequestFailure(Throwable t);
     }
 
-    public NewsApiRepository(NewsApi newsApi, String apiKey) {
+    // TODO: 26.03.2020 remove keys from constructor
+    public NewsApiRepository(NewsApi newsApi, String apiKey, String countryKey) {
         this.newsApi = newsApi;
         this.apiKey = apiKey;
+        this.countryKey = countryKey;
     }
 
     public void getNewsFromApi(Category category, RequestListener listener) {
         String categoryKey = null;
-        String countryKey = "ru";
         Call<NewsApiResponse> call;
         if (category != Category.ALL) {
             categoryKey = Category.getRequestName(category);

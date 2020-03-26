@@ -11,6 +11,6 @@ public class ApiRepositoryModule {
 
     @Provides
     NewsApiRepository provideApiRepository(NewsApi newsApi, AppConfig config){
-        return new NewsApiRepository(newsApi, config.getApiKey());
+        return new NewsApiRepository(newsApi, config.getApiKey(), config.getCountryKey());
     }
 }
