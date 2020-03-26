@@ -1,6 +1,8 @@
 package ru.vssemikoz.newsfeed;
 
 import android.app.Application;
+
+import ru.vssemikoz.newsfeed.di.AppConfigModule;
 import ru.vssemikoz.newsfeed.di.ApplicationComponent;
 import ru.vssemikoz.newsfeed.di.ApplicationModule;
 import ru.vssemikoz.newsfeed.di.DaggerApplicationComponent;
@@ -10,8 +12,6 @@ import ru.vssemikoz.newsfeed.di.NetworkModule;
 public class MainApplication extends Application {
     private static final String TAG = MainApplication.class.getName();
     private static ApplicationComponent applicationComponent;
-    // TODO: 26.03.2020 into gradle build
-    private final String MAIN_URL = "https://newsapi.org";
 
     private static MainApplication instance;
 
@@ -30,8 +30,9 @@ public class MainApplication extends Application {
         instance = this;
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(instance))
-                .networkModule(new NetworkModule(MAIN_URL))
+                .networkModule(new NetworkModule())
                 .dataBaseModule(new DataBaseModule())
+                .appConfigModule(new AppConfigModule())
                 .build();
     }
 
