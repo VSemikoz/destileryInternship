@@ -2,6 +2,7 @@ package ru.vssemikoz.newsfeed.di;
 
 import dagger.Module;
 import dagger.Provides;
+import ru.vssemikoz.newsfeed.AppConfig;
 import ru.vssemikoz.newsfeed.api.NewsApi;
 import ru.vssemikoz.newsfeed.data.NewsApiRepository;
 
@@ -9,7 +10,7 @@ import ru.vssemikoz.newsfeed.data.NewsApiRepository;
 public class ApiRepositoryModule {
 
     @Provides
-    NewsApiRepository provideApiRepository(NewsApi newsApi){
-        return new NewsApiRepository(newsApi);
+    NewsApiRepository provideApiRepository(NewsApi newsApi, AppConfig config){
+        return new NewsApiRepository(newsApi, config.getApiKey());
     }
 }
