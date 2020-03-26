@@ -65,7 +65,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     public void changeNewsFavoriteState(int position) {
         NewsItem item = news.get(position);
         item.invertFavoriteState();
-        newsStorage.updateNews(item);
+        newsStorage.updateData(item);
         if (showOnlyFavorite && !item.isFavorite()) {
             news.remove(position);
             view.removeNewsItem(position);
@@ -133,26 +133,26 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private List<NewsItem> getNewsFromDB() {
-        return newsStorage.getNewsFromDB(showOnlyFavorite, category);
+        return newsStorage.getDataFromDB(showOnlyFavorite, category);
     }
 
     private void requestNewsFromApi() {
-        repository.getNewsFromApi(category, new NewsApiRepository.RequestListener() {
+        repository.getNewsFromApi(category, new NewsApiRepository.RequestListener(){
             @Override
-            public void onApiRequestSuccess(Response<NewsApiResponse> response) {
+            public void onRequestSuccess(Response<NewsApiResponse> response) {
                 view.hideProgressBar();
                 if (!response.isSuccessful()) {
                     Log.d(TAG, "onResponse " + response.code());
                     return;
                 }
                 List<NewsItem> news = NewsItemMapper.mapResponseToNewsItems(response, category);
-                newsStorage.insertUnique(news);
+                newsStorage.insertUniqueData(news);
                 loadNewsFromDB();
                 updateNewsListUI();
             }
 
             @Override
-            public void onApiRequestFailure(Throwable t) {
+            public void onRequestFailure(Throwable t) {
                 view.hideProgressBar();
                 Log.d(TAG, "onFailure " + t.getMessage());
             }
