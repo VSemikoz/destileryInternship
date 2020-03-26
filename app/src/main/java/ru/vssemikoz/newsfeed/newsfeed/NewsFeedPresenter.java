@@ -41,14 +41,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     public void start() {
         Log.d(TAG, "start: " + mainApplication);
         initStartValues();
-//        initApiStorage();
-//        initNewsStorage();
         loadNewsFromApi();
     }
-
-//    private void initApiStorage() {
-//        repository = new NewsApiRepository(mainApplication);
-//    }
 
     private void loadNewsFromApi() {
         view.showProgressBar();
@@ -141,10 +135,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private List<NewsItem> getNewsFromDB() {
         return newsStorage.getNewsFromDB(showOnlyFavorite, category);
     }
-
-//    private void initNewsStorage() {
-//        newsStorage = new NewsStorage(mainApplication);
-//    }
 
     private void requestNewsFromApi() {
         repository.getNewsFromApi(category, new NewsApiRepository.RequestListener() {
