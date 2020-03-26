@@ -8,16 +8,17 @@ import ru.vssemikoz.newsfeed.api.NewsApi;
 
 @Module
 public class NetworkModule {
-    private String mainUrl;
+    // TODO: 26.03.2020 into gradle config
+    private String baseUrl;
 
-    public NetworkModule(String mainUrl) {
-        this.mainUrl = mainUrl;
+    public NetworkModule(String baseUrl) {
+        this.baseUrl = baseUrl;
     }
 
     @Provides
     Retrofit provideRetrofit() {
         return new Retrofit.Builder()
-                .baseUrl(mainUrl)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
