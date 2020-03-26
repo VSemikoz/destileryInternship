@@ -26,9 +26,7 @@ import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.data.IconicStorage;
-
-import static androidx.core.util.Preconditions.checkNotNull;
+import ru.vssemikoz.newsfeed.data.NewsIconicStorage;
 
 public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         PickCategoryDialog.OnCategorySelectedListener {
@@ -131,9 +129,9 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Override
     public void setFavoriteIcon(Boolean showOnlyFavorite) {
         if (showOnlyFavorite) {
-            favoriteNewsButton.setImageDrawable(IconicStorage.getYellowStarBorderless(context));
+            favoriteNewsButton.setImageDrawable(NewsIconicStorage.getYellowStarBorderless(context));
         } else {
-            favoriteNewsButton.setImageDrawable(IconicStorage.getWhiteStarBorderless(context));
+            favoriteNewsButton.setImageDrawable(NewsIconicStorage.getWhiteStarBorderless(context));
         }
     }
 

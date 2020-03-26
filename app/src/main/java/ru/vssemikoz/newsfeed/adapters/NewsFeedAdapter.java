@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.data.IconicStorage;
+import ru.vssemikoz.newsfeed.data.NewsIconicStorage;
 import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
 public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
@@ -102,9 +102,9 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
             author.setText(newsItem.getAuthor());
 
             if (favoriteState) {
-                changeFavoriteStateButton.setImageDrawable(IconicStorage.getYellowStarBorder(getContext()));
+                changeFavoriteStateButton.setImageDrawable(NewsIconicStorage.getYellowStarBorder(getContext()));
             } else {
-                changeFavoriteStateButton.setImageDrawable(IconicStorage.getWhiteStarBorder(getContext()));
+                changeFavoriteStateButton.setImageDrawable(NewsIconicStorage.getWhiteStarBorder(getContext()));
             }
 
             progressBar.setVisibility(ProgressBar.VISIBLE);
