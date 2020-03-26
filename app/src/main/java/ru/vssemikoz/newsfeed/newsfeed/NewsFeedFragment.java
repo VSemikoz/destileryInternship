@@ -66,12 +66,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         presenter.start();
     }
 
-    //unnecessary method; maybe delete that?
-    @Override
-    public void setPresenter(NewsFeedContract.Presenter presenter) {
-        this.presenter = checkNotNull(presenter);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
