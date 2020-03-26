@@ -7,15 +7,15 @@ import ru.vssemikoz.newsfeed.database.NewsAppDataBase;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
-public class NewsStorage {
-
+public class NewsStorage implements DataStorage {
     private NewsItemDAO newsItemDAO;
 
     public NewsStorage(NewsAppDataBase dataBase) {
         this.newsItemDAO = dataBase.newsItemDAO();
     }
-
-    public List<NewsItem> getNewsFromDB(boolean favoriteNewsState, Category category) {
+    
+    @Override
+    public List<NewsItem> getDataFromDB(boolean favoriteNewsState, Category category) {
         if (favoriteNewsState) {
             if (category == Category.ALL) {
                 return newsItemDAO.getFavoriteNews();
@@ -29,15 +29,18 @@ public class NewsStorage {
         return newsItemDAO.getNewsByCategory(Category.getRequestName(category));
     }
 
-    public void updateNews(NewsItem item) {
+    @Override
+    public void deleteAllDataFromDB() {
+        newsItemDAO.deleteAll();
+    }
+
+    @Override
+    public void updateData(NewsItem item) {
         newsItemDAO.update(item);
     }
 
-    public void insertUnique(List<NewsItem> newsItems) {
+    @Override
+    public void insertUniqueData(List<NewsItem> newsItems) {
         newsItemDAO.insertUnique(newsItems);
-    }
-
-    public void deleteAllNewsFromDB() {
-        newsItemDAO.deleteAll();
     }
 }
