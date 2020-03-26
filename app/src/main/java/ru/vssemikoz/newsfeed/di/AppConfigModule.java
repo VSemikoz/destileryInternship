@@ -10,6 +10,6 @@ public class AppConfigModule {
 
     @Provides
     AppConfig provideAppConfig(){
-        return new AppConfig(BuildConfig.NEWS_API_BASE_URL, BuildConfig.NEWS_API_KEY);
+        return new AppConfig(BuildConfig.NEWS_API_BASE_URL, BuildConfig.NEWS_API_KEY, BuildConfig.NEWS_COUNTRY_KEY);
     }
 }

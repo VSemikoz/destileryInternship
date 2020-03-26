@@ -28,6 +28,7 @@ android {
             dimension "environment"
             buildConfigField "String", "NEWS_API_KEY", "\"c94a57cbbb50497f94a2bb167dc91fc5\""
             buildConfigField "String", "NEWS_API_BASE_URL", "\"https://newsapi.org\""
+            buildConfigField "String", "NEWS_COUNTRY_KEY", "\"ru\""
         }
 
     }
