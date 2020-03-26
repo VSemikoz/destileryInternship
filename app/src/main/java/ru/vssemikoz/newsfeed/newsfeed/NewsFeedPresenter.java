@@ -27,10 +27,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Inject
     MainApplication mainApplication;
-
     @Inject
     NewsStorage newsStorage;
-
     @Inject
     NewsApiRepository repository;
 
