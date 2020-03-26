@@ -2,13 +2,13 @@ package ru.vssemikoz.newsfeed.di;
 
 import dagger.Module;
 import dagger.Provides;
-import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.data.NewsStorage;
+import ru.vssemikoz.newsfeed.database.NewsAppDataBase;
 
 @Module
 public class StorageModule {
     @Provides
-    NewsStorage provideStorage(MainApplication application){
-        return new NewsStorage(application);
+    NewsStorage provideStorage(NewsAppDataBase dataBase){
+        return new NewsStorage(dataBase);
     }
 }

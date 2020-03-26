@@ -142,9 +142,9 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         return newsStorage.getNewsFromDB(showOnlyFavorite, category);
     }
 
-    private void initNewsStorage() {
-        newsStorage = new NewsStorage(mainApplication);
-    }
+//    private void initNewsStorage() {
+//        newsStorage = new NewsStorage(mainApplication);
+//    }
 
     private void requestNewsFromApi() {
         repository.getNewsFromApi(category, new NewsApiRepository.RequestListener() {
