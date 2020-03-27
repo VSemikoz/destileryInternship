@@ -2,6 +2,7 @@ package ru.vssemikoz.newsfeed.newsfeed;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +23,12 @@ import javax.inject.Inject;
 
 import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
+import ru.vssemikoz.newsfeed.adapters.BaseAdapter;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
+import ru.vssemikoz.newsfeed.data.IconicStorage;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.data.LocalIconicStorage;
 
 public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         PickCategoryDialog.OnCategorySelectedListener {
@@ -39,9 +41,9 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Inject
     Context context;
     @Inject
-    NewsFeedAdapter adapter;
+    BaseAdapter<NewsItem> adapter;
     @Inject
-    LocalIconicStorage iconicStorage;
+    IconicStorage iconicStorage;
     private RecyclerView recyclerView;
     private TextView emptyView;
     private ImageButton favoriteNewsButton;
@@ -56,6 +58,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: ");
 
         MainApplication.getApplicationComponent().fragmentComponent().inject(this);
         presenter.setView(this);
@@ -113,7 +116,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     }
 
     private void initRecyclerView() {
-        adapter = new NewsFeedAdapter(context);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new NewsFeedAdapter.OnNewsItemClickListener() {

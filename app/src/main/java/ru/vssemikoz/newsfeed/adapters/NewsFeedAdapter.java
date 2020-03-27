@@ -20,12 +20,16 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
+
 import ru.vssemikoz.newsfeed.R;
+import ru.vssemikoz.newsfeed.data.IconicStorage;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.data.LocalIconicStorage;
 import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
 public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
+    @Inject
+    IconicStorage iconicStorage;
 
     public interface OnNewsItemClickListener extends OnRecyclerItemClickListener {
         void onChangeFavoriteStateClick(int position);
@@ -34,12 +38,9 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
         void OnRecyclerItemClick(int position);
     }
 
+    @Inject
     public NewsFeedAdapter(Context context) {
         super(context);
-    }
-
-    public void setOnItemClickListener(OnNewsItemClickListener mListener) {
-        super.setOnItemClickListener(mListener);
     }
 
     @NotNull
@@ -100,8 +101,6 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
             dateTime.setText(DateConverter.fromDateToUIFormat(newsItem.getPublishedAt()));
             author.setText(newsItem.getAuthor());
 
-            // TODO: 27.03.2020 cant provide iconicStorage through inject
-            LocalIconicStorage iconicStorage = new LocalIconicStorage();
             if (favoriteState) {
                 changeFavoriteStateButton.setImageDrawable(iconicStorage.getYellowStarBorder(getContext()));
             } else {

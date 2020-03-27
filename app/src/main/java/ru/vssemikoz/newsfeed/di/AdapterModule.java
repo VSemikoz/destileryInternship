@@ -4,13 +4,14 @@ import android.content.Context;
 
 import dagger.Module;
 import dagger.Provides;
+import ru.vssemikoz.newsfeed.adapters.BaseAdapter;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
+import ru.vssemikoz.newsfeed.models.NewsItem;
 
 @Module
 public class AdapterModule {
-
     @Provides
-    NewsFeedAdapter provideAdapter(Context context){
-        return new NewsFeedAdapter(context);
+    BaseAdapter<NewsItem> provideAdapter(NewsFeedAdapter adapter){
+        return adapter;
     }
 }
