@@ -5,39 +5,35 @@ import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import ru.vssemikoz.newsfeed.AppConfig;
 import ru.vssemikoz.newsfeed.api.NewsApi;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 
-public class NewsApiRepository implements ApiRepository {
+public class RemoteNewsRepository implements NewsRepository {
     private NewsApi newsApi;
     private String apiKey;
     private String countryKey;
 
     // TODO: 26.03.2020 remove keys from constructor
-    public NewsApiRepository(NewsApi newsApi, String apiKey, String countryKey) {
+    public RemoteNewsRepository(NewsApi newsApi, AppConfig config) {
         this.newsApi = newsApi;
-        this.apiKey = apiKey;
-        this.countryKey = countryKey;
+        this.apiKey = config.getApiKey();
+        this.countryKey = config.getCountryKey();
     }
 
     @Override
-    public void getDataFromApi(Category category, RequestListener listener) {
+    public void getNewsFiltered(Category category, RequestListener listener) {
         String categoryKey = null;
         Call<NewsApiResponse> call;
         if (category != Category.ALL) {
-            categoryKey = Category.getRequestName(category);
+            categoryKey = Category.getCategoryName(category);
         }
         call = newsApi.getNews(countryKey, categoryKey, apiKey);
         call.enqueue(getNewsApiCallBack(listener));
     }
 
-    // TODO: 26.03.2020 is it need to cover override methods by method with exactly names?
-    public void getNewsFromApi(Category category, RequestListener listener) {
-        getDataFromApi(category, listener);
-    }
-
-    private Callback<NewsApiResponse> getNewsApiCallBack(ApiRepository.RequestListener listener) {
+    private Callback<NewsApiResponse> getNewsApiCallBack(NewsRepository.RequestListener listener) {
         return new Callback<NewsApiResponse>() {
             @Override
             public void onResponse(@NotNull Call<NewsApiResponse> call, @NotNull Response<NewsApiResponse> response) {

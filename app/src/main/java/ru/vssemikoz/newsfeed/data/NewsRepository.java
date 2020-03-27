@@ -4,7 +4,7 @@ import retrofit2.Response;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 
-public interface ApiRepository {
+public interface NewsRepository {
     interface RequestListener{
 
         void onRequestSuccess(Response<NewsApiResponse> response);
@@ -12,5 +12,5 @@ public interface ApiRepository {
         void onRequestFailure(Throwable t);
     }
 
-    void getDataFromApi(Category category, RequestListener listener);
+    void getNewsFiltered(Category category, RequestListener listener);
 }
