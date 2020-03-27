@@ -14,7 +14,7 @@ import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.navigator.Navigator;
 import ru.vssemikoz.newsfeed.data.NewsApiRepository;
-import ru.vssemikoz.newsfeed.data.NewsStorage;
+import ru.vssemikoz.newsfeed.data.LocalNewsStorage;
 import ru.vssemikoz.newsfeed.data.mappers.NewsItemMapper;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
@@ -28,7 +28,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Inject
     MainApplication mainApplication;
     @Inject
-    NewsStorage newsStorage;
+    LocalNewsStorage newsStorage;
     @Inject
     NewsApiRepository repository;
 
@@ -64,7 +64,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     public void changeNewsFavoriteState(int position) {
         NewsItem item = news.get(position);
         item.invertFavoriteState();
-        newsStorage.updateData(item);
+        newsStorage.updateItem(item);
         if (showOnlyFavorite && !item.isFavorite()) {
             news.remove(position);
             view.removeNewsItem(position);
@@ -133,7 +133,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private List<NewsItem> getNewsFromDB() {
-        return newsStorage.getDataFromDB(showOnlyFavorite, category);
+        return newsStorage.getFiltered(showOnlyFavorite, category);
     }
 
     private void requestNewsFromApi() {
@@ -146,7 +146,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                     return;
                 }
                 List<NewsItem> news = NewsItemMapper.mapResponseToNewsItems(response, category);
-                newsStorage.insertUniqueData(news);
+                newsStorage.insertUnique(news);
                 loadNewsFromDB();
                 updateNewsListUI();
             }
