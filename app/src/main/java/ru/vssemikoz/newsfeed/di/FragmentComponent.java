@@ -7,7 +7,8 @@ import ru.vssemikoz.newsfeed.newsfeed.NewsFeedFragment;
         PresenterModule.class,
         RepositoryModule.class,
         StorageModule.class,
-        IconicStorageModule.class})
+        IconicStorageModule.class,
+        NavigatorModule.class})
 public interface FragmentComponent {
     void inject(NewsFeedFragment fragment);
 }

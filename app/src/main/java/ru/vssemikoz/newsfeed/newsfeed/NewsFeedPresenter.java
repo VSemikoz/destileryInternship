@@ -15,9 +15,8 @@ import ru.vssemikoz.newsfeed.data.RemoteNewsRepository;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.navigator.Navigator;
-import ru.vssemikoz.newsfeed.data.LocalNewsStorage;
 import ru.vssemikoz.newsfeed.data.mappers.NewsItemMapper;
+import ru.vssemikoz.newsfeed.navigator.Navigator;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private static final String TAG = NewsFeedPresenter.class.getName();
@@ -33,6 +32,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     NewsStorage newsStorage;
     @Inject
     NewsRepository repository;
+    @Inject
+    Navigator navigator;
 
     @Inject
     public NewsFeedPresenter() {
@@ -58,8 +59,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     public void openNewsDetails(int position, Context context) {
         NewsItem item = news.get(position);
         String url = item.getUrl();
-        Navigator navigator = new Navigator();
-        navigator.openWebView(url, context);
+        navigator.openWebView(url);
     }
 
     @Override
