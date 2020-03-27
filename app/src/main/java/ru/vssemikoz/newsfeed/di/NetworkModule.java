@@ -18,7 +18,7 @@ public class NetworkModule {
     }
 
     @Provides
-    NewsApi provideNewsApi(Retrofit retrofit){
+    NewsApi provideNewsApi(Retrofit retrofit) {
         return retrofit.create(NewsApi.class);
     }
 }

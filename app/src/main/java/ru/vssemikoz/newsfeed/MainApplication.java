@@ -8,7 +8,6 @@ import ru.vssemikoz.newsfeed.di.DaggerApplicationComponent;
 
 public class MainApplication extends Application {
     private static ApplicationComponent applicationComponent;
-
     private static MainApplication instance;
 
     public static MainApplication getInstance() {
@@ -28,5 +27,4 @@ public class MainApplication extends Application {
                 .applicationModule(new ApplicationModule(instance))
                 .build();
     }
-
 }

@@ -8,7 +8,7 @@ import ru.vssemikoz.newsfeed.data.RemoteNewsRepository;
 @Module
 public class RepositoryModule {
     @Provides
-    NewsRepository provideRepository(RemoteNewsRepository repository){
+    NewsRepository provideRepository(RemoteNewsRepository repository) {
         return repository;
     }
 }

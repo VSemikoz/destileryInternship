@@ -33,8 +33,8 @@ import ru.vssemikoz.newsfeed.models.NewsItem;
 public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         PickCategoryDialog.OnCategorySelectedListener {
     private static final String TAG = NewsFeedFragment.class.getName();
-    private String CURRENT_CATEGORY = "CURRENT_CATEGORY";
-    private String CURRENT_SHOW_FAVORITE = "CURRENT_SHOW_FAVORITE";
+    private static final String CURRENT_CATEGORY = "CURRENT_CATEGORY";
+    private static final String CURRENT_SHOW_FAVORITE = "CURRENT_SHOW_FAVORITE";
 
     @Inject
     NewsFeedContract.Presenter presenter;

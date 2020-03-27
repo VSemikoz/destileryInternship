@@ -16,7 +16,7 @@ public class LocalNewsStorage implements NewsStorage {
     public LocalNewsStorage(NewsAppDataBase dataBase) {
         this.newsItemDAO = dataBase.newsItemDAO();
     }
-    
+
     @Override
     public List<NewsItem> getFiltered(boolean favoriteNewsState, Category category) {
         if (favoriteNewsState) {

@@ -5,7 +5,7 @@ import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 
 public interface NewsRepository {
-    interface RequestListener{
+    interface RequestListener {
 
         void onRequestSuccess(Response<NewsApiResponse> response);
 

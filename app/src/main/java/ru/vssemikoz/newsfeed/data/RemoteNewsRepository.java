@@ -1,7 +1,9 @@
 package ru.vssemikoz.newsfeed.data;
 
 import org.jetbrains.annotations.NotNull;
+
 import javax.inject.Inject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -17,7 +19,8 @@ public class RemoteNewsRepository implements NewsRepository {
     AppConfig config;
 
     @Inject
-    public RemoteNewsRepository() {}
+    public RemoteNewsRepository() {
+    }
 
     @Override
     public void getNewsFiltered(Category category, RequestListener listener) {

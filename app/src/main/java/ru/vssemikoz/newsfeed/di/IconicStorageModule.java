@@ -8,7 +8,7 @@ import ru.vssemikoz.newsfeed.data.LocalIconicStorage;
 @Module
 public class IconicStorageModule {
     @Provides
-    IconicStorage provideIconicStorage(LocalIconicStorage iconicStorage){
+    IconicStorage provideIconicStorage(LocalIconicStorage iconicStorage) {
         return iconicStorage;
     }
 }

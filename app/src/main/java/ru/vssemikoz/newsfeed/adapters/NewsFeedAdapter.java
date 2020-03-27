@@ -50,7 +50,7 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
         return new NewsFeedAdapter.NewsViewHolder(view, getListener());
     }
 
-     class NewsViewHolder extends BaseViewHolder<NewsItem> {
+    class NewsViewHolder extends BaseViewHolder<NewsItem> {
         boolean favoriteState;
         final CardView cardView;
         final ImageView imageView;

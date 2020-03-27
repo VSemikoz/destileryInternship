@@ -8,7 +8,7 @@ import ru.vssemikoz.newsfeed.navigator.Navigator;
 @Module
 public class NavigatorModule {
     @Provides
-    Navigator provideNavigator(AppNavigator navigator){
+    Navigator provideNavigator(AppNavigator navigator) {
         return navigator;
     }
 }

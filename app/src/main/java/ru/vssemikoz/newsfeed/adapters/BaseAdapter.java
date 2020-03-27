@@ -19,7 +19,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseViewHolder
         void OnRecyclerItemClick(int position);
     }
 
-    BaseAdapter(Context context){
+    BaseAdapter(Context context) {
         this.context = context;
     }
 
