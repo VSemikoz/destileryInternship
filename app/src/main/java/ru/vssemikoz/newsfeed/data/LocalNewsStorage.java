@@ -2,6 +2,8 @@ package ru.vssemikoz.newsfeed.data;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.database.NewsAppDataBase;
 import ru.vssemikoz.newsfeed.models.Category;
@@ -10,6 +12,7 @@ import ru.vssemikoz.newsfeed.models.NewsItem;
 public class LocalNewsStorage implements NewsStorage {
     private NewsItemDAO newsItemDAO;
 
+    @Inject
     public LocalNewsStorage(NewsAppDataBase dataBase) {
         this.newsItemDAO = dataBase.newsItemDAO();
     }
