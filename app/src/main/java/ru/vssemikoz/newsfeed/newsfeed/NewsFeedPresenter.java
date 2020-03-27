@@ -9,11 +9,13 @@ import javax.inject.Inject;
 
 import retrofit2.Response;
 import ru.vssemikoz.newsfeed.MainApplication;
+import ru.vssemikoz.newsfeed.data.NewsRepository;
+import ru.vssemikoz.newsfeed.data.NewsStorage;
+import ru.vssemikoz.newsfeed.data.RemoteNewsRepository;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.navigator.Navigator;
-import ru.vssemikoz.newsfeed.data.NewsApiRepository;
 import ru.vssemikoz.newsfeed.data.LocalNewsStorage;
 import ru.vssemikoz.newsfeed.data.mappers.NewsItemMapper;
 
@@ -28,9 +30,9 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Inject
     MainApplication mainApplication;
     @Inject
-    LocalNewsStorage newsStorage;
+    NewsStorage newsStorage;
     @Inject
-    NewsApiRepository repository;
+    NewsRepository repository;
 
     @Inject
     public NewsFeedPresenter() {
@@ -137,7 +139,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private void requestNewsFromApi() {
-        repository.getNewsFromApi(category, new NewsApiRepository.RequestListener() {
+        repository.getNewsFiltered(category, new RemoteNewsRepository.RequestListener() {
             @Override
             public void onRequestSuccess(Response<NewsApiResponse> response) {
                 view.hideProgressBar();
