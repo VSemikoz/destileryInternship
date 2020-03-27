@@ -30,9 +30,6 @@ public class MainApplication extends Application {
         instance = this;
         applicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(instance))
-                .networkModule(new NetworkModule())
-                .dataBaseModule(new DataBaseModule())
-                .appConfigModule(new AppConfigModule())
                 .build();
     }
 
