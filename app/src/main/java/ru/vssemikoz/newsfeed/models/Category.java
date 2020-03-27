@@ -15,7 +15,7 @@ public enum Category {
 
     private Integer categoryId;
 
-    public static String getRequestName(Category category) {
+    public static String getCategoryName(Category category) {
         return category.name();
     }
 

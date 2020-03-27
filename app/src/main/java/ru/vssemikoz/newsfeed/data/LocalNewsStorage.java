@@ -20,13 +20,13 @@ public class LocalNewsStorage implements NewsStorage {
             if (category == Category.ALL) {
                 return newsItemDAO.getFavoriteNews();
             } else {
-                return newsItemDAO.getFavoriteNewsByCategory(Category.getRequestName(category));
+                return newsItemDAO.getFavoriteNewsByCategory(Category.getCategoryName(category));
             }
         }
         if (category == Category.ALL) {
             return newsItemDAO.getAll();
         }
-        return newsItemDAO.getNewsByCategory(Category.getRequestName(category));
+        return newsItemDAO.getNewsByCategory(Category.getCategoryName(category));
     }
 
     @Override
