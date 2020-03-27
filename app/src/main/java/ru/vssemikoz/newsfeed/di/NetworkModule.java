@@ -9,7 +9,6 @@ import ru.vssemikoz.newsfeed.api.NewsApi;
 
 @Module
 public class NetworkModule {
-
     @Provides
     Retrofit provideRetrofit(AppConfig config) {
         return new Retrofit.Builder()
