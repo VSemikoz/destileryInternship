@@ -26,7 +26,7 @@ import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.data.NewsIconicStorage;
+import ru.vssemikoz.newsfeed.data.LocalIconicStorage;
 
 public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         PickCategoryDialog.OnCategorySelectedListener {
@@ -40,6 +40,8 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     Context context;
     @Inject
     NewsFeedAdapter adapter;
+    @Inject
+    LocalIconicStorage iconicStorage;
     private RecyclerView recyclerView;
     private TextView emptyView;
     private ImageButton favoriteNewsButton;
@@ -130,9 +132,9 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Override
     public void setFavoriteIcon(Boolean showOnlyFavorite) {
         if (showOnlyFavorite) {
-            favoriteNewsButton.setImageDrawable(NewsIconicStorage.getYellowStarBorderless(context));
+            favoriteNewsButton.setImageDrawable(iconicStorage.getYellowStarBorderless(context));
         } else {
-            favoriteNewsButton.setImageDrawable(NewsIconicStorage.getWhiteStarBorderless(context));
+            favoriteNewsButton.setImageDrawable(iconicStorage.getWhiteStarBorderless(context));
         }
     }
 

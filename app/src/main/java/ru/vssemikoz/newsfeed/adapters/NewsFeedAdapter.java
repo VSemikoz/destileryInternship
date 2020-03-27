@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import ru.vssemikoz.newsfeed.R;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.data.NewsIconicStorage;
+import ru.vssemikoz.newsfeed.data.LocalIconicStorage;
 import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
 public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
@@ -59,7 +59,6 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
         final TextView author;
         final ImageButton changeFavoriteStateButton;
         final ProgressBar progressBar;
-
 
         NewsViewHolder(View view, OnRecyclerItemClickListener listener) {//жду базовый
             super(view);
@@ -101,10 +100,12 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
             dateTime.setText(DateConverter.fromDateToUIFormat(newsItem.getPublishedAt()));
             author.setText(newsItem.getAuthor());
 
+            // TODO: 27.03.2020 cant provide iconicStorage through inject
+            LocalIconicStorage iconicStorage = new LocalIconicStorage();
             if (favoriteState) {
-                changeFavoriteStateButton.setImageDrawable(NewsIconicStorage.getYellowStarBorder(getContext()));
+                changeFavoriteStateButton.setImageDrawable(iconicStorage.getYellowStarBorder(getContext()));
             } else {
-                changeFavoriteStateButton.setImageDrawable(NewsIconicStorage.getWhiteStarBorder(getContext()));
+                changeFavoriteStateButton.setImageDrawable(iconicStorage.getWhiteStarBorder(getContext()));
             }
 
             progressBar.setVisibility(ProgressBar.VISIBLE);
