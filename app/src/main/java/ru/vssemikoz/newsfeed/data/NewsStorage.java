@@ -2,42 +2,15 @@ package ru.vssemikoz.newsfeed.data;
 
 import java.util.List;
 
-import ru.vssemikoz.newsfeed.MainApplication;
-import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
-public class NewsStorage {
+public interface NewsStorage {
+    List<NewsItem> getFiltered(boolean favoriteNewsState, Category category);
 
-    private NewsItemDAO newsItemDAO;
+    void deleteAll();
 
-    public NewsStorage(MainApplication mainApplication) {
-        this.newsItemDAO = mainApplication.getNewsDataBase().newsItemDAO();
-    }
+    void updateItem(NewsItem item);
 
-    public List<NewsItem> getNewsFromDB(boolean favoriteNewsState, Category category) {
-        if (favoriteNewsState) {
-            if (category == Category.ALL) {
-                return newsItemDAO.getFavoriteNews();
-            } else {
-                return newsItemDAO.getFavoriteNewsByCategory(Category.getRequestName(category));
-            }
-        }
-        if (category == Category.ALL) {
-            return newsItemDAO.getAll();
-        }
-        return newsItemDAO.getNewsByCategory(Category.getRequestName(category));
-    }
-
-    public void updateNews(NewsItem item) {
-        newsItemDAO.update(item);
-    }
-
-    public void insertUnique(List<NewsItem> newsItems) {
-        newsItemDAO.insertUnique(newsItems);
-    }
-
-    public void deleteAllNewsFromDB() {
-        newsItemDAO.deleteAll();
-    }
+    void insertUnique(List<NewsItem> newsItems);
 }

@@ -2,6 +2,7 @@ package ru.vssemikoz.newsfeed.newsfeed;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,23 +19,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
+import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
+import ru.vssemikoz.newsfeed.adapters.BaseAdapter;
 import ru.vssemikoz.newsfeed.adapters.NewsFeedAdapter;
+import ru.vssemikoz.newsfeed.data.IconicStorage;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.data.IconicStorage;
-
-import static androidx.core.util.Preconditions.checkNotNull;
 
 public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         PickCategoryDialog.OnCategorySelectedListener {
-    private String CURRENT_CATEGORY = "CURRENT_CATEGORY";
-    private String CURRENT_SHOW_FAVORITE = "CURRENT_SHOW_FAVORITE";
+    private static final String TAG = NewsFeedFragment.class.getName();
+    private static final String CURRENT_CATEGORY = "CURRENT_CATEGORY";
+    private static final String CURRENT_SHOW_FAVORITE = "CURRENT_SHOW_FAVORITE";
 
-    private NewsFeedContract.Presenter presenter;
-    private Context context;
-    private NewsFeedAdapter adapter;
+    @Inject
+    NewsFeedContract.Presenter presenter;
+    @Inject
+    Context context;
+    @Inject
+    BaseAdapter<NewsItem> adapter;
+    @Inject
+    IconicStorage iconicStorage;
     private RecyclerView recyclerView;
     private TextView emptyView;
     private ImageButton favoriteNewsButton;
@@ -42,26 +51,23 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     private ProgressBar progressBar;
     private TextView descriptionView;
 
+    @Inject
     public NewsFeedFragment() {
-        presenter = new NewsFeedPresenter(this);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = Objects.requireNonNull(getActivity()).getApplicationContext();
-        adapter = new NewsFeedAdapter(context);
+        Log.d(TAG, "onCreate: ");
+
+        MainApplication.getApplicationComponent().fragmentComponent().inject(this);
+        presenter.setView(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         presenter.start();
-    }
-
-    @Override
-    public void setPresenter(NewsFeedContract.Presenter presenter) {
-        this.presenter = checkNotNull(presenter);
     }
 
     @Nullable
@@ -110,7 +116,6 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     }
 
     private void initRecyclerView() {
-        adapter = new NewsFeedAdapter(context);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new NewsFeedAdapter.OnNewsItemClickListener() {
@@ -129,9 +134,9 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     @Override
     public void setFavoriteIcon(Boolean showOnlyFavorite) {
         if (showOnlyFavorite) {
-            favoriteNewsButton.setImageDrawable(IconicStorage.getYellowStarBorderless(context));
+            favoriteNewsButton.setImageDrawable(iconicStorage.getYellowStarBorderless(context));
         } else {
-            favoriteNewsButton.setImageDrawable(IconicStorage.getWhiteStarBorderless(context));
+            favoriteNewsButton.setImageDrawable(iconicStorage.getWhiteStarBorderless(context));
         }
     }
 

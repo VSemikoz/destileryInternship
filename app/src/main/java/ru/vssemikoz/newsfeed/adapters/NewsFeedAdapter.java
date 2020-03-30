@@ -20,12 +20,16 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import javax.inject.Inject;
+
 import ru.vssemikoz.newsfeed.R;
-import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.data.IconicStorage;
+import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.utils.TypeConverters.DateConverter;
 
 public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
+    @Inject
+    IconicStorage iconicStorage;
 
     public interface OnNewsItemClickListener extends OnRecyclerItemClickListener {
         void onChangeFavoriteStateClick(int position);
@@ -34,12 +38,9 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
         void OnRecyclerItemClick(int position);
     }
 
+    @Inject
     public NewsFeedAdapter(Context context) {
         super(context);
-    }
-
-    public void setOnItemClickListener(OnNewsItemClickListener mListener) {
-        super.setOnItemClickListener(mListener);
     }
 
     @NotNull
@@ -49,7 +50,7 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
         return new NewsFeedAdapter.NewsViewHolder(view, getListener());
     }
 
-     class NewsViewHolder extends BaseViewHolder<NewsItem> {
+    class NewsViewHolder extends BaseViewHolder<NewsItem> {
         boolean favoriteState;
         final CardView cardView;
         final ImageView imageView;
@@ -59,7 +60,6 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
         final TextView author;
         final ImageButton changeFavoriteStateButton;
         final ProgressBar progressBar;
-
 
         NewsViewHolder(View view, OnRecyclerItemClickListener listener) {//жду базовый
             super(view);
@@ -102,9 +102,9 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
             author.setText(newsItem.getAuthor());
 
             if (favoriteState) {
-                changeFavoriteStateButton.setImageDrawable(IconicStorage.getYellowStarBorder(getContext()));
+                changeFavoriteStateButton.setImageDrawable(iconicStorage.getYellowStarBorder(getContext()));
             } else {
-                changeFavoriteStateButton.setImageDrawable(IconicStorage.getWhiteStarBorder(getContext()));
+                changeFavoriteStateButton.setImageDrawable(iconicStorage.getWhiteStarBorder(getContext()));
             }
 
             progressBar.setVisibility(ProgressBar.VISIBLE);

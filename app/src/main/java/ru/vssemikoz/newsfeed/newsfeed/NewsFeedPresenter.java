@@ -5,46 +5,45 @@ import android.util.Log;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import retrofit2.Response;
 import ru.vssemikoz.newsfeed.MainApplication;
+import ru.vssemikoz.newsfeed.data.NewsRepository;
+import ru.vssemikoz.newsfeed.data.NewsStorage;
+import ru.vssemikoz.newsfeed.data.RemoteNewsRepository;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.navigator.Navigator;
-import ru.vssemikoz.newsfeed.data.NewsApiRepository;
-import ru.vssemikoz.newsfeed.data.NewsStorage;
 import ru.vssemikoz.newsfeed.data.mappers.NewsItemMapper;
-
-import static androidx.core.util.Preconditions.checkNotNull;
+import ru.vssemikoz.newsfeed.navigator.Navigator;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private static final String TAG = NewsFeedPresenter.class.getName();
-    private final NewsFeedContract.View view;
+    private NewsFeedContract.View view;
 
     private boolean showOnlyFavorite = false;
     private Category category = Category.ALL;
     private List<NewsItem> news;
 
-    private MainApplication mainApplication;
-    private NewsStorage newsStorage;
-    private NewsApiRepository repository;
+    @Inject
+    MainApplication mainApplication;
+    @Inject
+    NewsStorage newsStorage;
+    @Inject
+    NewsRepository repository;
+    @Inject
+    Navigator navigator;
 
-    public NewsFeedPresenter(NewsFeedContract.View view) {
-        this.view = checkNotNull(view, "tasksView cannot be null!");
-        this.view.setPresenter(this);
-        this.mainApplication = MainApplication.getInstance();
+    @Inject
+    public NewsFeedPresenter() {
     }
 
     @Override
     public void start() {
+        Log.d(TAG, "start: " + mainApplication);
         initStartValues();
-        initApiStorage();
-        initNewsStorage();
         loadNewsFromApi();
-    }
-
-    private void initApiStorage() {
-        repository = new NewsApiRepository(mainApplication);
     }
 
     private void loadNewsFromApi() {
@@ -60,15 +59,14 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     public void openNewsDetails(int position, Context context) {
         NewsItem item = news.get(position);
         String url = item.getUrl();
-        Navigator navigator = new Navigator();
-        navigator.openWebView(url, context);
+        navigator.openWebView(url);
     }
 
     @Override
     public void changeNewsFavoriteState(int position) {
         NewsItem item = news.get(position);
         item.invertFavoriteState();
-        newsStorage.updateNews(item);
+        newsStorage.updateItem(item);
         if (showOnlyFavorite && !item.isFavorite()) {
             news.remove(position);
             view.removeNewsItem(position);
@@ -80,13 +78,14 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         }
     }
 
-    private void updateNewsListUI(){
+    private void updateNewsListUI() {
         if (news == null || news.isEmpty()) {
             view.showEmptyView();
         } else {
             view.showList(news);
         }
     }
+
     @Override
     public void setCategory(Category category) {
         this.category = category;
@@ -108,8 +107,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private void initStartValues() {
-        category = Category.ALL;
-        showOnlyFavorite = false;
         view.setFavoriteIcon(showOnlyFavorite);
         view.setCategoryTitle(category);
     }
@@ -117,6 +114,11 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Override
     public void onCategoryButtonClick() {
         view.showCategoryDialog();
+    }
+
+    @Override
+    public void setView(NewsFeedContract.View view) {
+        this.view = view;
     }
 
     @Override
@@ -133,17 +135,13 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private List<NewsItem> getNewsFromDB() {
-        return newsStorage.getNewsFromDB(showOnlyFavorite, category);
-    }
-
-    private void initNewsStorage() {
-        newsStorage = new NewsStorage(mainApplication);
+        return newsStorage.getFiltered(showOnlyFavorite, category);
     }
 
     private void requestNewsFromApi() {
-        repository.getNewsFromApi(category, new NewsApiRepository.RequestListener() {
+        repository.getNewsFiltered(category, new RemoteNewsRepository.RequestListener() {
             @Override
-            public void onApiRequestSuccess(Response<NewsApiResponse> response) {
+            public void onRequestSuccess(Response<NewsApiResponse> response) {
                 view.hideProgressBar();
                 if (!response.isSuccessful()) {
                     Log.d(TAG, "onResponse " + response.code());
@@ -156,7 +154,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
             }
 
             @Override
-            public void onApiRequestFailure(Throwable t) {
+            public void onRequestFailure(Throwable t) {
                 view.hideProgressBar();
                 Log.d(TAG, "onFailure " + t.getMessage());
             }
