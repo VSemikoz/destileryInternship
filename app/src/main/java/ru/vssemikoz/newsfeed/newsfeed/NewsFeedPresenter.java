@@ -52,7 +52,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private void loadNewsFromDB() {
-        news = getNewsFromDB();
+        getNewsFromDB();
     }
 
     @Override
@@ -134,8 +134,19 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         loadNewsFromApi();
     }
 
-    private List<NewsItem> getNewsFromDB() {
-        return newsStorage.getFiltered(showOnlyFavorite, category);
+    private void getNewsFromDB() {
+        newsStorage.getFiltered(showOnlyFavorite, category, new NewsStorage.RequestListener() {
+            @Override
+            public void onRequestSuccess(List<NewsItem> items) {
+                news = items;
+                view.showList(news);
+            }
+
+            @Override
+            public void onRequestFailure() {
+                view.showEmptyView();
+            }
+        });
     }
 
     private void requestNewsFromApi() {
@@ -160,4 +171,5 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
             }
         });
     }
+
 }
