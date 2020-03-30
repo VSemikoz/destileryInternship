@@ -17,6 +17,7 @@ import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.data.mappers.NewsItemMapper;
 import ru.vssemikoz.newsfeed.navigator.Navigator;
+import ru.vssemikoz.newsfeed.tasks.GetFilteredTask;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private static final String TAG = NewsFeedPresenter.class.getName();
@@ -135,7 +136,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private void getNewsFromDB() {
-        newsStorage.getFiltered(showOnlyFavorite, category, new NewsStorage.RequestListener() {
+        newsStorage.getFiltered(showOnlyFavorite, category, new GetFilteredTask.RequestListener() {
             @Override
             public void onRequestSuccess(List<NewsItem> items) {
                 news = items;

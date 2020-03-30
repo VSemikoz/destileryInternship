@@ -15,7 +15,8 @@ public class GetFilteredTask extends AsyncTask<Void, Void, List<NewsItem>> {
     private RequestListener listener;
 
     public interface RequestListener {
-        void setNewsItems(List<NewsItem> items);
+        void onRequestSuccess(List<NewsItem> items);
+        void onRequestFailure();
     }
 
     public GetFilteredTask(Boolean favoriteNewsState, Category category, NewsItemDAO newsItemDAO, RequestListener listener) {
@@ -42,7 +43,11 @@ public class GetFilteredTask extends AsyncTask<Void, Void, List<NewsItem>> {
 
     @Override
     protected void onPostExecute(List<NewsItem> newsItems) {
-        listener.setNewsItems(newsItems);
+        if (newsItems ==null || newsItems.isEmpty()){
+            listener.onRequestFailure();
+        } else {
+            listener.onRequestSuccess(newsItems);
+        }
     }
 }
 

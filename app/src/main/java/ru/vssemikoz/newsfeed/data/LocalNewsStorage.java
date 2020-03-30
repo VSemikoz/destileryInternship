@@ -16,22 +16,14 @@ import ru.vssemikoz.newsfeed.models.NewsItem;
 public class LocalNewsStorage implements NewsStorage {
     private NewsItemDAO newsItemDAO;
 
-    private void setResultNews(List<NewsItem> resultNews, RequestListener listener) {
-        if (resultNews ==null || resultNews.isEmpty()){
-            listener.onRequestFailure();
-        } else {
-            listener.onRequestSuccess(resultNews);
-        }
-    }
-
     @Inject
     public LocalNewsStorage(NewsAppDataBase dataBase) {
         this.newsItemDAO = dataBase.newsItemDAO();
     }
 
     @Override
-    public void getFiltered(boolean favoriteNewsState, Category category,  RequestListener listener) {
-        GetFilteredTask task = new GetFilteredTask(favoriteNewsState, category, newsItemDAO, items -> setResultNews(items, listener));
+    public void getFiltered(boolean favoriteNewsState, Category category,  GetFilteredTask.RequestListener listener) {
+        GetFilteredTask task = new GetFilteredTask(favoriteNewsState, category, newsItemDAO, listener);
         task.execute();
     }
 

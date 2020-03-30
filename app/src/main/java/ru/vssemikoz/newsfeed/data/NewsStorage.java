@@ -4,14 +4,11 @@ import java.util.List;
 
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
+import ru.vssemikoz.newsfeed.tasks.GetFilteredTask;
 
 public interface NewsStorage {
-    public interface RequestListener{
-        void onRequestSuccess(List<NewsItem> items);
-        void onRequestFailure();
-    }
 
-    void getFiltered(boolean favoriteNewsState, Category category, RequestListener listener);
+    void getFiltered(boolean favoriteNewsState, Category category, GetFilteredTask.RequestListener listener);
 
     void deleteAll();
 
