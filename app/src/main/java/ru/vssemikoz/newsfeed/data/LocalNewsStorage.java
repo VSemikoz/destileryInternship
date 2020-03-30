@@ -22,7 +22,7 @@ public class LocalNewsStorage implements NewsStorage {
     }
 
     @Override
-    public void getFiltered(boolean favoriteNewsState, Category category,  GetFilteredTask.RequestListener listener) {
+    public void getFiltered(boolean favoriteNewsState, Category category, GetFilteredTask.RequestListener listener) {
         GetFilteredTask task = new GetFilteredTask(favoriteNewsState, category, newsItemDAO, listener);
         task.execute();
     }
@@ -35,7 +35,7 @@ public class LocalNewsStorage implements NewsStorage {
 
     @Override
     public void updateItem(NewsItem item) {
-        UpdateTask task =  new UpdateTask(newsItemDAO, item);
+        UpdateTask task = new UpdateTask(newsItemDAO, item);
         task.execute();
     }
 
