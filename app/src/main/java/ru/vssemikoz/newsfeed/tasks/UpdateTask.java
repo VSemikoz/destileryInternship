@@ -1,4 +1,4 @@
-package ru.vssemikoz.newsfeed.Tasks;
+package ru.vssemikoz.newsfeed.tasks;
 
 import android.os.AsyncTask;
 

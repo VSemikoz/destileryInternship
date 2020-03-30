@@ -4,10 +4,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import ru.vssemikoz.newsfeed.Tasks.DeleteTask;
-import ru.vssemikoz.newsfeed.Tasks.GetFilteredTask;
-import ru.vssemikoz.newsfeed.Tasks.InsertUniqueTask;
-import ru.vssemikoz.newsfeed.Tasks.UpdateTask;
+import ru.vssemikoz.newsfeed.tasks.DeleteTask;
+import ru.vssemikoz.newsfeed.tasks.GetFilteredTask;
+import ru.vssemikoz.newsfeed.tasks.InsertUniqueTask;
+import ru.vssemikoz.newsfeed.tasks.UpdateTask;
 import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.database.NewsAppDataBase;
 import ru.vssemikoz.newsfeed.models.Category;
