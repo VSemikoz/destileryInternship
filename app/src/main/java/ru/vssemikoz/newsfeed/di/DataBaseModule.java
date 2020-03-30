@@ -14,7 +14,6 @@ public class DataBaseModule {
     NewsAppDataBase provideDataBase(Context context) {
         return Room.databaseBuilder(context,
                 NewsAppDataBase.class, "news_data_base")
-                .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
     }
