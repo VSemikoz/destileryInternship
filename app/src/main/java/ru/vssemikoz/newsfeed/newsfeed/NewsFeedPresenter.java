@@ -7,15 +7,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import retrofit2.Response;
 import ru.vssemikoz.newsfeed.MainApplication;
-import ru.vssemikoz.newsfeed.data.NewsRepository;
-import ru.vssemikoz.newsfeed.data.NewsStorage;
-import ru.vssemikoz.newsfeed.data.RemoteNewsRepository;
 import ru.vssemikoz.newsfeed.models.Category;
-import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.data.mappers.NewsItemMapper;
 import ru.vssemikoz.newsfeed.navigator.Navigator;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
@@ -29,30 +23,35 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Inject
     MainApplication mainApplication;
     @Inject
-    NewsStorage newsStorage;
-    @Inject
-    NewsRepository repository;
-    @Inject
     Navigator navigator;
+    @Inject
+    NewsFeedModel model;
 
     @Inject
     public NewsFeedPresenter() {
     }
 
+    public void setNews(List<NewsItem> news) {
+        this.news = news;
+    }
+
     @Override
     public void start() {
         Log.d(TAG, "start: " + mainApplication);
+        model.setListener(new NewsFeedModel.NewsFeedRequestListener() {
+            @Override
+            public void onGetRequestSuccess(List<NewsItem> news) {
+                setNews(news);
+                view.showList(news);
+            }
+
+            @Override
+            public void onGetRequestFailure() {
+                view.showEmptyView();
+            }
+        });
         initStartValues();
-        loadNewsFromApi();
-    }
-
-    private void loadNewsFromApi() {
-        view.showProgressBar();
-        requestNewsFromApi();
-    }
-
-    private void loadNewsFromDB() {
-        news = getNewsFromDB();
+        updateNews();
     }
 
     @Override
@@ -66,7 +65,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     public void changeNewsFavoriteState(int position) {
         NewsItem item = news.get(position);
         item.invertFavoriteState();
-        newsStorage.updateItem(item);
+        model.updateItem(item);
         if (showOnlyFavorite && !item.isFavorite()) {
             news.remove(position);
             view.removeNewsItem(position);
@@ -75,14 +74,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
             }
         } else {
             view.updateNewsItem(position);
-        }
-    }
-
-    private void updateNewsListUI() {
-        if (news == null || news.isEmpty()) {
-            view.showEmptyView();
-        } else {
-            view.showList(news);
         }
     }
 
@@ -125,39 +116,28 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     public void invertFavoriteState() {
         showOnlyFavorite = !showOnlyFavorite;
         view.setFavoriteIcon(showOnlyFavorite);
-        loadNewsFromDB();
+        model.getNews(category, showOnlyFavorite);
         updateNewsListUI();
     }
 
     @Override
     public void updateNewsFromApi() {
-        loadNewsFromApi();
+        updateNews();
     }
 
-    private List<NewsItem> getNewsFromDB() {
-        return newsStorage.getFiltered(showOnlyFavorite, category);
+    private void updateNews() {
+        view.showProgressBar();
+        model.updateNews(category, showOnlyFavorite);
+        view.hideProgressBar();
+        updateNewsListUI();
     }
 
-    private void requestNewsFromApi() {
-        repository.getNewsFiltered(category, new RemoteNewsRepository.RequestListener() {
-            @Override
-            public void onRequestSuccess(Response<NewsApiResponse> response) {
-                view.hideProgressBar();
-                if (!response.isSuccessful()) {
-                    Log.d(TAG, "onResponse " + response.code());
-                    return;
-                }
-                List<NewsItem> news = NewsItemMapper.mapResponseToNewsItems(response, category);
-                newsStorage.insertUnique(news);
-                loadNewsFromDB();
-                updateNewsListUI();
-            }
-
-            @Override
-            public void onRequestFailure(Throwable t) {
-                view.hideProgressBar();
-                Log.d(TAG, "onFailure " + t.getMessage());
-            }
-        });
+    private void updateNewsListUI() {
+        if (news == null || news.isEmpty()) {
+            view.showEmptyView();
+        } else {
+            view.showList(news);
+        }
     }
+
 }
