@@ -18,9 +18,9 @@ public class ApiResponseMapper implements NewsMapper<Response<NewsApiResponse>, 
     }
 
     @Override
-    public List<NewsItem> map(Response<NewsApiResponse> mapObj, Filter params) {
+    public List<NewsItem> map(Response<NewsApiResponse> mapItems, Filter params) {
         List<NewsItem> news = new ArrayList<>();
-        List<NewsApiResponseItem> responseItems = Objects.requireNonNull(mapObj.body()).getNewsApiResponseItemList();
+        List<NewsApiResponseItem> responseItems = mapItems.body().getNewsApiResponseItemList();
         for (NewsApiResponseItem newsApiResponseItem : responseItems) {
             news.add(new NewsItem(newsApiResponseItem, params.getCategory()));
         }
