@@ -4,6 +4,6 @@ import java.util.List;
 
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
-public interface NewsMapper<T,P> {
+public interface NewsMapper<T, P> {
     List<NewsItem> map(T mapItems, P params);
 }
