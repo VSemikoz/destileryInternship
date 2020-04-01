@@ -7,22 +7,22 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import retrofit2.Response;
-import ru.vssemikoz.newsfeed.models.Category;
+import ru.vssemikoz.newsfeed.models.Filter;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
-public class ApiResponseMapper implements NewsMapper<Response<NewsApiResponse>, Category> {
+public class ApiResponseMapper implements NewsMapper<Response<NewsApiResponse>, Filter> {
     @Inject
     public ApiResponseMapper() {
     }
 
     @Override
-    public List<NewsItem> map(Response<NewsApiResponse> mapObj, Category params) {
+    public List<NewsItem> map(Response<NewsApiResponse> mapObj, Filter params) {
         List<NewsItem> news = new ArrayList<>();
         List<NewsApiResponseItem> responseItems = Objects.requireNonNull(mapObj.body()).getNewsApiResponseItemList();
         for (NewsApiResponseItem newsApiResponseItem : responseItems) {
-            news.add(new NewsItem(newsApiResponseItem, params));
+            news.add(new NewsItem(newsApiResponseItem, params.getCategory()));
         }
         return news;
     }
