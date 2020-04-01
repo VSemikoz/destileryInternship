@@ -12,10 +12,10 @@ import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.data.NewsRepository;
 import ru.vssemikoz.newsfeed.data.NewsStorage;
 import ru.vssemikoz.newsfeed.data.RemoteNewsRepository;
+import ru.vssemikoz.newsfeed.data.mappers.NewsMapper;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.data.mappers.NewsItemMapper;
 import ru.vssemikoz.newsfeed.navigator.Navigator;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
@@ -34,6 +34,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     NewsRepository repository;
     @Inject
     Navigator navigator;
+    @Inject
+    NewsMapper mapper;
 
     @Inject
     public NewsFeedPresenter() {
@@ -147,7 +149,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                     Log.d(TAG, "onResponse " + response.code());
                     return;
                 }
-                List<NewsItem> news = NewsItemMapper.mapResponseToNewsItems(response, category);
+                List<NewsItem> news = mapper.map(response, category);
                 newsStorage.insertUnique(news);
                 loadNewsFromDB();
                 updateNewsListUI();
