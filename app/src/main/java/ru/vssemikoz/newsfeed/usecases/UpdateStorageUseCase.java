@@ -4,31 +4,34 @@ import android.util.Log;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import retrofit2.Response;
 import ru.vssemikoz.newsfeed.data.NewsRepository;
 import ru.vssemikoz.newsfeed.data.NewsStorage;
 import ru.vssemikoz.newsfeed.data.RemoteNewsRepository;
 import ru.vssemikoz.newsfeed.data.mappers.NewsMapper;
-import ru.vssemikoz.newsfeed.models.Filter;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
+import ru.vssemikoz.newsfeed.models.Params;
 
-public class StorageUpdateUseCase implements BaseUseCase<NewsItem, Filter>{
-    private static final String TAG = StorageUpdateUseCase.class.getName();
+public class UpdateStorageUseCase implements BaseUseCase<Void, Params> {
+    private static final String TAG = UpdateStorageUseCase.class.getName();
+    @Inject
+    NewsStorage newsStorage;
+    @Inject
+    NewsRepository repository;
+    @Inject
+    NewsMapper mapper;
 
-    private NewsStorage newsStorage;
-    private NewsRepository repository;
-    private NewsMapper mapper;
-
-    public StorageUpdateUseCase(NewsStorage newsStorage, NewsRepository repository, NewsMapper mapper) {
-        this.newsStorage = newsStorage;
-        this.repository = repository;
-        this.mapper = mapper;
+    @Inject
+    public UpdateStorageUseCase() {
     }
 
     @Override
-    public List<NewsItem> run(List<NewsItem> itemsList, Filter params) {
-        repository.getNewsFiltered(params.getCategory(), new RemoteNewsRepository.RequestListener() {
+    public Void run(Params params) {
+        Params.RequestListener listener = params.getListener();
+        repository.getNewsFiltered(params.getFilter().getCategory(), new RemoteNewsRepository.RequestListener() {
             @Override
             public void onRequestSuccess(Response<NewsApiResponse> response) {
                 if (!response.isSuccessful()) {
@@ -37,12 +40,12 @@ public class StorageUpdateUseCase implements BaseUseCase<NewsItem, Filter>{
                 }
                 List<NewsItem> news = mapper.map(response, params);
                 newsStorage.insertUnique(news);
-
+                listener.onRequestSuccess(news);
             }
 
             @Override
             public void onRequestFailure(Throwable t) {
-                Log.d(TAG, "onFailure " + t.getMessage());
+                listener.onRequestFailure();
             }
         });
         return null;
