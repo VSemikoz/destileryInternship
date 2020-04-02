@@ -14,8 +14,10 @@ import ru.vssemikoz.newsfeed.data.NewsStorage;
 import ru.vssemikoz.newsfeed.data.RemoteNewsRepository;
 import ru.vssemikoz.newsfeed.data.mappers.NewsMapper;
 import ru.vssemikoz.newsfeed.models.Category;
+import ru.vssemikoz.newsfeed.models.Filter;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsItem;
+import ru.vssemikoz.newsfeed.models.Params;
 import ru.vssemikoz.newsfeed.navigator.Navigator;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
@@ -45,10 +47,10 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     public void start() {
         Log.d(TAG, "start: " + mainApplication);
         initStartValues();
-        loadNewsFromApi();
+        updateNews();
     }
 
-    private void loadNewsFromApi() {
+    private void updateNews() {
         view.showProgressBar();
         requestNewsFromApi();
     }
@@ -133,7 +135,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Override
     public void updateNewsFromApi() {
-        loadNewsFromApi();
+        updateNews();
     }
 
     private List<NewsItem> getNewsFromDB() {
@@ -149,7 +151,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                     Log.d(TAG, "onResponse " + response.code());
                     return;
                 }
-                List<NewsItem> news = mapper.map(response, category);
+                Params params = new Params(new Filter(category, showOnlyFavorite));
+                List<NewsItem> news = mapper.map(response, params);
                 newsStorage.insertUnique(news);
                 loadNewsFromDB();
                 updateNewsListUI();
