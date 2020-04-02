@@ -9,16 +9,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ru.vssemikoz.newsfeed.MainApplication;
-import ru.vssemikoz.newsfeed.data.NewsRepository;
-import ru.vssemikoz.newsfeed.data.NewsStorage;
-import ru.vssemikoz.newsfeed.data.mappers.NewsMapper;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.Filter;
 import ru.vssemikoz.newsfeed.models.NewsItem;
+import ru.vssemikoz.newsfeed.models.Params;
 import ru.vssemikoz.newsfeed.navigator.Navigator;
-import ru.vssemikoz.newsfeed.usecases.StorageGetUseCase;
-import ru.vssemikoz.newsfeed.usecases.StorageUpdateItemUseCase;
-import ru.vssemikoz.newsfeed.usecases.StorageUpdateUseCase;
+import ru.vssemikoz.newsfeed.usecases.GetFilteredNewsUseCase;
+import ru.vssemikoz.newsfeed.usecases.UpdateNewsItemsUseCase;
+import ru.vssemikoz.newsfeed.usecases.UpdateStorageUseCase;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private static final String TAG = NewsFeedPresenter.class.getName();
@@ -31,13 +29,13 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Inject
     MainApplication mainApplication;
     @Inject
-    NewsStorage newsStorage;
+    GetFilteredNewsUseCase getUseCase;
     @Inject
-    NewsRepository repository;
+    UpdateNewsItemsUseCase updateItemsUseCase;
+    @Inject
+    UpdateStorageUseCase updateUseCase;
     @Inject
     Navigator navigator;
-    @Inject
-    NewsMapper mapper;
 
     @Inject
     public NewsFeedPresenter() {
@@ -53,9 +51,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private void updateActualNews() {
         view.showProgressBar();
         updateNewsStorage();
-        getNewsFromStorage();
-        updateNewsListUI();
-        view.hideProgressBar();
     }
 
     @Override
@@ -127,17 +122,33 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private void getNewsFromStorage() {
-        StorageGetUseCase getUseCase = new StorageGetUseCase(newsStorage);
-        news = getUseCase.run(null, new Filter(category, showOnlyFavorite));
+        Params params = new Params(new Filter(category, showOnlyFavorite));
+        news = getUseCase.run(params);
     }
 
     private void updateNewsStorage() {
-        StorageUpdateUseCase updateUseCase = new StorageUpdateUseCase(newsStorage, repository, mapper );
-        updateUseCase.run(null, new Filter(category, showOnlyFavorite));
+        Params params = new Params(new Filter(category, showOnlyFavorite), new Params.RequestListener() {
+            @Override
+            public void onRequestSuccess(List<NewsItem> news) {
+                getNewsFromStorage();
+                updateNewsListUI();
+                view.hideProgressBar();
+            }
+
+            @Override
+            public void onRequestFailure() {
+                Log.e(TAG, "onRequestFailure: update request failure, shows cash news" );
+                getNewsFromStorage();
+                updateNewsListUI();
+                view.hideProgressBar();
+            }
+        });
+        updateUseCase.run(params);
     }
-    private void updateItemsStorage(List<NewsItem> updateList){
-        StorageUpdateItemUseCase updateItemUseCase = new StorageUpdateItemUseCase(newsStorage);
-        updateItemUseCase.run(updateList, new Filter(category, showOnlyFavorite));
+
+    private void updateItemsStorage(List<NewsItem> updateList) {
+        Params params = new Params(updateList, new Filter(category, showOnlyFavorite));
+        updateItemsUseCase.run(params);
     }
 
     private void initStartValues() {
