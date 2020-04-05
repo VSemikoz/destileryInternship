@@ -1,24 +1,13 @@
 package ru.vssemikoz.newsfeed;
 
-import android.util.Log;
-
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import retrofit2.Response;
 import ru.vssemikoz.newsfeed.data.LocalNewsStorage;
-import ru.vssemikoz.newsfeed.data.NewsRepository;
-import ru.vssemikoz.newsfeed.data.RemoteNewsRepository;
-import ru.vssemikoz.newsfeed.data.mappers.ApiResponseMapper;
-import ru.vssemikoz.newsfeed.data.mappers.NewsMapper;
 import ru.vssemikoz.newsfeed.models.Category;
-import ru.vssemikoz.newsfeed.models.Filter;
-import ru.vssemikoz.newsfeed.models.NewsApiResponse;
-import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.models.Params;
 
+import ru.vssemikoz.newsfeed.models.NewsItem;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
