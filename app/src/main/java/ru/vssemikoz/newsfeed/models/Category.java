@@ -3,8 +3,6 @@ package ru.vssemikoz.newsfeed.models;
 import android.content.Context;
 
 import java.util.List;
-
-import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
 
 public enum Category {

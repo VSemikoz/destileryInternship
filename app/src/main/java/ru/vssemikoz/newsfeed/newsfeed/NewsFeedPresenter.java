@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -44,6 +45,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Override
     public void start() {
         Log.d(TAG, "start: " + mainApplication);
+        Category.resolveCategory(mainApplication, Arrays.asList(Category.values()));
         initStartValues();
         updateActualNews();
     }
