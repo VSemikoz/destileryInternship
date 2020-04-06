@@ -8,9 +8,9 @@ import ru.vssemikoz.newsfeed.data.NewsStorage;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.models.Params;
 
-public class GetFilteredNewsUseCase implements BaseUseCase<List<NewsItem>, Params> {
+public class GetFilteredNewsUseCase implements BaseUseCase<List<NewsItem>, Params> {//inject mock
     @Inject
-    NewsStorage newsStorage;
+    NewsStorage newsStorage;//mock
 
     @Inject
     public GetFilteredNewsUseCase() {
