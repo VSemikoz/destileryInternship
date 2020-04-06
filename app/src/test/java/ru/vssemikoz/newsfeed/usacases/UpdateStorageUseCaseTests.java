@@ -9,8 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import ru.vssemikoz.newsfeed.data.NewsStorage;
 import ru.vssemikoz.newsfeed.models.Category;
@@ -46,15 +48,22 @@ public class UpdateStorageUseCaseTests {
     }
 
     public void initLists(){
+        int stringSize = 10;
         for (int i = 0; i < 5; i++) {
             NewsItem item = new NewsItem();
-            item.setAuthor(Integer.toString(i));
-            item.setCategory(Integer.toString(i));
-            item.setContent(Integer.toString(i));
-            item.setDescription(Integer.toString(i));
-            item.setTitle(Integer.toString(i));
+            item.setAuthor(generateRandomString(stringSize));
+            item.setCategory(generateRandomString(stringSize));
+            item.setContent(generateRandomString(stringSize));
+            item.setDescription(generateRandomString(stringSize));
+            item.setTitle(generateRandomString(stringSize));
             exampleNewsList.add(item);
         }
+    }
+
+    private String generateRandomString(int stringSize){
+        byte[] array = new byte[stringSize];
+        new Random().nextBytes(array);
+        return new String(array, Charset.forName("UTF-8"));
     }
 
     private void initParams() {
@@ -69,7 +78,7 @@ public class UpdateStorageUseCaseTests {
     }
 
     @Test
-    public void verifyUpdateItemContainAllItemsPassedExampleList() {
+    public void updateItemShouldContainNewsItemsExactlyTimes() {
         updateNewsItemsUseCase.run(paramsExample);
         verify(newsStorage, times(paramsExample.getNews().size())).updateItem(itemCaptor.capture());
         List<NewsItem> capturedArgument = itemCaptor.getAllValues();
@@ -77,7 +86,7 @@ public class UpdateStorageUseCaseTests {
     }
 
     @Test
-    public void verifyUpdateItemContainNoItemsPassedEmptyList() {
+    public void updateItemShouldContainNoItems() {
         NewsFeedParams paramEmptyList = new NewsFeedParams(emptyNewsList, filterExample);
         updateNewsItemsUseCase.run(paramEmptyList);
         verify(newsStorage, never()).updateItem(itemCaptor.capture());

@@ -7,8 +7,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import ru.vssemikoz.newsfeed.data.NewsStorage;
 import ru.vssemikoz.newsfeed.models.Category;
@@ -21,7 +23,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,15 +37,22 @@ public class GetFilteredNewsUseCaseTests {
     GetFilteredNewsUseCase getFilteredNewsUseCase;
 
     public void initLists(){
+        int stringSize = 10;
         for (int i = 0; i < 5; i++) {
             NewsItem item = new NewsItem();
-            item.setAuthor(Integer.toString(i));
-            item.setCategory(Integer.toString(i));
-            item.setContent(Integer.toString(i));
-            item.setDescription(Integer.toString(i));
-            item.setTitle(Integer.toString(i));
+            item.setAuthor(generateRandomString(stringSize));
+            item.setCategory(generateRandomString(stringSize));
+            item.setContent(generateRandomString(stringSize));
+            item.setDescription(generateRandomString(stringSize));
+            item.setTitle(generateRandomString(stringSize));
             exampleNewsList.add(item);
         }
+    }
+
+    private String generateRandomString(int stringSize){
+        byte[] array = new byte[stringSize];
+        new Random().nextBytes(array);
+        return new String(array, Charset.forName("UTF-8"));
     }
 
     private void initParams() {
