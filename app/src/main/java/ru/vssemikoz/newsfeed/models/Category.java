@@ -1,5 +1,9 @@
 package ru.vssemikoz.newsfeed.models;
 
+import android.content.Context;
+
+import java.util.List;
+
 import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
 
@@ -14,6 +18,7 @@ public enum Category {
     TECHNOLOGY(R.string.category_technology);
 
     private Integer categoryId;
+    private String category;
 
     public static String getCategoryName(Category category) {
         return category.name();
@@ -43,6 +48,10 @@ public enum Category {
             categories[i] = getDisplayName(values[i]);
         }
         return categories;
+    }
+
+    public static void resolveCategory(Context context, List<Category> categories){
+//        category = //for
     }
 
 }
