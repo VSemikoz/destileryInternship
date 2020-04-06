@@ -12,7 +12,7 @@ import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.models.Params;
 
-public class ApiResponseMapper implements NewsMapper<Params> {
+public class ApiResponseMapper implements NewsMapper {
     @Inject
     public ApiResponseMapper() {
     }
