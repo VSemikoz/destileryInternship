@@ -5,10 +5,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ru.vssemikoz.newsfeed.data.NewsStorage;
+import ru.vssemikoz.newsfeed.models.NewsFeedParams;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.models.Params;
 
-public class GetFilteredNewsUseCase implements BaseUseCase<List<NewsItem>, Params> {//inject mock
+public class GetFilteredNewsUseCase implements BaseUseCase<List<NewsItem>, NewsFeedParams> {//inject mock
     @Inject
     NewsStorage newsStorage;//mock
 
@@ -17,7 +17,7 @@ public class GetFilteredNewsUseCase implements BaseUseCase<List<NewsItem>, Param
     }
 
     @Override
-    public List<NewsItem> run(Params params) {
+    public List<NewsItem> run(NewsFeedParams params) {
         return newsStorage.getFiltered(params.getFilter().getShowOnlyFavorite(), params.getFilter().getCategory());
     }
 }

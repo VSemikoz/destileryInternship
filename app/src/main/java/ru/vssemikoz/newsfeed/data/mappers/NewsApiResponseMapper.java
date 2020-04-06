@@ -10,7 +10,7 @@ import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.models.Params;
+import ru.vssemikoz.newsfeed.models.NewsFeedParams;
 
 public class NewsApiResponseMapper implements NewsMapper {
     @Inject
@@ -18,7 +18,7 @@ public class NewsApiResponseMapper implements NewsMapper {
     }
 
     @Override
-    public List<NewsItem> map(Response<NewsApiResponse> response, Params params) {
+    public List<NewsItem> map(Response<NewsApiResponse> response, NewsFeedParams params) {
         List<NewsItem> news = new ArrayList<>();
         Category category = params.getFilter().getCategory();
         List<NewsApiResponseItem> responseItems = response.body().getNewsApiResponseItemList();

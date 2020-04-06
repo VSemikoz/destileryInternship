@@ -3,7 +3,7 @@ package ru.vssemikoz.newsfeed.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Params {
+public class NewsFeedParams {
     private List<NewsItem> news;
     private Filter filter;
     private RequestListener listener;
@@ -14,21 +14,21 @@ public class Params {
         void onRequestFailure();
     }
 
-    public Params(List<NewsItem> news, Filter filter, RequestListener listener) {
+    public NewsFeedParams(List<NewsItem> news, Filter filter, RequestListener listener) {
         this.news = news;
         this.filter = filter;
         this.listener = listener;
     }
 
-    public Params(Filter filter, RequestListener listener) {
+    public NewsFeedParams(Filter filter, RequestListener listener) {
         this(new ArrayList<>(), filter, listener);
     }
 
-    public Params(List<NewsItem> news, Filter filter) {
+    public NewsFeedParams(List<NewsItem> news, Filter filter) {
         this(news, filter, null);
     }
 
-    public Params(Filter filter) {
+    public NewsFeedParams(Filter filter) {
         this(new ArrayList<>(), filter);
     }
 
@@ -42,7 +42,7 @@ public class Params {
 
     public RequestListener getListener() {
         if (listener == null){
-            throw new NullPointerException("Params.RequestListener must be implement");
+            throw new NullPointerException("NewsFeedParams.RequestListener must be implement");
         }
         return listener;
     }

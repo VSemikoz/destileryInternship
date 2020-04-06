@@ -11,8 +11,8 @@ import javax.inject.Inject;
 import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.Filter;
+import ru.vssemikoz.newsfeed.models.NewsFeedParams;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.models.Params;
 import ru.vssemikoz.newsfeed.navigator.Navigator;
 import ru.vssemikoz.newsfeed.usecases.GetFilteredNewsUseCase;
 import ru.vssemikoz.newsfeed.usecases.UpdateNewsItemsUseCase;
@@ -122,12 +122,12 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private void getNewsFromStorage() {
-        Params params = new Params(new Filter(category, showOnlyFavorite));
+        NewsFeedParams params = new NewsFeedParams(new Filter(category, showOnlyFavorite));
         news = getFilteredNewsUseCase.run(params);
     }
 
     private void updateNewsStorage() {
-        Params params = new Params(new Filter(category, showOnlyFavorite), new Params.RequestListener() {
+        NewsFeedParams params = new NewsFeedParams(new Filter(category, showOnlyFavorite), new NewsFeedParams.RequestListener() {
             @Override
             public void onRequestSuccess(List<NewsItem> news) {
                 getNewsFromStorage();
@@ -147,7 +147,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     private void updateItemsStorage(List<NewsItem> updateList) {
-        Params params = new Params(updateList, new Filter(category, showOnlyFavorite));
+        NewsFeedParams params = new NewsFeedParams(updateList, new Filter(category, showOnlyFavorite));
         updateNewsItemsUseCase.run(params);
     }
 
