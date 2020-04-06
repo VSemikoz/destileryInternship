@@ -48,7 +48,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         updateActualNews();
     }
 
-    private void updateActualNews() {
+    @Override
+    public void updateActualNews() {
         view.showProgressBar();
         updateNewsStorage();
     }
@@ -114,11 +115,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         view.setFavoriteIcon(showOnlyFavorite);
         getNewsFromStorage();
         updateNewsListUI();
-    }
-
-    @Override
-    public void updateNewsFromApi() {
-        updateActualNews();
     }
 
     private void getNewsFromStorage() {
