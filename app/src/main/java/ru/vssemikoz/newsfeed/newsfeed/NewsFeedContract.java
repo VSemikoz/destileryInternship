@@ -34,7 +34,7 @@ public interface NewsFeedContract {
 
     interface Presenter extends BasePresenter {
 
-        void updateNewsFromApi();
+        void updateActualNews();
 
         void invertFavoriteState();
 

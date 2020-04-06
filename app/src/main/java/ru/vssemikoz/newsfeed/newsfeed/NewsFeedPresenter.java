@@ -3,20 +3,20 @@ package ru.vssemikoz.newsfeed.newsfeed;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import retrofit2.Response;
 import ru.vssemikoz.newsfeed.MainApplication;
-import ru.vssemikoz.newsfeed.data.NewsRepository;
-import ru.vssemikoz.newsfeed.data.NewsStorage;
-import ru.vssemikoz.newsfeed.data.RemoteNewsRepository;
 import ru.vssemikoz.newsfeed.models.Category;
-import ru.vssemikoz.newsfeed.models.NewsApiResponse;
+import ru.vssemikoz.newsfeed.models.Filter;
+import ru.vssemikoz.newsfeed.models.NewsFeedParams;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.data.mappers.NewsItemMapper;
 import ru.vssemikoz.newsfeed.navigator.Navigator;
+import ru.vssemikoz.newsfeed.usecases.GetFilteredNewsUseCase;
+import ru.vssemikoz.newsfeed.usecases.UpdateNewsItemsUseCase;
+import ru.vssemikoz.newsfeed.usecases.UpdateStorageUseCase;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private static final String TAG = NewsFeedPresenter.class.getName();
@@ -29,9 +29,11 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Inject
     MainApplication mainApplication;
     @Inject
-    NewsStorage newsStorage;
+    GetFilteredNewsUseCase getFilteredNewsUseCase;
     @Inject
-    NewsRepository repository;
+    UpdateNewsItemsUseCase updateNewsItemsUseCase;
+    @Inject
+    UpdateStorageUseCase updateStorageUseCase;
     @Inject
     Navigator navigator;
 
@@ -43,16 +45,13 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     public void start() {
         Log.d(TAG, "start: " + mainApplication);
         initStartValues();
-        loadNewsFromApi();
+        updateActualNews();
     }
 
-    private void loadNewsFromApi() {
+    @Override
+    public void updateActualNews() {
         view.showProgressBar();
-        requestNewsFromApi();
-    }
-
-    private void loadNewsFromDB() {
-        news = getNewsFromDB();
+        updateNewsStorage();
     }
 
     @Override
@@ -66,7 +65,9 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     public void changeNewsFavoriteState(int position) {
         NewsItem item = news.get(position);
         item.invertFavoriteState();
-        newsStorage.updateItem(item);
+        List<NewsItem> updateList = new ArrayList<>();
+        updateList.add(item);
+        updateItemsStorage(updateList);
         if (showOnlyFavorite && !item.isFavorite()) {
             news.remove(position);
             view.removeNewsItem(position);
@@ -75,14 +76,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
             }
         } else {
             view.updateNewsItem(position);
-        }
-    }
-
-    private void updateNewsListUI() {
-        if (news == null || news.isEmpty()) {
-            view.showEmptyView();
-        } else {
-            view.showList(news);
         }
     }
 
@@ -106,11 +99,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         return this.showOnlyFavorite;
     }
 
-    private void initStartValues() {
-        view.setFavoriteIcon(showOnlyFavorite);
-        view.setCategoryTitle(category);
-    }
-
     @Override
     public void onCategoryButtonClick() {
         view.showCategoryDialog();
@@ -125,39 +113,51 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     public void invertFavoriteState() {
         showOnlyFavorite = !showOnlyFavorite;
         view.setFavoriteIcon(showOnlyFavorite);
-        loadNewsFromDB();
+        getNewsFromStorage();
         updateNewsListUI();
     }
 
-    @Override
-    public void updateNewsFromApi() {
-        loadNewsFromApi();
+    private void getNewsFromStorage() {
+        NewsFeedParams params = new NewsFeedParams(new Filter(category, showOnlyFavorite));
+        news = getFilteredNewsUseCase.run(params);
     }
 
-    private List<NewsItem> getNewsFromDB() {
-        return newsStorage.getFiltered(showOnlyFavorite, category);
-    }
-
-    private void requestNewsFromApi() {
-        repository.getNewsFiltered(category, new RemoteNewsRepository.RequestListener() {
+    private void updateNewsStorage() {
+        NewsFeedParams params = new NewsFeedParams(new Filter(category, showOnlyFavorite), new NewsFeedParams.RequestListener() {
             @Override
-            public void onRequestSuccess(Response<NewsApiResponse> response) {
-                view.hideProgressBar();
-                if (!response.isSuccessful()) {
-                    Log.d(TAG, "onResponse " + response.code());
-                    return;
-                }
-                List<NewsItem> news = NewsItemMapper.mapResponseToNewsItems(response, category);
-                newsStorage.insertUnique(news);
-                loadNewsFromDB();
+            public void onRequestSuccess(List<NewsItem> news) {
+                getNewsFromStorage();
                 updateNewsListUI();
+                view.hideProgressBar();
             }
 
             @Override
-            public void onRequestFailure(Throwable t) {
+            public void onRequestFailure() {
+                Log.e(TAG, "onRequestFailure: update request failure, shows cash news" );
+                getNewsFromStorage();
+                updateNewsListUI();
                 view.hideProgressBar();
-                Log.d(TAG, "onFailure " + t.getMessage());
             }
         });
+        updateStorageUseCase.run(params);
     }
+
+    private void updateItemsStorage(List<NewsItem> updateList) {
+        NewsFeedParams params = new NewsFeedParams(updateList, new Filter(category, showOnlyFavorite));
+        updateNewsItemsUseCase.run(params);
+    }
+
+    private void initStartValues() {
+        view.setFavoriteIcon(showOnlyFavorite);
+        view.setCategoryTitle(category);
+    }
+
+    private void updateNewsListUI() {
+        if (news == null || news.isEmpty()) {
+            view.showEmptyView();
+        } else {
+            view.showList(news);
+        }
+    }
+
 }
