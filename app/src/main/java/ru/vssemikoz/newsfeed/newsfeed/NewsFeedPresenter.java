@@ -29,11 +29,11 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Inject
     MainApplication mainApplication;
     @Inject
-    GetFilteredNewsUseCase getUseCase;
+    GetFilteredNewsUseCase getFilteredNewsUseCase;
     @Inject
-    UpdateNewsItemsUseCase updateItemsUseCase;
+    UpdateNewsItemsUseCase updateNewsItemsUseCase;
     @Inject
-    UpdateStorageUseCase updateUseCase;
+    UpdateStorageUseCase updateStorageUseCase;
     @Inject
     Navigator navigator;
 
@@ -123,7 +123,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     private void getNewsFromStorage() {
         Params params = new Params(new Filter(category, showOnlyFavorite));
-        news = getUseCase.run(params);
+        news = getFilteredNewsUseCase.run(params);
     }
 
     private void updateNewsStorage() {
@@ -143,12 +143,12 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                 view.hideProgressBar();
             }
         });
-        updateUseCase.run(params);
+        updateStorageUseCase.run(params);
     }
 
     private void updateItemsStorage(List<NewsItem> updateList) {
         Params params = new Params(updateList, new Filter(category, showOnlyFavorite));
-        updateItemsUseCase.run(params);
+        updateNewsItemsUseCase.run(params);
     }
 
     private void initStartValues() {
