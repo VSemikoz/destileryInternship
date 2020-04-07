@@ -19,6 +19,7 @@ import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.Filter;
 import ru.vssemikoz.newsfeed.models.NewsFeedParams;
 import ru.vssemikoz.newsfeed.models.NewsItem;
+import ru.vssemikoz.newsfeed.models.ShowOnlyFavorite;
 import ru.vssemikoz.newsfeed.usecases.UpdateNewsItemsUseCase;
 
 import static org.junit.Assert.assertEquals;
@@ -67,7 +68,7 @@ public class UpdateStorageUseCaseTests {
     }
 
     private void initParams() {
-        filterExample = new Filter(Category.ALL, true);
+        filterExample = new Filter(Category.ALL, ShowOnlyFavorite.SHOW);
         paramsExample = new NewsFeedParams(exampleNewsList, filterExample);
     }
 
