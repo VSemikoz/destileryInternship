@@ -8,6 +8,7 @@ import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.database.NewsAppDataBase;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
+import ru.vssemikoz.newsfeed.models.ShowOnlyFavorite;
 
 public class LocalNewsStorage implements NewsStorage {
     private NewsItemDAO newsItemDAO;
@@ -18,8 +19,8 @@ public class LocalNewsStorage implements NewsStorage {
     }
 
     @Override
-    public List<NewsItem> getFiltered(boolean favoriteNewsState, Category category) {
-        if (favoriteNewsState) {
+    public List<NewsItem> getFiltered(ShowOnlyFavorite favoriteNewsState, Category category) {
+        if (favoriteNewsState.isShow()) {
             if (category == Category.ALL) {
                 return newsItemDAO.getFavoriteNews();
             } else {

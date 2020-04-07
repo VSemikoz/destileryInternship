@@ -4,9 +4,10 @@ import java.util.List;
 
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
+import ru.vssemikoz.newsfeed.models.ShowOnlyFavorite;
 
 public interface NewsStorage {
-    List<NewsItem> getFiltered(boolean favoriteNewsState, Category category);
+    List<NewsItem> getFiltered(ShowOnlyFavorite favoriteNewsState, Category category);
 
     void deleteAll();
 

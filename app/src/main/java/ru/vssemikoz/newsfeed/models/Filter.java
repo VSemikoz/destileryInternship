@@ -2,9 +2,9 @@ package ru.vssemikoz.newsfeed.models;
 
 public class Filter {
     private Category category;
-    private Boolean showOnlyFavorite;
+    private ShowOnlyFavorite showOnlyFavorite;
 
-    public Filter(Category category, Boolean showOnlyFavorite) {
+    public Filter(Category category, ShowOnlyFavorite showOnlyFavorite) {
         this.category = category;
         this.showOnlyFavorite = showOnlyFavorite;
     }
@@ -13,7 +13,7 @@ public class Filter {
         return category;
     }
 
-    public Boolean getShowOnlyFavorite() {
+    public ShowOnlyFavorite getShowOnlyFavorite() {
         return showOnlyFavorite;
     }
 }
