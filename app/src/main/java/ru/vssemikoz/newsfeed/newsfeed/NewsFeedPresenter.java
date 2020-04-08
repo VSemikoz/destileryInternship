@@ -75,7 +75,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
             news.remove(position);
             view.removeNewsItem(position);
             if (news.isEmpty()) {
-                updateNewsListUI();
+                view.showEmptyView();
             }
         } else {
             view.updateNewsItem(position);
