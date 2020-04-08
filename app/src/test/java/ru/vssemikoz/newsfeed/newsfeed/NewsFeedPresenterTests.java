@@ -2,7 +2,6 @@ package ru.vssemikoz.newsfeed.newsfeed;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.Disabled;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -26,6 +25,7 @@ import ru.vssemikoz.newsfeed.usecases.UpdateNewsItemsUseCase;
 import ru.vssemikoz.newsfeed.usecases.UpdateStorageUseCase;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
@@ -35,9 +35,14 @@ import static org.mockito.Mockito.when;
 
 public class NewsFeedPresenterTests {
     private List<NewsItem> exampleNewsList = new ArrayList<>();
+    private List<NewsItem> emptyList = new ArrayList<>();
+    private NewsItem newsItemExample;
+    private int indexExample = 7;
 
     @Captor
     private ArgumentCaptor<ShowOnlyFavorite> favoriteCaptor;
+    @Captor
+    private ArgumentCaptor<String> stringCaptor;
     @Mock
     List<NewsItem> news;
     @Mock
@@ -76,6 +81,7 @@ public class NewsFeedPresenterTests {
             item.setImageUrl(generateRandomString(stringSize));
             exampleNewsList.add(item);
         }
+        newsItemExample = exampleNewsList.get(0);
     }
 
     private String generateRandomString(int stringSize){
@@ -85,15 +91,29 @@ public class NewsFeedPresenterTests {
     }
 
     @Test
+    public void verifyUpdateActualNews_ShowProgressBarIsCalled() {
+        presenter.updateActualNews();
+        verify(view).showProgressBar();
+    }
+
+    @Test
     public void verifyUpdateActualNews_UpdateStorageUseCaseIsCalled() {
         presenter.updateActualNews();
         verify(updateStorageUseCase).run(any());
     }
 
     @Test
-    public void verifyInvertFavoriteState_showOnlyFavoriteIsInverted() {
+    public void verifyInvertFavoriteState_InvertStateIsCalled() {
         presenter.invertFavoriteState();
         verify(showOnlyFavorite).invertState();
+    }
+
+    @Test
+    public void verifyInvertFavoriteState_ShowOnlyFavoriteIsInverted() {
+        ShowOnlyFavorite savedShowFavorite = ShowOnlyFavorite.SHOW;
+        presenter.setShowFavorite(savedShowFavorite);
+        presenter.invertFavoriteState();
+        assertNotEquals(presenter.getShowFavorite(), savedShowFavorite);
     }
 
     @Test
@@ -113,45 +133,33 @@ public class NewsFeedPresenterTests {
     }
 
     @Test
-    @Disabled("don't know how to change news variable")
     public void verifyInvertFavoriteState_ShowListIsCalled() {
-        when(news.isEmpty()).thenReturn(false);
-        when(news.equals(null)).thenReturn(false);
+        when(getFilteredNewsUseCase.run(any())).thenReturn(exampleNewsList);
         presenter.invertFavoriteState();
-        verify(view).showList(any());
+        verify(view).showList(exampleNewsList);
     }
 
     @Test
     public void verifyInvertFavoriteState_ShowEmptyViewIsCalled() {
+        when(getFilteredNewsUseCase.run(any())).thenReturn(emptyList);
         presenter.invertFavoriteState();
         verify(view).showEmptyView();
     }
 
     @Test
     public void verifyOpenNewsDetails_OpenWebViewIsCalled() {
-        when(news.get(anyInt())).thenReturn(exampleNewsList.get(0));
+        when(news.get(anyInt())).thenReturn(newsItemExample);
         presenter.openNewsDetails(anyInt(), mainApplication);
         verify(navigator).openWebView(any());
     }
 
     @Test
-    public void verifyChangeNewsFavoriteState_RemoveNewsItemIsCalled() {
-        NewsItem favoriteItem = exampleNewsList.get(0);
-        favoriteItem.setFavorite(true);
-        when(news.get(anyInt())).thenReturn(favoriteItem);
-        when(showOnlyFavorite.isShow()).thenReturn(true);
-        presenter.changeNewsFavoriteState(anyInt());
-        verify(view).removeNewsItem(anyInt());
-    }
-
-    @Test
-    public void verifyChangeNewsFavoriteState_UpdateNewsItemIsCalled() {
-        NewsItem unFavoriteItem = exampleNewsList.get(0);
-        unFavoriteItem.setFavorite(false);
-        when(news.get(anyInt())).thenReturn(unFavoriteItem);
-        when(showOnlyFavorite.isShow()).thenReturn(true);
-        presenter.changeNewsFavoriteState(anyInt());
-        verify(view).updateNewsItem(anyInt());
+    public void verifyOpenNewsDetails_OpenWebViewShouldContainArgument() {
+        when(news.get(anyInt())).thenReturn(newsItemExample);
+        presenter.openNewsDetails(anyInt(), mainApplication);
+        verify(navigator).openWebView(stringCaptor.capture());
+        String capturedArgument = stringCaptor.getValue();
+        assertEquals(capturedArgument, newsItemExample.getUrl());
     }
 
     @Test
@@ -164,10 +172,44 @@ public class NewsFeedPresenterTests {
     }
 
     @Test
+    public void verifyChangeNewsFavoriteState_RemoveIsCalled() {
+        newsItemExample.setFavorite(true);
+        when(news.get(anyInt())).thenReturn(newsItemExample);
+        when(showOnlyFavorite.isShow()).thenReturn(true);
+        presenter.changeNewsFavoriteState(indexExample);
+        verify(news).remove(indexExample);
+    }
+
+    @Test
+    public void verifyChangeNewsFavoriteState_RemoveNewsItemIsCalled() {
+        newsItemExample.setFavorite(true);
+        when(news.get(anyInt())).thenReturn(newsItemExample);
+        when(showOnlyFavorite.isShow()).thenReturn(true);
+        presenter.changeNewsFavoriteState(indexExample);
+        verify(view).removeNewsItem(indexExample);
+    }
+
+    @Test
+    public void verifyChangeNewsFavoriteState_ShowEmptyViewIsCalled() {
+        newsItemExample.setFavorite(true);
+        when(news.get(anyInt())).thenReturn(newsItemExample);
+        when(showOnlyFavorite.isShow()).thenReturn(true);
+        when(news.isEmpty()).thenReturn(true);
+        presenter.changeNewsFavoriteState(anyInt());
+        verify(view).showEmptyView();
+    }
+
+    @Test
+    public void verifyChangeNewsFavoriteState_UpdateNewsItemIsCalled() {
+        when(news.get(anyInt())).thenReturn(newsItemExample);
+        when(showOnlyFavorite.isShow()).thenReturn(false);
+        presenter.changeNewsFavoriteState(indexExample);
+        verify(view).updateNewsItem(indexExample);
+    }
+
+    @Test
     public void verifyOnCategoryButtonClick_ShowCategoryDialogIsCalled() {
         presenter.onCategoryButtonClick();
         verify(view).showCategoryDialog();
     }
-
-
 }
