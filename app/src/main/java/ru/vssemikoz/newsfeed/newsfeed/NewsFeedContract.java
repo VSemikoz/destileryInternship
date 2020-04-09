@@ -30,6 +30,8 @@ public interface NewsFeedContract {
         void hideProgressBar();
 
         void showCategoryDialog();
+
+        void hideRefreshLayout();
     }
 
     interface Presenter extends BasePresenter {

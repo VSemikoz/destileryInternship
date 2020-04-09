@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.List;
 import java.util.Objects;
@@ -50,6 +51,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     private ImageButton categoryButton;
     private ProgressBar progressBar;
     private TextView descriptionView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Inject
     public NewsFeedFragment() {
@@ -83,6 +85,9 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         initViews(root);
         favoriteNewsButton.setOnClickListener(v -> presenter.invertFavoriteState());
         categoryButton.setOnClickListener(v -> presenter.onCategoryButtonClick());
+        swipeRefreshLayout.setOnRefreshListener(() ->
+            presenter.updateActualNews()
+        );
     }
 
     private void initViews(View root) {
@@ -92,6 +97,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         descriptionView = root.findViewById(R.id.tv_description);
         categoryButton = root.findViewById(R.id.ib_category);
         recyclerView = root.findViewById(R.id.rv_news_feed);
+        swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout);
         initRecyclerView();
     }
 
@@ -171,6 +177,11 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         categoryDialog.setListener(this);
         categoryDialog.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
                 "categoryDialog");
+    }
+
+    @Override
+    public void hideRefreshLayout() {
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
