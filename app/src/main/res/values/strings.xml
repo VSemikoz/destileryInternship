@@ -13,5 +13,6 @@
     <string name="category_technology">Технологии</string>
     <string name="no_data_available">no data available</string>
     <string name="display_category_prefix">Категория:</string>
+    <string name="share_chooser_title">Send news to</string>
 
 </resources>
