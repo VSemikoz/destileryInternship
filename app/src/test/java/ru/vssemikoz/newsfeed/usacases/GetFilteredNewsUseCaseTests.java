@@ -36,7 +36,7 @@ public class GetFilteredNewsUseCaseTests {
     @InjectMocks
     GetFilteredNewsUseCase getFilteredNewsUseCase;
 
-    public void initLists(){
+    public void initLists() {
         int stringSize = 10;
         for (int i = 0; i < 5; i++) {
             NewsItem item = new NewsItem();
@@ -49,7 +49,7 @@ public class GetFilteredNewsUseCaseTests {
         }
     }
 
-    private String generateRandomString(int stringSize){
+    private String generateRandomString(int stringSize) {
         byte[] array = new byte[stringSize];
         new Random().nextBytes(array);
         return new String(array, Charset.forName("UTF-8"));
@@ -61,7 +61,7 @@ public class GetFilteredNewsUseCaseTests {
     }
 
     @Before
-    public void init(){
+    public void init() {
         initLists();
         initParams();
     }
