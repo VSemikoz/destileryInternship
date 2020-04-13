@@ -30,7 +30,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UpdateStorageUseCaseTests {
+public class UpdateStorageUseCaseTest {
     @Captor
     private ArgumentCaptor<NewsItem> itemCaptor;
     private List<NewsItem> exampleNewsList = new ArrayList<>();
@@ -43,12 +43,12 @@ public class UpdateStorageUseCaseTests {
     UpdateNewsItemsUseCase updateNewsItemsUseCase;
 
     @Before
-    public void init(){
+    public void init() {
         initLists();
         initParams();
     }
 
-    public void initLists(){
+    public void initLists() {
         int stringSize = 10;
         for (int i = 0; i < 5; i++) {
             NewsItem item = new NewsItem();
@@ -61,7 +61,7 @@ public class UpdateStorageUseCaseTests {
         }
     }
 
-    private String generateRandomString(int stringSize){
+    private String generateRandomString(int stringSize) {
         byte[] array = new byte[stringSize];
         new Random().nextBytes(array);
         return new String(array, Charset.forName("UTF-8"));

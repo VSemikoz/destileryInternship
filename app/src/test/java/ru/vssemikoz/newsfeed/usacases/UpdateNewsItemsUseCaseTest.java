@@ -33,7 +33,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UpdateNewsItemsUseCaseTests {
+public class UpdateNewsItemsUseCaseTest {
     private Boolean requestIsSuccess;
     @Captor
     private ArgumentCaptor<Category> categoryCaptor;
@@ -52,7 +52,7 @@ public class UpdateNewsItemsUseCaseTests {
 
 
     @Before
-    public void init(){
+    public void init() {
         initLists();
         initParams();
     }
@@ -72,7 +72,7 @@ public class UpdateNewsItemsUseCaseTests {
         });
     }
 
-    public void initLists(){
+    public void initLists() {
         int stringSize = 10;
         for (int i = 0; i < 5; i++) {
             NewsItem item = new NewsItem();
@@ -85,7 +85,7 @@ public class UpdateNewsItemsUseCaseTests {
         }
     }
 
-    private String generateRandomString(int stringSize){
+    private String generateRandomString(int stringSize) {
         byte[] array = new byte[stringSize];
         new Random().nextBytes(array);
         return new String(array, Charset.forName("UTF-8"));
