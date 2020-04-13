@@ -124,7 +124,7 @@ public class UpdateNewsItemsUseCaseTest {
     }
 
     @Test
-    public void InsertUniqueShouldContainNewsList() {
+    public void insertUniqueShouldContainNewsList() {
         Response response = mock(Response.class);
         when(response.isSuccessful()).thenReturn(true);
         when(mapper.map(response, paramsExample)).thenReturn(exampleNewsList);
