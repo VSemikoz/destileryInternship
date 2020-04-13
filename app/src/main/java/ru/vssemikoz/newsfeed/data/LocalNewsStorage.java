@@ -18,7 +18,7 @@ public class LocalNewsStorage implements NewsStorage {
     }
 
     @Override
-    public List<NewsItem> getFiltered(boolean favoriteNewsState, Category category) {
+    public List<NewsItem> getFiltered(Boolean favoriteNewsState, Category category) {
         if (favoriteNewsState) {
             if (category == Category.ALL) {
                 return newsItemDAO.getFavoriteNews();

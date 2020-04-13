@@ -3,8 +3,6 @@ package ru.vssemikoz.newsfeed.models;
 import android.content.Context;
 
 import java.util.List;
-
-import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.R;
 
 public enum Category {
@@ -18,26 +16,26 @@ public enum Category {
     TECHNOLOGY(R.string.category_technology);
 
     private Integer categoryId;
-    private String category;
+    private String categoryName;
+
+    public void setCategoryName(Context context) {
+        if (this == Category.ALL) {
+            this.categoryName = context.getString(R.string.display_category_no_limits);
+        } else {
+            this.categoryName = context.getString(categoryId);
+        }
+    }
 
     public static String getCategoryName(Category category) {
         return category.name();
     }
 
     public static String getDisplayName(Category category) {
-        if (category == Category.ALL) {
-            return MainApplication.getInstance().getString(R.string.display_category_no_limits);
-        }
-        return category.toString();
+        return category.categoryName;
     }
 
     Category(int categoryResId) {
         this.categoryId = categoryResId;
-    }
-
-    @Override
-    public String toString() {
-        return MainApplication.getInstance().getString(categoryId);
     }
 
     public static String[] getCategoryNameList() {
@@ -50,8 +48,10 @@ public enum Category {
         return categories;
     }
 
-    public static void resolveCategory(Context context, List<Category> categories){
-//        category = //for
+    public static void resolveCategory(Context context, List<Category> categories) {
+        for (Category category : categories) {
+            category.setCategoryName(context);
+        }
     }
 
 }

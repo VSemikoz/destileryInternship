@@ -6,7 +6,7 @@ import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
 public interface NewsStorage {
-    List<NewsItem> getFiltered(boolean favoriteNewsState, Category category);
+    List<NewsItem> getFiltered(Boolean favoriteNewsState, Category category);
 
     void deleteAll();
 
