@@ -32,7 +32,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UpdateNewsItemsUseCaseTests {
+public class UpdateNewsItemsUseCaseTest {
     private Boolean requestIsSuccess;
     @Captor
     private ArgumentCaptor<Category> categoryCaptor;

@@ -3,8 +3,6 @@ package ru.vssemikoz.newsfeed.usacases;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -19,33 +17,24 @@ import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.Filter;
 import ru.vssemikoz.newsfeed.models.NewsFeedParams;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.usecases.UpdateNewsItemsUseCase;
+import ru.vssemikoz.newsfeed.usecases.GetFilteredNewsUseCase;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UpdateStorageUseCaseTests {
-    @Captor
-    private ArgumentCaptor<NewsItem> itemCaptor;
+public class GetFilteredNewsUseCaseTest {
     private List<NewsItem> exampleNewsList = new ArrayList<>();
     private List<NewsItem> emptyNewsList = new ArrayList<>();
     private NewsFeedParams paramsExample;
-    private Filter filterExample;
     @Mock
     NewsStorage newsStorage;
     @InjectMocks
-    UpdateNewsItemsUseCase updateNewsItemsUseCase;
-
-    @Before
-    public void init() {
-        initLists();
-        initParams();
-    }
+    GetFilteredNewsUseCase getFilteredNewsUseCase;
 
     public void initLists() {
         int stringSize = 10;
@@ -67,31 +56,38 @@ public class UpdateStorageUseCaseTests {
     }
 
     private void initParams() {
-        filterExample = new Filter(Category.ALL, true);
-        paramsExample = new NewsFeedParams(exampleNewsList, filterExample);
+        Filter filter = new Filter(Category.ALL, true);
+        paramsExample = new NewsFeedParams(filter);
+    }
+
+    @Before
+    public void init() {
+        initLists();
+        initParams();
     }
 
     @Test
-    public void verifyUpdateItemIsCalled() {
-        updateNewsItemsUseCase.run(paramsExample);
-        verify(newsStorage, atLeastOnce()).updateItem(any());
+    public void verifyGetFilteredIsCalled() {
+        getFilteredNewsUseCase.run(paramsExample);
+        verify(newsStorage).getFiltered(anyBoolean(), any());
     }
 
     @Test
-    public void updateItemShouldContainNewsItemsExactlyTimes() {
-        updateNewsItemsUseCase.run(paramsExample);
-        verify(newsStorage, times(paramsExample.getNews().size())).updateItem(itemCaptor.capture());
-        List<NewsItem> capturedArgument = itemCaptor.getAllValues();
-        assertEquals(capturedArgument, exampleNewsList);
+    public void verifyGetFilteredReturnNewsList() {
+        when(newsStorage.getFiltered(anyBoolean(), any())).thenReturn(exampleNewsList);
+        assertEquals(getFilteredNewsUseCase.run(paramsExample), exampleNewsList);
     }
 
     @Test
-    public void updateItemShouldContainNoItems() {
-        NewsFeedParams paramEmptyList = new NewsFeedParams(emptyNewsList, filterExample);
-        updateNewsItemsUseCase.run(paramEmptyList);
-        verify(newsStorage, never()).updateItem(itemCaptor.capture());
-        List<NewsItem> capturedArgument = itemCaptor.getAllValues();
-        assertEquals(capturedArgument.size(), 0);
+    public void verifyGetFilteredReturnEmptyList() {
+        when(newsStorage.getFiltered(anyBoolean(), any())).thenReturn(emptyNewsList);
+        assertEquals(getFilteredNewsUseCase.run(paramsExample), emptyNewsList);
+    }
+
+    @Test
+    public void verifyGetFilteredThrowException() {
+        when(newsStorage.getFiltered(anyBoolean(), any())).thenThrow(new IllegalArgumentException());
+        assertThrows(IllegalArgumentException.class, () -> getFilteredNewsUseCase.run(paramsExample));
     }
 
 }
