@@ -22,7 +22,6 @@ import ru.vssemikoz.newsfeed.usecases.GetFilteredNewsUseCase;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -69,24 +68,24 @@ public class GetFilteredNewsUseCaseTest {
     @Test
     public void verifyGetFilteredIsCalled() {
         getFilteredNewsUseCase.run(paramsExample);
-        verify(newsStorage).getFiltered(anyBoolean(), any());
+        verify(newsStorage).getFiltered(any(), any());
     }
 
     @Test
     public void verifyGetFilteredReturnNewsList() {
-        when(newsStorage.getFiltered(anyBoolean(), any())).thenReturn(exampleNewsList);
+        when(newsStorage.getFiltered(any(), any())).thenReturn(exampleNewsList);
         assertEquals(getFilteredNewsUseCase.run(paramsExample), exampleNewsList);
     }
 
     @Test
     public void verifyGetFilteredReturnEmptyList() {
-        when(newsStorage.getFiltered(anyBoolean(), any())).thenReturn(emptyNewsList);
+        when(newsStorage.getFiltered(any(), any())).thenReturn(emptyNewsList);
         assertEquals(getFilteredNewsUseCase.run(paramsExample), emptyNewsList);
     }
 
     @Test
     public void verifyGetFilteredThrowException() {
-        when(newsStorage.getFiltered(anyBoolean(), any())).thenThrow(new IllegalArgumentException());
+        when(newsStorage.getFiltered(any(), any())).thenThrow(new IllegalArgumentException());
         assertThrows(IllegalArgumentException.class, () -> getFilteredNewsUseCase.run(paramsExample));
     }
 
