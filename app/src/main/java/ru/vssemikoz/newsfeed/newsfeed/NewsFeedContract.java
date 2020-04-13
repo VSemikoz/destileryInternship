@@ -8,7 +8,6 @@ import ru.vssemikoz.newsfeed.BasePresenter;
 import ru.vssemikoz.newsfeed.BaseView;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.models.ShowOnlyFavorite;
 
 public interface NewsFeedContract {
 
@@ -18,7 +17,7 @@ public interface NewsFeedContract {
 
         void showList(List<NewsItem> news);
 
-        void setFavoriteIcon(ShowOnlyFavorite showOnlyFavorite);
+        void setFavoriteIcon(Boolean showOnlyFavorite);
 
         void setCategoryTitle(Category category);
 
@@ -45,11 +44,11 @@ public interface NewsFeedContract {
 
         void setCategory(Category category);
 
-        void setShowFavorite(ShowOnlyFavorite showOnlyFavorite);
+        void setShowFavorite(Boolean showOnlyFavorite);
 
         Category getCategory();
 
-        ShowOnlyFavorite getShowFavorite();
+        Boolean getShowFavorite();
 
         void onCategoryButtonClick();
 

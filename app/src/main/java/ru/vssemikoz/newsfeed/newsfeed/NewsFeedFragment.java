@@ -29,7 +29,6 @@ import ru.vssemikoz.newsfeed.data.IconicStorage;
 import ru.vssemikoz.newsfeed.dialogs.PickCategoryDialog;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.models.ShowOnlyFavorite;
 
 public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
         PickCategoryDialog.OnCategorySelectedListener {
@@ -100,7 +99,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(CURRENT_CATEGORY, presenter.getCategory());
-        outState.putSerializable(CURRENT_SHOW_FAVORITE, presenter.getShowFavorite());
+        outState.putBoolean(CURRENT_SHOW_FAVORITE, presenter.getShowFavorite());
     }
 
     @Override
@@ -109,7 +108,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
         if (savedInstanceState != null) {
             Category category = (Category) savedInstanceState.getSerializable(CURRENT_CATEGORY);
-            ShowOnlyFavorite showFavoriteNews = (ShowOnlyFavorite) savedInstanceState.getSerializable(CURRENT_SHOW_FAVORITE);
+            Boolean showFavoriteNews = savedInstanceState.getBoolean(CURRENT_SHOW_FAVORITE);
             presenter.setShowFavorite(showFavoriteNews);
             presenter.setCategory(category);
         }
@@ -133,8 +132,8 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
     }
 
     @Override
-    public void setFavoriteIcon(ShowOnlyFavorite showOnlyFavorite) {
-        if (showOnlyFavorite.isShow()) {
+    public void setFavoriteIcon(Boolean showOnlyFavorite) {
+        if (showOnlyFavorite) {
             favoriteNewsButton.setImageDrawable(iconicStorage.getYellowStarBorderless(context));
         } else {
             favoriteNewsButton.setImageDrawable(iconicStorage.getWhiteStarBorderless(context));

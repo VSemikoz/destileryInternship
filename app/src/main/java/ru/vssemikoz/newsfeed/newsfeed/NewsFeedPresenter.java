@@ -14,7 +14,6 @@ import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.Filter;
 import ru.vssemikoz.newsfeed.models.NewsFeedParams;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.models.ShowOnlyFavorite;
 import ru.vssemikoz.newsfeed.navigator.Navigator;
 import ru.vssemikoz.newsfeed.usecases.GetFilteredNewsUseCase;
 import ru.vssemikoz.newsfeed.usecases.UpdateNewsItemsUseCase;
@@ -24,7 +23,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private static final String TAG = NewsFeedPresenter.class.getName();
     private NewsFeedContract.View view;
 
-    private ShowOnlyFavorite showOnlyFavorite = ShowOnlyFavorite.NOT_SHOW;
+    private Boolean showOnlyFavorite = false;
     private Category category = Category.ALL;
     private List<NewsItem> news;
 
@@ -71,7 +70,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         List<NewsItem> updateList = new ArrayList<>();
         updateList.add(item);
         updateItemsStorage(updateList);
-        if (showOnlyFavorite.isShow() && !item.isFavorite()) {
+        if (showOnlyFavorite && !item.isFavorite()) {
             news.remove(position);
             view.removeNewsItem(position);
             if (news.isEmpty()) {
@@ -93,12 +92,12 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     @Override
-    public void setShowFavorite(ShowOnlyFavorite showOnlyFavorite) {
+    public void setShowFavorite(Boolean showOnlyFavorite) {
         this.showOnlyFavorite = showOnlyFavorite;
     }
 
     @Override
-    public ShowOnlyFavorite getShowFavorite() {
+    public Boolean getShowFavorite() {
         return this.showOnlyFavorite;
     }
 
@@ -114,7 +113,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Override
     public void invertFavoriteState() {
-        showOnlyFavorite = showOnlyFavorite.invertState();
+        showOnlyFavorite = !showOnlyFavorite;
         view.setFavoriteIcon(showOnlyFavorite);
         getNewsFromStorage();
         updateNewsListUI();
