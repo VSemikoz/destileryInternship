@@ -57,6 +57,6 @@ public interface NewsFeedContract {
         // TODO: 26.03.2020 think about better solution
         void setView(NewsFeedContract.View view);
 
-        void shareNews(int position);
+        void shareNewsItem(int position);
     }
 }

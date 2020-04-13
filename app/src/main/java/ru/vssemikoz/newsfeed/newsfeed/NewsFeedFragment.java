@@ -132,7 +132,7 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
 
             @Override
             public void onShareButtonClick(int position) {
-                presenter.shareNews(position);
+                presenter.shareNewsItem(position);
             }
 
             @Override
