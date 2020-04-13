@@ -18,7 +18,6 @@ import java.util.Random;
 import ru.vssemikoz.newsfeed.MainApplication;
 
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.models.ShowOnlyFavorite;
 import ru.vssemikoz.newsfeed.navigator.Navigator;
 import ru.vssemikoz.newsfeed.usecases.GetFilteredNewsUseCase;
 import ru.vssemikoz.newsfeed.usecases.UpdateNewsItemsUseCase;
@@ -39,13 +38,9 @@ public class NewsFeedPresenterTest {
     private int indexExample = 7;
 
     @Captor
-    private ArgumentCaptor<ShowOnlyFavorite> favoriteCaptor;
-    @Captor
     private ArgumentCaptor<String> stringCaptor;
     @Mock
     List<NewsItem> news;
-    @Mock
-    ShowOnlyFavorite showOnlyFavorite;
     @Mock
     NewsFeedContract.View view;
     @Mock
@@ -103,31 +98,22 @@ public class NewsFeedPresenterTest {
 
     @Test
     public void verifyInvertFavoriteState_InvertStateIsCalled() {
+        Boolean savedShowFavorite = presenter.getShowFavorite();
         presenter.invertFavoriteState();
-        verify(showOnlyFavorite).invertState();
-    }
-
-    @Test
-    public void verifyInvertFavoriteState_ShowOnlyFavoriteIsInverted() {
-        presenter.setShowFavorite(ShowOnlyFavorite.SHOW);
-        presenter.invertFavoriteState();
-        assertEquals(presenter.getShowFavorite(), ShowOnlyFavorite.NOT_SHOW);
+        assertEquals(presenter.getShowFavorite(), !savedShowFavorite);
     }
 
     @Test
     public void verifyInvertFavoriteState_SetFavoriteIconIsCalled() {
-        when(showOnlyFavorite.invertState()).thenReturn(ShowOnlyFavorite.NOT_SHOW);
         presenter.invertFavoriteState();
         verify(view).setFavoriteIcon(any());
     }
 
     @Test
     public void verifyInvertFavoriteState_SetFavoriteIconShouldContainArguments() {
-        when(showOnlyFavorite.invertState()).thenReturn(ShowOnlyFavorite.NOT_SHOW);
+        Boolean savedShowFavorite = presenter.getShowFavorite();
         presenter.invertFavoriteState();
-        verify(view).setFavoriteIcon(favoriteCaptor.capture());
-        ShowOnlyFavorite capturedArgument = favoriteCaptor.getValue();
-        assertEquals(showOnlyFavorite.isShow(), capturedArgument.isShow());
+        verify(view).setFavoriteIcon(!savedShowFavorite);
     }
 
     @Test
@@ -178,7 +164,7 @@ public class NewsFeedPresenterTest {
     public void verifyChangeNewsFavoriteState_RemoveIsCalled() {
         newsItemExample.setFavorite(true);
         when(news.get(anyInt())).thenReturn(newsItemExample);
-        when(showOnlyFavorite.isShow()).thenReturn(true);
+        presenter.setShowFavorite(true);
         presenter.changeNewsFavoriteState(indexExample);
         verify(news).remove(indexExample);
     }
@@ -187,7 +173,7 @@ public class NewsFeedPresenterTest {
     public void verifyChangeNewsFavoriteState_RemoveNewsItemIsCalled() {
         newsItemExample.setFavorite(true);
         when(news.get(anyInt())).thenReturn(newsItemExample);
-        when(showOnlyFavorite.isShow()).thenReturn(true);
+        presenter.setShowFavorite(true);
         presenter.changeNewsFavoriteState(indexExample);
         verify(view).removeNewsItem(indexExample);
     }
@@ -196,7 +182,7 @@ public class NewsFeedPresenterTest {
     public void verifyChangeNewsFavoriteState_ShowEmptyViewIsCalled() {
         newsItemExample.setFavorite(true);
         when(news.get(anyInt())).thenReturn(newsItemExample);
-        when(showOnlyFavorite.isShow()).thenReturn(true);
+        presenter.setShowFavorite(true);
         when(news.isEmpty()).thenReturn(true);
         presenter.changeNewsFavoriteState(anyInt());
         verify(view).showEmptyView();
@@ -205,7 +191,7 @@ public class NewsFeedPresenterTest {
     @Test
     public void verifyChangeNewsFavoriteState_UpdateNewsItemIsCalled() {
         when(news.get(anyInt())).thenReturn(newsItemExample);
-        when(showOnlyFavorite.isShow()).thenReturn(false);
+        presenter.setShowFavorite(false);
         presenter.changeNewsFavoriteState(indexExample);
         verify(view).updateNewsItem(indexExample);
     }
