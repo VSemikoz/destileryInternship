@@ -131,14 +131,16 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                 getNewsFromStorage();
                 updateNewsListUI();
                 view.hideProgressBar();
+                view.hideRefreshLayout();
             }
 
             @Override
             public void onRequestFailure() {
                 Log.e(TAG, "onRequestFailure: update request failure, shows cash news" );
                 getNewsFromStorage();
-                updateNewsListUI();
+                view.showEmptyView();
                 view.hideProgressBar();
+                view.hideRefreshLayout();
             }
         });
         updateStorageUseCase.run(params);
