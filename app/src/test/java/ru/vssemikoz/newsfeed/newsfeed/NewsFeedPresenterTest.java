@@ -63,11 +63,11 @@ public class NewsFeedPresenterTest {
     NewsFeedPresenter presenter;
 
     @Before
-    public void init(){
+    public void init() {
         initList();
     }
 
-    private void initList(){
+    private void initList() {
         int stringSize = 10;
         for (int i = 0; i < 5; i++) {
             NewsItem item = new NewsItem();
@@ -83,7 +83,7 @@ public class NewsFeedPresenterTest {
         newsItemExample = exampleNewsList.get(0);
     }
 
-    private String generateRandomString(int stringSize){
+    private String generateRandomString(int stringSize) {
         byte[] array = new byte[stringSize];
         new Random().nextBytes(array);
         return new String(array, Charset.forName("UTF-8"));
