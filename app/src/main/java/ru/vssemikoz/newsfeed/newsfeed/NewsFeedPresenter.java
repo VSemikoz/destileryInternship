@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,7 +23,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private static final String TAG = NewsFeedPresenter.class.getName();
     private NewsFeedContract.View view;
 
-    private boolean showOnlyFavorite = false;
+    private Boolean showOnlyFavorite = false;
     private Category category = Category.ALL;
     private List<NewsItem> news;
 
@@ -44,6 +45,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Override
     public void start() {
         Log.d(TAG, "start: " + mainApplication);
+        Category.resolveCategory(mainApplication, Arrays.asList(Category.values()));
         initStartValues();
         updateActualNews();
     }
@@ -72,7 +74,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
             news.remove(position);
             view.removeNewsItem(position);
             if (news.isEmpty()) {
-                updateNewsListUI();
+                view.showEmptyView();
             }
         } else {
             view.updateNewsItem(position);

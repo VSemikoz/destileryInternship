@@ -30,8 +30,13 @@ public class UpdateStorageUseCase implements BaseUseCase<Void, NewsFeedParams> {
 
     @Override
     public Void run(NewsFeedParams params) {
+        repository.getNewsFiltered(params.getFilter().getCategory(), getListener(params));
+        return null;
+    }
+
+    public RemoteNewsRepository.RequestListener getListener(NewsFeedParams params){
         NewsFeedParams.RequestListener listener = params.getListener();
-        repository.getNewsFiltered(params.getFilter().getCategory(), new RemoteNewsRepository.RequestListener() {
+        return new NewsRepository.RequestListener() {
             @Override
             public void onRequestSuccess(Response<NewsApiResponse> response) {
                 if (!response.isSuccessful()) {
@@ -47,7 +52,6 @@ public class UpdateStorageUseCase implements BaseUseCase<Void, NewsFeedParams> {
             public void onRequestFailure(Throwable t) {
                 listener.onRequestFailure();
             }
-        });
-        return null;
+        };
     }
 }
