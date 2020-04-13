@@ -17,13 +17,11 @@ import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.Filter;
 import ru.vssemikoz.newsfeed.models.NewsFeedParams;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.models.ShowOnlyFavorite;
 import ru.vssemikoz.newsfeed.usecases.GetFilteredNewsUseCase;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -57,7 +55,7 @@ public class GetFilteredNewsUseCaseTest {
     }
 
     private void initParams() {
-        Filter filter = new Filter(Category.ALL, ShowOnlyFavorite.SHOW);
+        Filter filter = new Filter(Category.ALL, true);
         paramsExample = new NewsFeedParams(filter);
     }
 
