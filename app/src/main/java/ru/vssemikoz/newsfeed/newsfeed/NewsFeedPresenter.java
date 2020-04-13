@@ -114,7 +114,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     @Override
     public void shareNewsItem(int position) {
         String messageToSend = news.get(position).getUrl();
-        navigator.sendPlainTextToApps(messageToSend);
+        navigator.shareFeedItem(messageToSend);
     }
 
     @Override

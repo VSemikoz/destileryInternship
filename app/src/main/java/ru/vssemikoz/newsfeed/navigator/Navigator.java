@@ -4,5 +4,5 @@ public interface Navigator {
 
     void openWebView(String url);
 
-    void sendPlainTextToApps(String text);
+    void shareFeedItem(String url);
 }
