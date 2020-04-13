@@ -25,7 +25,6 @@ import ru.vssemikoz.newsfeed.usecases.UpdateNewsItemsUseCase;
 import ru.vssemikoz.newsfeed.usecases.UpdateStorageUseCase;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
@@ -33,7 +32,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 
-public class NewsFeedPresenterTests {
+public class NewsFeedPresenterTest {
     private List<NewsItem> exampleNewsList = new ArrayList<>();
     private List<NewsItem> emptyList = new ArrayList<>();
     private NewsItem newsItemExample;
