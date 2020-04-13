@@ -66,7 +66,7 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
 
         NewsViewHolder(View view, OnRecyclerItemClickListener listener) {
             super(view);
-            OnNewsItemClickListener finalListener = (OnNewsItemClickListener) listener;
+            OnNewsItemClickListener onNewsItemClickListener = (OnNewsItemClickListener) listener;
             cardView = view.findViewById(R.id.cv_item);
             imageView = view.findViewById(R.id.iv_news_image);
             title = view.findViewById(R.id.tv_title);
@@ -78,29 +78,29 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
             shareNewsButton = view.findViewById(R.id.ib_share);
 
             changeFavoriteStateButton.setOnClickListener(v -> {
-                if (finalListener != null) {
+                if (onNewsItemClickListener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        finalListener.onChangeFavoriteStateClick(position);
+                        onNewsItemClickListener.onChangeFavoriteStateClick(position);
                         favoriteState = !favoriteState;
                     }
                 }
             });
 
             cardView.setOnClickListener(v -> {
-                if (finalListener != null) {
+                if (onNewsItemClickListener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        finalListener.onRecyclerItemClick(position);
+                        onNewsItemClickListener.onRecyclerItemClick(position);
                     }
                 }
             });
 
             shareNewsButton.setOnClickListener(v -> {
-                if (finalListener != null) {
+                if (onNewsItemClickListener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        finalListener.onShareButtonClick(position);
+                        onNewsItemClickListener.onShareButtonClick(position);
                     }
                 }
             });
