@@ -30,7 +30,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-
 public class NewsFeedPresenterTest {
     private List<NewsItem> exampleNewsList = new ArrayList<>();
     private List<NewsItem> emptyList = new ArrayList<>();
