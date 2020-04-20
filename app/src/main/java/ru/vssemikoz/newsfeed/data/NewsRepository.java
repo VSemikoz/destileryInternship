@@ -1,8 +1,13 @@
 package ru.vssemikoz.newsfeed.data;
 
+import java.util.List;
+
+import io.reactivex.rxjava3.core.Single;
 import retrofit2.Response;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
+import ru.vssemikoz.newsfeed.models.NewsFeedParams;
+import ru.vssemikoz.newsfeed.models.NewsItem;
 
 public interface NewsRepository {
     interface RequestListener {
@@ -12,5 +17,5 @@ public interface NewsRepository {
         void onRequestFailure(Throwable t);
     }
 
-    void getNewsFiltered(Category category, RequestListener listener);
+    Single<List<NewsItem>> getNewsFiltered(NewsFeedParams params);
 }
