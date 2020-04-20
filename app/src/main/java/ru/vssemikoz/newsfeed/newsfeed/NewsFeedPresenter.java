@@ -30,9 +30,9 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private Boolean showOnlyFavorite = false;
     private Category category = Category.ALL;
     private List<NewsItem> news;
-    // TODO: 20.04.2020 provide with di
-    private CompositeDisposable disposables;
 
+    @Inject
+    CompositeDisposable disposables;
     @Inject
     MainApplication mainApplication;
     @Inject
@@ -46,7 +46,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Inject
     public NewsFeedPresenter() {
-        disposables = new CompositeDisposable();
     }
 
     @Override
@@ -59,7 +58,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Override
     public void unsubscribe() {
-      disposables.clear();
+        disposables.clear();
     }
 
     @Override
