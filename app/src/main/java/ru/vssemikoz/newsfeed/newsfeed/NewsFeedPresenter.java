@@ -70,7 +70,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                         .subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                taskOptional -> { /* Emit */
+                                updatedNews -> { /* Emit */
                                     getNewsFromStorage();
                                     updateNewsListUI();
                                     view.hideProgressBar();
