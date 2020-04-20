@@ -66,9 +66,9 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         NewsFeedParams params = new NewsFeedParams(new Filter(category, showOnlyFavorite));
         Disposable subscription =
                 updateStorageUseCase.run(params)
+                        .doOnSubscribe(disposable -> view.showProgressBar())
                         .subscribeOn(Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe(adda -> view.showProgressBar())
                         .subscribe(
                                 taskOptional -> { /* Emit */
                                     getNewsFromStorage();
