@@ -9,10 +9,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.rxjava3.annotations.NonNull;
-import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -53,14 +50,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     @Override
-    public void start() {
-        Log.d(TAG, "start: " + mainApplication);
-        Category.resolveCategory(mainApplication, Arrays.asList(Category.values()));
-        initStartValues();
-        updateActualNews();
-    }
-
-    @Override
     public void subscribe() {
         Log.d(TAG, "start: " + mainApplication);
         Category.resolveCategory(mainApplication, Arrays.asList(Category.values()));
@@ -70,42 +59,34 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Override
     public void unsubscribe() {
-        // TODO: 20.04.2020
+      disposables.clear();
     }
 
     @Override
     public void updateActualNews() {
-        Single<List<NewsItem>> stub = new Single<List<NewsItem>>() {
-            @Override
-            protected void subscribeActual(@NonNull SingleObserver<? super List<NewsItem>> observer) {
-            }
-        };
-
-
         NewsFeedParams params = new NewsFeedParams(new Filter(category, showOnlyFavorite));
         Disposable subscription =
                 updateStorageUseCase.run(params)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(Schedulers.io())
-                .doOnSubscribe( adda ->  view.showProgressBar())
-                .subscribe(
-                taskOptional -> { /* Emit */
-                getNewsFromStorage();
-                updateNewsListUI();
-                view.hideProgressBar();
-                view.hideRefreshLayout();
-                },
-                throwable -> { /* Error */
-                Log.e(TAG, "onRequestFailure: update request failure, shows cash news" );
-                getNewsFromStorage();
-                view.showEmptyView();
-                view.hideProgressBar();
-                view.hideRefreshLayout();
-                }
-                    );
+                        .subscribeOn(Schedulers.computation())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe(adda -> view.showProgressBar())
+                        .subscribe(
+                                taskOptional -> { /* Emit */
+                                    getNewsFromStorage();
+                                    updateNewsListUI();
+                                    view.hideProgressBar();
+                                    view.hideRefreshLayout();
+                                },
+                                throwable -> { /* Error */
+                                    Log.e(TAG, "onRequestFailure: update request failure, shows db news" + throwable);
+                                    // TODO: 20.04.2020 double code
+                                    getNewsFromStorage();
+                                    updateNewsListUI();
+                                    view.hideProgressBar();
+                                    view.hideRefreshLayout();
+                                }
+                        );
         disposables.add(subscription);
-
-
     }
 
     @Override
