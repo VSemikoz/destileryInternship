@@ -8,6 +8,6 @@ import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 public interface NewsApi {
     @GET("/v2/top-headlines")
     Single<NewsApiResponse> getNews(@Query("country") String country,
-                                         @Query("category") String category,
-                                         @Query("apiKey") String key);
+                                    @Query("category") String category,
+                                    @Query("apiKey") String key);
 }
