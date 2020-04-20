@@ -9,6 +9,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Scheduler;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.SingleObserver;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.Filter;
@@ -26,6 +33,8 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private Boolean showOnlyFavorite = false;
     private Category category = Category.ALL;
     private List<NewsItem> news;
+    // TODO: 20.04.2020 provide with di
+    private CompositeDisposable disposables;
 
     @Inject
     MainApplication mainApplication;
@@ -40,6 +49,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Inject
     public NewsFeedPresenter() {
+        disposables = new CompositeDisposable();
     }
 
     @Override
@@ -51,9 +61,51 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     }
 
     @Override
+    public void subscribe() {
+        Log.d(TAG, "start: " + mainApplication);
+        Category.resolveCategory(mainApplication, Arrays.asList(Category.values()));
+        initStartValues();
+        updateActualNews();
+    }
+
+    @Override
+    public void unsubscribe() {
+        // TODO: 20.04.2020
+    }
+
+    @Override
     public void updateActualNews() {
-        view.showProgressBar();
-        updateNewsStorage();
+        Single<List<NewsItem>> stub = new Single<List<NewsItem>>() {
+            @Override
+            protected void subscribeActual(@NonNull SingleObserver<? super List<NewsItem>> observer) {
+            }
+        };
+
+
+        NewsFeedParams params = new NewsFeedParams(new Filter(category, showOnlyFavorite));
+        Disposable subscription =
+                updateStorageUseCase.run(params)
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.io())
+                .doOnSubscribe( adda ->  view.showProgressBar())
+                .subscribe(
+                taskOptional -> { /* Emit */
+                getNewsFromStorage();
+                updateNewsListUI();
+                view.hideProgressBar();
+                view.hideRefreshLayout();
+                },
+                throwable -> { /* Error */
+                Log.e(TAG, "onRequestFailure: update request failure, shows cash news" );
+                getNewsFromStorage();
+                view.showEmptyView();
+                view.hideProgressBar();
+                view.hideRefreshLayout();
+                }
+                    );
+        disposables.add(subscription);
+
+
     }
 
     @Override
@@ -128,28 +180,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private void getNewsFromStorage() {
         NewsFeedParams params = new NewsFeedParams(new Filter(category, showOnlyFavorite));
         news = getFilteredNewsUseCase.run(params);
-    }
-
-    private void updateNewsStorage() {
-        NewsFeedParams params = new NewsFeedParams(new Filter(category, showOnlyFavorite), new NewsFeedParams.RequestListener() {
-            @Override
-            public void onRequestSuccess(List<NewsItem> news) {
-                getNewsFromStorage();
-                updateNewsListUI();
-                view.hideProgressBar();
-                view.hideRefreshLayout();
-            }
-
-            @Override
-            public void onRequestFailure() {
-                Log.e(TAG, "onRequestFailure: update request failure, shows cash news" );
-                getNewsFromStorage();
-                view.showEmptyView();
-                view.hideProgressBar();
-                view.hideRefreshLayout();
-            }
-        });
-        updateStorageUseCase.run(params);
     }
 
     private void updateItemsStorage(List<NewsItem> updateList) {
