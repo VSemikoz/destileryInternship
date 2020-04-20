@@ -34,8 +34,10 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
     public interface OnNewsItemClickListener extends OnRecyclerItemClickListener {
         void onChangeFavoriteStateClick(int position);
 
+        void onShareButtonClick(int position);
+
         @Override
-        void OnRecyclerItemClick(int position);
+        void onRecyclerItemClick(int position);
     }
 
     @Inject
@@ -60,10 +62,11 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
         final TextView author;
         final ImageButton changeFavoriteStateButton;
         final ProgressBar progressBar;
+        final ImageButton shareNewsButton;
 
-        NewsViewHolder(View view, OnRecyclerItemClickListener listener) {//жду базовый
+        NewsViewHolder(View view, OnRecyclerItemClickListener listener) {
             super(view);
-            OnNewsItemClickListener finalListener = (OnNewsItemClickListener) listener;
+            OnNewsItemClickListener onNewsItemClickListener = (OnNewsItemClickListener) listener;
             cardView = view.findViewById(R.id.cv_item);
             imageView = view.findViewById(R.id.iv_news_image);
             title = view.findViewById(R.id.tv_title);
@@ -72,22 +75,32 @@ public class NewsFeedAdapter extends BaseAdapter<NewsItem> {
             author = view.findViewById(R.id.et_author);
             changeFavoriteStateButton = view.findViewById(R.id.ib_change_favorite_state);
             progressBar = view.findViewById(R.id.image_progress_bar);
+            shareNewsButton = view.findViewById(R.id.ib_share);
 
             changeFavoriteStateButton.setOnClickListener(v -> {
-                if (finalListener != null) {
+                if (onNewsItemClickListener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        finalListener.onChangeFavoriteStateClick(position);
+                        onNewsItemClickListener.onChangeFavoriteStateClick(position);
                         favoriteState = !favoriteState;
                     }
                 }
             });
 
             cardView.setOnClickListener(v -> {
-                if (finalListener != null) {
+                if (onNewsItemClickListener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        finalListener.OnRecyclerItemClick(position);
+                        onNewsItemClickListener.onRecyclerItemClick(position);
+                    }
+                }
+            });
+
+            shareNewsButton.setOnClickListener(v -> {
+                if (onNewsItemClickListener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        onNewsItemClickListener.onShareButtonClick(position);
                     }
                 }
             });

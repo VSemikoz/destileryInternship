@@ -131,7 +131,12 @@ public class NewsFeedFragment extends Fragment implements NewsFeedContract.View,
             }
 
             @Override
-            public void OnRecyclerItemClick(int position) {
+            public void onShareButtonClick(int position) {
+                presenter.shareNewsItem(position);
+            }
+
+            @Override
+            public void onRecyclerItemClick(int position) {
                 presenter.openNewsDetails(position, context);
             }
         });

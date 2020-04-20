@@ -7,6 +7,8 @@ import android.net.Uri;
 
 import javax.inject.Inject;
 
+import ru.vssemikoz.newsfeed.R;
+
 public class AppNavigator implements Navigator {
     @Inject
     Context context;
@@ -27,5 +29,16 @@ public class AppNavigator implements Navigator {
             intent.setPackage(null);
             context.startActivity(intent);
         }
+    }
+
+    @Override
+    public void shareFeedItem(String url) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, url);
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, context.getString(R.string.share_chooser_title));
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(shareIntent);
     }
 }
