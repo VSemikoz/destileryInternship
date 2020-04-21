@@ -14,61 +14,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import retrofit2.Response;
-import ru.vssemikoz.newsfeed.data.NewsRepository;
 import ru.vssemikoz.newsfeed.data.NewsStorage;
-import ru.vssemikoz.newsfeed.data.RemoteNewsRepository;
-import ru.vssemikoz.newsfeed.data.mappers.NewsMapper;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.Filter;
 import ru.vssemikoz.newsfeed.models.NewsFeedParams;
 import ru.vssemikoz.newsfeed.models.NewsItem;
-import ru.vssemikoz.newsfeed.usecases.UpdateStorageUseCase;
+import ru.vssemikoz.newsfeed.usecases.UpdateNewsItemsUseCase;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UpdateNewsItemsUseCaseTest {
-    private Boolean requestIsSuccess;
     @Captor
-    private ArgumentCaptor<Category> categoryCaptor;
-    @Captor
-    private ArgumentCaptor<List<NewsItem>> newsItemsCaptor;
-    private NewsFeedParams paramsExample;
+    private ArgumentCaptor<NewsItem> itemCaptor;
     private List<NewsItem> exampleNewsList = new ArrayList<>();
+    private List<NewsItem> emptyNewsList = new ArrayList<>();
+    private NewsFeedParams paramsExample;
+    private Filter filterExample;
     @Mock
     NewsStorage newsStorage;
-    @Mock
-    NewsRepository repository;
-    @Mock
-    NewsMapper mapper;
     @InjectMocks
-    UpdateStorageUseCase updateStorageUseCase;
-
+    UpdateNewsItemsUseCase updateNewsItemsUseCase;
 
     @Before
     public void init() {
         initLists();
         initParams();
-    }
-
-    private void initParams() {
-        Filter filter = new Filter(Category.ALL, true);
-        paramsExample = new NewsFeedParams(filter, new NewsFeedParams.RequestListener() {
-            @Override
-            public void onRequestSuccess(List<NewsItem> news) {
-                requestIsSuccess = true;
-            }
-
-            @Override
-            public void onRequestFailure() {
-                requestIsSuccess = false;
-            }
-        });
     }
 
     public void initLists() {
@@ -90,66 +66,32 @@ public class UpdateNewsItemsUseCaseTest {
         return new String(array, Charset.forName("UTF-8"));
     }
 
-    @Test
-    public void verifyGetNewsFilteredIsCalled() {
-        updateStorageUseCase.run(paramsExample);
-        verify(repository).getNewsFiltered(any(), any());
+    private void initParams() {
+        filterExample = new Filter(Category.ALL, true);
+        paramsExample = new NewsFeedParams(exampleNewsList, filterExample);
     }
 
     @Test
-    public void getNewsFilteredShouldContainCategory() {
-        updateStorageUseCase.run(paramsExample);
-        verify(repository).getNewsFiltered(categoryCaptor.capture(), any());
-        Category capturedArgument = categoryCaptor.getValue();
-        assertEquals(capturedArgument, paramsExample.getFilter().getCategory());
+    public void verifyUpdateItemIsCalled() {
+        updateNewsItemsUseCase.run(paramsExample);
+        verify(newsStorage, atLeastOnce()).updateItem(any());
     }
 
     @Test
-    public void verifyMapIsCalled() {
-        Response response = mock(Response.class);
-        when(response.isSuccessful()).thenReturn(true);
-        RemoteNewsRepository.RequestListener listener = updateStorageUseCase.getListener(paramsExample);
-        listener.onRequestSuccess(response);
-        verify(mapper).map(any(), any());
-    }
-
-    @Test
-    public void verifyInsertUniqueIsCalled() {
-        Response response = mock(Response.class);
-        when(response.isSuccessful()).thenReturn(true);
-        when(mapper.map(response, paramsExample)).thenReturn(exampleNewsList);
-        RemoteNewsRepository.RequestListener listener = updateStorageUseCase.getListener(paramsExample);
-        listener.onRequestSuccess(response);
-        verify(newsStorage).insertUnique(any());
-    }
-
-    @Test
-    public void insertUniqueShouldContainNewsList() {
-        Response response = mock(Response.class);
-        when(response.isSuccessful()).thenReturn(true);
-        when(mapper.map(response, paramsExample)).thenReturn(exampleNewsList);
-        RemoteNewsRepository.RequestListener listener = updateStorageUseCase.getListener(paramsExample);
-        listener.onRequestSuccess(response);
-        verify(newsStorage).insertUnique(newsItemsCaptor.capture());
-        List<NewsItem> capturedArgument = newsItemsCaptor.getValue();
+    public void updateItemShouldContainNewsItemsExactlyTimes() {
+        updateNewsItemsUseCase.run(paramsExample);
+        verify(newsStorage, times(paramsExample.getNews().size())).updateItem(itemCaptor.capture());
+        List<NewsItem> capturedArgument = itemCaptor.getAllValues();
         assertEquals(capturedArgument, exampleNewsList);
     }
 
     @Test
-    public void verifyRequestSuccessIsCalled() {
-        Response response = mock(Response.class);
-        when(response.isSuccessful()).thenReturn(true);
-        RemoteNewsRepository.RequestListener listener = updateStorageUseCase.getListener(paramsExample);
-        listener.onRequestSuccess(response);
-        assertEquals(requestIsSuccess, true);
-    }
-
-    @Test
-    public void verifyRequestFailureIsCalled() {
-        Throwable throwable = mock(Throwable.class);
-        RemoteNewsRepository.RequestListener listener = updateStorageUseCase.getListener(paramsExample);
-        listener.onRequestFailure(throwable);
-        assertEquals(requestIsSuccess, false);
+    public void updateItemShouldContainNoItems() {
+        NewsFeedParams paramEmptyList = new NewsFeedParams(emptyNewsList, filterExample);
+        updateNewsItemsUseCase.run(paramEmptyList);
+        verify(newsStorage, never()).updateItem(itemCaptor.capture());
+        List<NewsItem> capturedArgument = itemCaptor.getAllValues();
+        assertEquals(capturedArgument.size(), 0);
     }
 
 }
