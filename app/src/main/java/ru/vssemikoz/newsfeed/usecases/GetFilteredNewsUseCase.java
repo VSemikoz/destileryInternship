@@ -4,11 +4,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.rxjava3.core.Single;
 import ru.vssemikoz.newsfeed.data.NewsStorage;
 import ru.vssemikoz.newsfeed.models.NewsFeedParams;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
-public class GetFilteredNewsUseCase implements BaseUseCase<List<NewsItem>, NewsFeedParams> {//inject mock
+public class GetFilteredNewsUseCase implements BaseUseCase<Single<List<NewsItem>>, NewsFeedParams> {//inject mock
     @Inject
     NewsStorage newsStorage;//mock
 
@@ -17,7 +18,7 @@ public class GetFilteredNewsUseCase implements BaseUseCase<List<NewsItem>, NewsF
     }
 
     @Override
-    public List<NewsItem> run(NewsFeedParams params) {
+    public Single<List<NewsItem>> run(NewsFeedParams params) {
         return newsStorage.getFiltered(params.getFilter().getShowOnlyFavorite(), params.getFilter().getCategory());
     }
 }

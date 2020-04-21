@@ -1,12 +1,15 @@
 package ru.vssemikoz.newsfeed.usecases;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import io.reactivex.rxjava3.core.Single;
 import ru.vssemikoz.newsfeed.data.NewsStorage;
 import ru.vssemikoz.newsfeed.models.NewsFeedParams;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
-public class UpdateNewsItemsUseCase implements BaseUseCase<Void, NewsFeedParams> {
+public class UpdateNewsItemsUseCase implements BaseUseCase<Single<List<NewsItem>>, NewsFeedParams> {
     @Inject
     NewsStorage newsStorage;
 
@@ -15,10 +18,11 @@ public class UpdateNewsItemsUseCase implements BaseUseCase<Void, NewsFeedParams>
     }
 
     @Override
-    public Void run(NewsFeedParams params) {
-        for (NewsItem item : params.getNews()) {
+    public Single<List<NewsItem>> run(NewsFeedParams params) {
+        List<NewsItem> updateList = params.getNews();
+        for (NewsItem item : updateList) {
             newsStorage.updateItem(item);
         }
-        return null;
+        return Single.just(updateList);
     }
 }
