@@ -26,9 +26,6 @@ public class UpdateStorageUseCase implements BaseUseCase<Single<List<NewsItem>>,
     @Override
     public Single<List<NewsItem>> run(NewsFeedParams params) {
         return repository.getNewsFiltered(params)
-                .flatMap(news -> {
-                    newsStorage.insertUnique(news);
-                    return Single.just(news);
-                });
+                .flatMap(news -> newsStorage.insertUnique(news));
     }
 }

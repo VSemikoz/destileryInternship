@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.rxjava3.core.Single;
 import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.database.NewsAppDataBase;
 import ru.vssemikoz.newsfeed.models.Category;
@@ -43,7 +44,8 @@ public class LocalNewsStorage implements NewsStorage {
     }
 
     @Override
-    public void insertUnique(List<NewsItem> newsItems) {
+    public Single<List<NewsItem>> insertUnique(List<NewsItem> newsItems) {
         newsItemDAO.insertUnique(newsItems);
+        return Single.just(newsItems);
     }
 }
