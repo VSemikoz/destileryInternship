@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import io.reactivex.rxjava3.core.Single;
 import ru.vssemikoz.newsfeed.data.NewsStorage;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.Filter;
@@ -73,14 +74,14 @@ public class GetFilteredNewsUseCaseTest {
 
     @Test
     public void verifyGetFilteredReturnNewsList() {
-        when(newsStorage.getFiltered(any(), any())).thenReturn(exampleNewsList);
-        assertEquals(getFilteredNewsUseCase.run(paramsExample), exampleNewsList);
+        when(newsStorage.getFiltered(any(), any())).thenReturn(Single.just(exampleNewsList));
+        getFilteredNewsUseCase.run(paramsExample).test().assertValue(exampleNewsList);
     }
 
     @Test
     public void verifyGetFilteredReturnEmptyList() {
-        when(newsStorage.getFiltered(any(), any())).thenReturn(emptyNewsList);
-        assertEquals(getFilteredNewsUseCase.run(paramsExample), emptyNewsList);
+        when(newsStorage.getFiltered(any(), any())).thenReturn(Single.just(emptyNewsList));
+        getFilteredNewsUseCase.run(paramsExample).test().assertValue(emptyNewsList);
     }
 
     @Test
