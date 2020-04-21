@@ -6,26 +6,10 @@ import java.util.List;
 public class NewsFeedParams {
     private List<NewsItem> news;
     private Filter filter;
-    private RequestListener listener;
-
-    public interface RequestListener {
-        void onRequestSuccess(List<NewsItem> news);
-
-        void onRequestFailure();
-    }
-
-    public NewsFeedParams(List<NewsItem> news, Filter filter, RequestListener listener) {
-        this.news = news;
-        this.filter = filter;
-        this.listener = listener;
-    }
-
-    public NewsFeedParams(Filter filter, RequestListener listener) {
-        this(new ArrayList<>(), filter, listener);
-    }
 
     public NewsFeedParams(List<NewsItem> news, Filter filter) {
-        this(news, filter, null);
+        this.news = news;
+        this.filter = filter;
     }
 
     public NewsFeedParams(Filter filter) {
@@ -40,10 +24,4 @@ public class NewsFeedParams {
         return filter;
     }
 
-    public RequestListener getListener() {
-        if (listener == null){
-            throw new NullPointerException("NewsFeedParams.RequestListener must be implement");
-        }
-        return listener;
-    }
 }
