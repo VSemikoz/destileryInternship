@@ -32,9 +32,7 @@ public class RemoteNewsRepository implements NewsRepository {
             categoryKey = Category.getCategoryName(category);
         }
 
-        return Single.just(newsApi.getNews(config.getCountryKey(), categoryKey, config.getApiKey()))
-                // TODO: 20.04.2020 response -> response looks bad
-                .flatMap(response -> response)
+        return newsApi.getNews(config.getCountryKey(), categoryKey, config.getApiKey())
                 .map(response -> mapper.map(response, params));
     }
 }
