@@ -19,18 +19,18 @@ public class LocalNewsStorage implements NewsStorage {
     }
 
     @Override
-    public List<NewsItem> getFiltered(Boolean favoriteNewsState, Category category) {
+    public Single<List<NewsItem>> getFiltered(Boolean favoriteNewsState, Category category) {
         if (favoriteNewsState) {
             if (category == Category.ALL) {
-                return newsItemDAO.getFavoriteNews();
+                return Single.just(newsItemDAO.getFavoriteNews());
             } else {
-                return newsItemDAO.getFavoriteNewsByCategory(Category.getCategoryName(category));
+                return Single.just(newsItemDAO.getFavoriteNewsByCategory(Category.getCategoryName(category)));
             }
         }
         if (category == Category.ALL) {
-            return newsItemDAO.getAll();
+            return Single.just(newsItemDAO.getAll());
         }
-        return newsItemDAO.getNewsByCategory(Category.getCategoryName(category));
+        return Single.just(newsItemDAO.getNewsByCategory(Category.getCategoryName(category)));
     }
 
     @Override
