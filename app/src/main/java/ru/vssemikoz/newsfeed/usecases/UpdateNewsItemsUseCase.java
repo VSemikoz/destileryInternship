@@ -1,6 +1,7 @@
 package ru.vssemikoz.newsfeed.usecases;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
@@ -19,10 +20,12 @@ public class UpdateNewsItemsUseCase implements BaseUseCase<Single<List<NewsItem>
 
     @Override
     public Single<List<NewsItem>> run(NewsFeedParams params) {
-        List<NewsItem> updateList = params.getNews();
-        for (NewsItem item : updateList) {
-            newsStorage.updateItem(item);
-        }
-        return Single.just(updateList);
+        return Single.fromCallable(() -> {
+            List<NewsItem> updateList = params.getNews();
+            for (NewsItem item : updateList) {
+                newsStorage.updateItem(item);
+            }
+            return updateList;
+        });
     }
 }
