@@ -79,6 +79,9 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                         },
                         throwable -> { /* Error */
                             Log.e(TAG, "updateActualNews failure: " + throwable);
+                            view.hideProgressBar();
+                            view.hideRefreshLayout();
+                            view.showEmptyView();
                         }
                 );
         disposables.add(subscription);
