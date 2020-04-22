@@ -121,19 +121,19 @@ public class NewsFeedPresenterTest {
         verify(getFilteredNewsUseCase).run(any());
     }
 
-    @Test
-    public void verifyInvertFavoriteState_ShowListIsCalled() {
-        when(getFilteredNewsUseCase.run(any())).thenReturn(exampleNewsList);
-        presenter.invertFavoriteState();
-        verify(view).showList(exampleNewsList);
-    }
-
-    @Test
-    public void verifyInvertFavoriteState_ShowEmptyViewIsCalled() {
-        when(getFilteredNewsUseCase.run(any())).thenReturn(emptyList);
-        presenter.invertFavoriteState();
-        verify(view).showEmptyView();
-    }
+//    @Test
+//    public void verifyInvertFavoriteState_ShowListIsCalled() {
+//        when(getFilteredNewsUseCase.run(any())).thenReturn(exampleNewsList);
+//        presenter.invertFavoriteState();
+//        verify(view).showList(exampleNewsList);
+//    }
+//
+//    @Test
+//    public void verifyInvertFavoriteState_ShowEmptyViewIsCalled() {
+//        when(getFilteredNewsUseCase.run(any())).thenReturn(emptyList);
+//        presenter.invertFavoriteState();
+//        verify(view).showEmptyView();
+//    }
 
     @Test
     public void verifyOpenNewsDetails_OpenWebViewIsCalled() {
