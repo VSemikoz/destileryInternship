@@ -93,18 +93,29 @@ public class UpdateStorageUseCaseTest {
     @Test
     public void verifyInsertUniqueIsCalled() {
         when(repository.getNewsFiltered(any())).thenReturn(Single.just(exampleNewsList));
-        updateStorageUseCase.run(any()).test();
+        when(newsStorage.insertUnique(any())).thenReturn(Single.just(exampleNewsList));
+        updateStorageUseCase.run(any());
         verify(newsStorage).insertUnique(any());
     }
 
     @Test
     public void insertUniqueShouldContainNewsList() {
         when(repository.getNewsFiltered(any())).thenReturn(Single.just(exampleNewsList));
-        updateStorageUseCase.run(any()).test();
-        verify(newsStorage).insertUnique(newsItemsCaptor.capture());
-        List<NewsItem> capturedArgument = newsItemsCaptor.getValue();
-        assertEquals(capturedArgument, exampleNewsList);
+        when(newsStorage.insertUnique(any())).thenReturn(Single.just(exampleNewsList));
+        updateStorageUseCase.run(any())
+                .test()
+                .assertNoErrors()
+                .assertValue(exampleNewsList);
     }
 
+    @Test
+    public void getNewsFilteredThrowException() {
+        when(repository.getNewsFiltered(any())).thenReturn(Single.error(new NullPointerException()));
+        when(newsStorage.insertUnique(any())).thenReturn(Single.just(exampleNewsList));
+        updateStorageUseCase.run(any())
+                .test()
+                .assertNoValues()
+                .assertError(NullPointerException.class);
+    }
 }
 
