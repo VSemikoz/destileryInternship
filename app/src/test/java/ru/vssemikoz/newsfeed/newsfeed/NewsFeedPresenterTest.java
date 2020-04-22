@@ -2,6 +2,9 @@ package ru.vssemikoz.newsfeed.newsfeed;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -33,6 +36,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NewsFeedPresenterTest {
     private List<NewsItem> exampleNewsList = new ArrayList<>();
     private List<NewsItem> emptyList = new ArrayList<>();
@@ -97,12 +101,26 @@ public class NewsFeedPresenterTest {
 
     @Test
     public void verifyUpdateActualNews_UpdateStorageUseCaseIsCalled() {
+        when(updateStorageUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
+        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
         presenter.updateActualNews();
         verify(updateStorageUseCase).run(any());
     }
 
     @Test
+    public void verifyUpdateActualNews_UpdateStorageUseCaseThrowError() {
+        when(updateStorageUseCase.run(any())).thenReturn(Single.error(new NullPointerException()));
+        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.error(new NullPointerException()));
+        updateStorageUseCase.run(any())
+                .test()
+                .assertNoValues()
+                .assertError(NullPointerException.class);
+    }
+
+
+    @Test
     public void verifyInvertFavoriteState_InvertStateIsCalled() {
+        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
         Boolean savedShowFavorite = presenter.getShowFavorite();
         presenter.invertFavoriteState();
         assertEquals(presenter.getShowFavorite(), !savedShowFavorite);
@@ -110,12 +128,14 @@ public class NewsFeedPresenterTest {
 
     @Test
     public void verifyInvertFavoriteState_SetFavoriteIconIsCalled() {
+        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
         presenter.invertFavoriteState();
         verify(view).setFavoriteIcon(any());
     }
 
     @Test
     public void verifyInvertFavoriteState_SetFavoriteIconShouldContainArguments() {
+        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
         Boolean savedShowFavorite = presenter.getShowFavorite();
         presenter.invertFavoriteState();
         verify(view).setFavoriteIcon(!savedShowFavorite);
@@ -123,23 +143,24 @@ public class NewsFeedPresenterTest {
 
     @Test
     public void verifyInvertFavoriteState_GetFilteredNewsUseCaseRunIsCalled() {
+        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
         presenter.invertFavoriteState();
         verify(getFilteredNewsUseCase).run(any());
     }
 
-//    @Test
-//    public void verifyInvertFavoriteState_ShowListIsCalled() {
-//        when(getFilteredNewsUseCase.run(any())).thenReturn(exampleNewsList);
-//        presenter.invertFavoriteState();
-//        verify(view).showList(exampleNewsList);
-//    }
-//
-//    @Test
-//    public void verifyInvertFavoriteState_ShowEmptyViewIsCalled() {
-//        when(getFilteredNewsUseCase.run(any())).thenReturn(emptyList);
-//        presenter.invertFavoriteState();
-//        verify(view).showEmptyView();
-//    }
+    @Test
+    public void verifyInvertFavoriteState_ShowListIsCalled() {
+        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
+        presenter.invertFavoriteState();
+        verify(view).showList(exampleNewsList);
+    }
+
+    @Test
+    public void verifyInvertFavoriteState_ShowEmptyViewIsCalled() {
+        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(emptyList));
+        presenter.invertFavoriteState();
+        verify(view).showEmptyView();
+    }
 
     @Test
     public void verifyOpenNewsDetails_OpenWebViewIsCalled() {
@@ -159,6 +180,7 @@ public class NewsFeedPresenterTest {
 
     @Test
     public void verifyChangeNewsFavoriteState_UpdateNewsItemsUseCaseRunCalled() {
+        when(updateNewsItemsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
         newsItemExample.setFavorite(false);
         when(news.get(anyInt())).thenReturn(newsItemExample);
         presenter.changeNewsFavoriteState(anyInt());
@@ -167,6 +189,7 @@ public class NewsFeedPresenterTest {
 
     @Test
     public void verifyChangeNewsFavoriteState_RemoveIsCalled() {
+        when(updateNewsItemsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
         newsItemExample.setFavorite(true);
         when(news.get(anyInt())).thenReturn(newsItemExample);
         presenter.setShowFavorite(true);
@@ -176,6 +199,7 @@ public class NewsFeedPresenterTest {
 
     @Test
     public void verifyChangeNewsFavoriteState_RemoveNewsItemIsCalled() {
+        when(updateNewsItemsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
         newsItemExample.setFavorite(true);
         when(news.get(anyInt())).thenReturn(newsItemExample);
         presenter.setShowFavorite(true);
@@ -185,6 +209,7 @@ public class NewsFeedPresenterTest {
 
     @Test
     public void verifyChangeNewsFavoriteState_ShowEmptyViewIsCalled() {
+        when(updateNewsItemsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
         newsItemExample.setFavorite(true);
         when(news.get(anyInt())).thenReturn(newsItemExample);
         presenter.setShowFavorite(true);
@@ -195,6 +220,7 @@ public class NewsFeedPresenterTest {
 
     @Test
     public void verifyChangeNewsFavoriteState_UpdateNewsItemIsCalled() {
+        when(updateNewsItemsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
         when(news.get(anyInt())).thenReturn(newsItemExample);
         presenter.setShowFavorite(false);
         presenter.changeNewsFavoriteState(indexExample);
