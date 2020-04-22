@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import io.reactivex.rxjava3.core.Single;
 import ru.vssemikoz.newsfeed.data.NewsStorage;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.Filter;
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UpdateNewsItemsUseCaseTest {
@@ -35,6 +37,7 @@ public class UpdateNewsItemsUseCaseTest {
     private List<NewsItem> exampleNewsList = new ArrayList<>();
     private List<NewsItem> emptyNewsList = new ArrayList<>();
     private NewsFeedParams paramsExample;
+    private NewsFeedParams emptyListParamsExample;
     private Filter filterExample;
     @Mock
     NewsStorage newsStorage;
@@ -69,6 +72,7 @@ public class UpdateNewsItemsUseCaseTest {
     private void initParams() {
         filterExample = new Filter(Category.ALL, true);
         paramsExample = new NewsFeedParams(exampleNewsList, filterExample);
+        emptyListParamsExample = new NewsFeedParams(emptyNewsList, filterExample);
     }
 
     @Test
@@ -94,4 +98,19 @@ public class UpdateNewsItemsUseCaseTest {
         assertEquals(capturedArgument.size(), 0);
     }
 
+    @Test
+    public void verifyRunReturnNewsList() {
+        updateNewsItemsUseCase.run(paramsExample)
+                .test()
+                .assertValue(exampleNewsList)
+                .assertNoErrors();
+    }
+
+    @Test
+    public void verifyRunReturnEmptyList() {
+        updateNewsItemsUseCase.run(emptyListParamsExample)
+                .test()
+                .assertValue(emptyNewsList)
+                .assertNoErrors();
+    }
 }
