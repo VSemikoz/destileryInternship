@@ -32,8 +32,6 @@ import static org.mockito.Mockito.when;
 public class UpdateStorageUseCaseTest {
     @Captor
     private ArgumentCaptor<NewsFeedParams> paramsCaptor;
-    @Captor
-    private ArgumentCaptor<List<NewsItem>> newsItemsCaptor;
     private NewsFeedParams paramsExample;
     private List<NewsItem> exampleNewsList = new ArrayList<>();
     @Mock

@@ -20,8 +20,6 @@ import ru.vssemikoz.newsfeed.models.NewsFeedParams;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.usecases.GetFilteredNewsUseCase;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -92,10 +90,10 @@ public class GetFilteredNewsUseCaseTest {
 
     @Test
     public void verifyGetFilteredThrowException() {
-        when(newsStorage.getFiltered(any(), any())).thenReturn(Single.error(new IllegalArgumentException()));
+        when(newsStorage.getFiltered(any(), any())).thenReturn(Single.error(new NullPointerException()));
         getFilteredNewsUseCase.run(paramsExample)
                 .test()
                 .assertNoValues()
-                .assertError(IllegalArgumentException.class);
+                .assertError(NullPointerException.class);
     }
 }
