@@ -75,19 +75,27 @@ public class GetFilteredNewsUseCaseTest {
     @Test
     public void verifyGetFilteredReturnNewsList() {
         when(newsStorage.getFiltered(any(), any())).thenReturn(Single.just(exampleNewsList));
-        getFilteredNewsUseCase.run(paramsExample).test().assertValue(exampleNewsList);
+        getFilteredNewsUseCase.run(paramsExample)
+                .test()
+                .assertValue(exampleNewsList)
+                .assertNoErrors();
     }
 
     @Test
     public void verifyGetFilteredReturnEmptyList() {
         when(newsStorage.getFiltered(any(), any())).thenReturn(Single.just(emptyNewsList));
-        getFilteredNewsUseCase.run(paramsExample).test().assertValue(emptyNewsList);
+        getFilteredNewsUseCase.run(paramsExample)
+                .test()
+                .assertValue(emptyNewsList)
+                .assertNoErrors();
     }
 
     @Test
     public void verifyGetFilteredThrowException() {
-        when(newsStorage.getFiltered(any(), any())).thenThrow(new IllegalArgumentException());
-        assertThrows(IllegalArgumentException.class, () -> getFilteredNewsUseCase.run(paramsExample));
+        when(newsStorage.getFiltered(any(), any())).thenReturn(Single.error(new IllegalArgumentException()));
+        getFilteredNewsUseCase.run(paramsExample)
+                .test()
+                .assertNoValues()
+                .assertError(IllegalArgumentException.class);
     }
-
 }

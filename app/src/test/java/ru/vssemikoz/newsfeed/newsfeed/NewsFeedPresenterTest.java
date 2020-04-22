@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Random;
 
 
+import io.reactivex.rxjava3.android.plugins.RxAndroidPlugins;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import ru.vssemikoz.newsfeed.MainApplication;
 
 import ru.vssemikoz.newsfeed.models.NewsItem;
@@ -59,6 +62,7 @@ public class NewsFeedPresenterTest {
     @Before
     public void init() {
         initList();
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler(scheduler -> Schedulers.trampoline());
     }
 
     private void initList() {
@@ -85,6 +89,8 @@ public class NewsFeedPresenterTest {
 
     @Test
     public void verifyUpdateActualNews_ShowProgressBarIsCalled() {
+        when(updateStorageUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
+        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
         presenter.updateActualNews();
         verify(view).showProgressBar();
     }
