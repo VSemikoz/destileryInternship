@@ -1,5 +1,7 @@
 package ru.vssemikoz.newsfeed.usacases;
 
+import android.util.Log;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import io.reactivex.rxjava3.core.Single;
 import ru.vssemikoz.newsfeed.data.NewsStorage;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.Filter;
@@ -71,20 +74,6 @@ public class UpdateNewsItemsUseCaseTest {
         filterExample = new Filter(Category.ALL, true);
         paramsExample = new NewsFeedParams(exampleNewsList, filterExample);
         emptyListParamsExample = new NewsFeedParams(emptyNewsList, filterExample);
-    }
-
-    @Test
-    public void verifyUpdateItemIsCalled() {
-        updateNewsItemsUseCase.run(paramsExample);
-        verify(newsStorage, atLeastOnce()).updateItem(any());
-    }
-
-    @Test
-    public void updateItemShouldContainNewsItemsExactlyTimes() {
-        updateNewsItemsUseCase.run(paramsExample);
-        verify(newsStorage, times(paramsExample.getNews().size())).updateItem(itemCaptor.capture());
-        List<NewsItem> capturedArgument = itemCaptor.getAllValues();
-        assertEquals(capturedArgument, exampleNewsList);
     }
 
     @Test
