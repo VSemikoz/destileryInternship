@@ -89,14 +89,6 @@ public class UpdateStorageUseCaseTest {
     }
 
     @Test
-    public void verifyInsertUniqueIsCalled() {
-        when(repository.getNewsFiltered(any())).thenReturn(Single.just(exampleNewsList));
-        when(newsStorage.insertUnique(any())).thenReturn(Single.just(exampleNewsList));
-        updateStorageUseCase.run(any());
-        verify(newsStorage).insertUnique(any());
-    }
-
-    @Test
     public void insertUniqueShouldContainNewsList() {
         when(repository.getNewsFiltered(any())).thenReturn(Single.just(exampleNewsList));
         when(newsStorage.insertUnique(any())).thenReturn(Single.just(exampleNewsList));
