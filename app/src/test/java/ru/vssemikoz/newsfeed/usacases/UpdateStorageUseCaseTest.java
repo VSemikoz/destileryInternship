@@ -101,7 +101,6 @@ public class UpdateStorageUseCaseTest {
     @Test
     public void getNewsFilteredThrowException() {
         when(repository.getNewsFiltered(any())).thenReturn(Single.error(new NullPointerException()));
-        when(newsStorage.insertUnique(any())).thenReturn(Single.just(exampleNewsList));
         updateStorageUseCase.run(any())
                 .test()
                 .assertNoValues()
