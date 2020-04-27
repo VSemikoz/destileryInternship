@@ -2,9 +2,6 @@ package ru.vssemikoz.newsfeed.newsfeed;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -32,12 +29,13 @@ import ru.vssemikoz.newsfeed.usecases.UpdateStorageUseCase;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NewsFeedPresenterTest {
+    private static final int TIME_OUT_SECONDS = 2000;
     private List<NewsItem> exampleNewsList = new ArrayList<>();
     private List<NewsItem> emptyList = new ArrayList<>();
     private NewsItem newsItemExample;
@@ -92,14 +90,6 @@ public class NewsFeedPresenterTest {
     }
 
     @Test
-    public void verifyUpdateActualNews_ShowProgressBarIsCalled() {
-        when(updateStorageUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
-        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
-        presenter.updateActualNews();
-        verify(view).showProgressBar();
-    }
-
-    @Test
     public void verifyUpdateActualNews_UpdateStorageUseCaseIsCalled() {
         when(updateStorageUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
         when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
@@ -110,13 +100,11 @@ public class NewsFeedPresenterTest {
     @Test
     public void verifyUpdateActualNews_UpdateStorageUseCaseThrowError() {
         when(updateStorageUseCase.run(any())).thenReturn(Single.error(new NullPointerException()));
-        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.error(new NullPointerException()));
         updateStorageUseCase.run(any())
                 .test()
                 .assertNoValues()
                 .assertError(NullPointerException.class);
     }
-
 
     @Test
     public void verifyInvertFavoriteState_InvertStateIsCalled() {
@@ -194,17 +182,7 @@ public class NewsFeedPresenterTest {
         when(news.get(anyInt())).thenReturn(newsItemExample);
         presenter.setShowFavorite(true);
         presenter.changeNewsFavoriteState(indexExample);
-        verify(news).remove(indexExample);
-    }
-
-    @Test
-    public void verifyChangeNewsFavoriteState_RemoveNewsItemIsCalled() {
-        when(updateNewsItemsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
-        newsItemExample.setFavorite(true);
-        when(news.get(anyInt())).thenReturn(newsItemExample);
-        presenter.setShowFavorite(true);
-        presenter.changeNewsFavoriteState(indexExample);
-        verify(view).removeNewsItem(indexExample);
+        verify(news, timeout(TIME_OUT_SECONDS)).remove(indexExample);
     }
 
     @Test
@@ -215,7 +193,17 @@ public class NewsFeedPresenterTest {
         presenter.setShowFavorite(true);
         when(news.isEmpty()).thenReturn(true);
         presenter.changeNewsFavoriteState(anyInt());
-        verify(view).showEmptyView();
+        verify(view, timeout(TIME_OUT_SECONDS)).showEmptyView();
+    }
+
+    @Test
+    public void verifyChangeNewsFavoriteState_RemoveNewsItemIsCalled() {
+        when(updateNewsItemsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
+        newsItemExample.setFavorite(true);
+        when(news.get(anyInt())).thenReturn(newsItemExample);
+        presenter.setShowFavorite(true);
+        presenter.changeNewsFavoriteState(indexExample);
+        verify(view, timeout(TIME_OUT_SECONDS)).removeNewsItem(indexExample);
     }
 
     @Test
@@ -224,12 +212,20 @@ public class NewsFeedPresenterTest {
         when(news.get(anyInt())).thenReturn(newsItemExample);
         presenter.setShowFavorite(false);
         presenter.changeNewsFavoriteState(indexExample);
-        verify(view).updateNewsItem(indexExample);
+        verify(view, timeout(TIME_OUT_SECONDS)).updateNewsItem(indexExample);
+    }
+
+    @Test
+    public void verifyUpdateActualNews_ShowProgressBarIsCalled() {
+        when(updateStorageUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
+        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
+        presenter.updateActualNews();
+        verify(view, timeout(TIME_OUT_SECONDS)).showProgressBar();
     }
 
     @Test
     public void verifyOnCategoryButtonClick_ShowCategoryDialogIsCalled() {
         presenter.onCategoryButtonClick();
-        verify(view).showCategoryDialog();
+        verify(view, timeout(TIME_OUT_SECONDS)).showCategoryDialog();
     }
 }
