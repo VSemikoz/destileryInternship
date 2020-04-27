@@ -41,7 +41,6 @@ public class UpdateStorageUseCaseTest {
     @InjectMocks
     UpdateStorageUseCase updateStorageUseCase;
 
-
     @Before
     public void init() {
         initLists();
