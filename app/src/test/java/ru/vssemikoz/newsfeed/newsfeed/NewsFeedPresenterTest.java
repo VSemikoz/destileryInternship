@@ -37,7 +37,6 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NewsFeedPresenterTest {
-    private static final int TIME_OUT_SECONDS = 2000;
     private List<NewsItem> exampleNewsList = new ArrayList<>();
     private NewsItem newsItemExample;
     private int indexExample = 7;
