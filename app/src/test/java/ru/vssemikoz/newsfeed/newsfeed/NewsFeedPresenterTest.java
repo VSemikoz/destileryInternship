@@ -17,6 +17,7 @@ import java.util.Random;
 
 import io.reactivex.rxjava3.android.plugins.RxAndroidPlugins;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import ru.vssemikoz.newsfeed.MainApplication;
 
@@ -29,6 +30,7 @@ import ru.vssemikoz.newsfeed.usecases.UpdateStorageUseCase;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,12 +39,9 @@ import static org.mockito.Mockito.when;
 public class NewsFeedPresenterTest {
     private static final int TIME_OUT_SECONDS = 2000;
     private List<NewsItem> exampleNewsList = new ArrayList<>();
-    private List<NewsItem> emptyList = new ArrayList<>();
     private NewsItem newsItemExample;
     private int indexExample = 7;
 
-    @Captor
-    private ArgumentCaptor<String> stringCaptor;
     @Mock
     List<NewsItem> news;
     @Mock
@@ -90,50 +89,50 @@ public class NewsFeedPresenterTest {
     }
 
     @Test
-    public void verifyUpdateActualNews_UpdateStorageUseCaseIsCalled() {
+    public void verifySubscribe_OnNextIsCalled() {
         when(updateStorageUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
         when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
-        presenter.updateActualNews();
-        verify(updateStorageUseCase).run(any());
-    }
-
-    @Test
-    public void verifyUpdateActualNews_UpdateStorageUseCaseThrowError() {
-        when(updateStorageUseCase.run(any())).thenReturn(Single.error(new NullPointerException()));
-        updateStorageUseCase.run(any())
-                .test()
-                .assertNoValues()
-                .assertError(NullPointerException.class);
-    }
-
-    @Test
-    public void verifyInvertFavoriteState_InvertStateIsCalled() {
-        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
-        Boolean savedShowFavorite = presenter.getShowFavorite();
-        presenter.invertFavoriteState();
-        assertEquals(presenter.getShowFavorite(), !savedShowFavorite);
-    }
-
-    @Test
-    public void verifyInvertFavoriteState_SetFavoriteIconIsCalled() {
-        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
-        presenter.invertFavoriteState();
+        presenter.subscribe();
         verify(view).setFavoriteIcon(any());
+        verify(view).setCategoryTitle(any());
+        verify(view).hideProgressBar();
+        verify(view).hideRefreshLayout();
     }
 
     @Test
-    public void verifyInvertFavoriteState_SetFavoriteIconShouldContainArguments() {
-        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
-        Boolean savedShowFavorite = presenter.getShowFavorite();
-        presenter.invertFavoriteState();
-        verify(view).setFavoriteIcon(!savedShowFavorite);
+    public void verifySubscribe_OnErrorIsCalled() {
+        Throwable error = new RuntimeException();
+        when(updateStorageUseCase.run(any())).thenReturn(Single.error(error));
+        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.error(error));
+        presenter.subscribe();
+        verify(view).setFavoriteIcon(any());
+        verify(view).setCategoryTitle(any());
+        verify(view).hideProgressBar();
+        verify(view).hideRefreshLayout();
+        verify(view).showEmptyView();
     }
 
     @Test
-    public void verifyInvertFavoriteState_GetFilteredNewsUseCaseRunIsCalled() {
+    public void verifyOpenNewsDetails_NavigatorIsCalled() {
+        when(news.get(anyInt())).thenReturn(newsItemExample);
+        presenter.openNewsDetails(eq(indexExample), mainApplication);
+        verify(navigator).openWebView(any());
+    }
+
+    @Test
+    public void verifyShareNewsItem_NavigatorIsCalled() {
+        when(news.get(anyInt())).thenReturn(newsItemExample);
+        presenter.shareNewsItem(anyInt());
+        verify(navigator).shareFeedItem(any());
+    }
+
+    @Test
+    public void verifyChangeNewsFavoriteState_ShowListIsCalled() {
+        when(updateNewsItemsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
         when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
-        presenter.invertFavoriteState();
-        verify(getFilteredNewsUseCase).run(any());
+        when(news.get(anyInt())).thenReturn(newsItemExample);
+        presenter.changeNewsFavoriteState(indexExample);
+        verify(view).showList(exampleNewsList);
     }
 
     @Test
@@ -141,91 +140,5 @@ public class NewsFeedPresenterTest {
         when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
         presenter.invertFavoriteState();
         verify(view).showList(exampleNewsList);
-    }
-
-    @Test
-    public void verifyInvertFavoriteState_ShowEmptyViewIsCalled() {
-        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(emptyList));
-        presenter.invertFavoriteState();
-        verify(view).showEmptyView();
-    }
-
-    @Test
-    public void verifyOpenNewsDetails_OpenWebViewIsCalled() {
-        when(news.get(anyInt())).thenReturn(newsItemExample);
-        presenter.openNewsDetails(anyInt(), mainApplication);
-        verify(navigator).openWebView(any());
-    }
-
-    @Test
-    public void verifyOpenNewsDetails_OpenWebViewShouldContainArgument() {
-        when(news.get(anyInt())).thenReturn(newsItemExample);
-        presenter.openNewsDetails(anyInt(), mainApplication);
-        verify(navigator).openWebView(stringCaptor.capture());
-        String capturedArgument = stringCaptor.getValue();
-        assertEquals(capturedArgument, newsItemExample.getUrl());
-    }
-
-    @Test
-    public void verifyChangeNewsFavoriteState_UpdateNewsItemsUseCaseRunCalled() {
-        when(updateNewsItemsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
-        newsItemExample.setFavorite(false);
-        when(news.get(anyInt())).thenReturn(newsItemExample);
-        presenter.changeNewsFavoriteState(anyInt());
-        verify(updateNewsItemsUseCase).run(any());
-    }
-
-    @Test
-    public void verifyChangeNewsFavoriteState_RemoveIsCalled() {
-        when(updateNewsItemsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
-        newsItemExample.setFavorite(true);
-        when(news.get(anyInt())).thenReturn(newsItemExample);
-        presenter.setShowFavorite(true);
-        presenter.changeNewsFavoriteState(indexExample);
-        verify(news, timeout(TIME_OUT_SECONDS)).remove(indexExample);
-    }
-
-    @Test
-    public void verifyChangeNewsFavoriteState_ShowEmptyViewIsCalled() {
-        when(updateNewsItemsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
-        newsItemExample.setFavorite(true);
-        when(news.get(anyInt())).thenReturn(newsItemExample);
-        presenter.setShowFavorite(true);
-        when(news.isEmpty()).thenReturn(true);
-        presenter.changeNewsFavoriteState(anyInt());
-        verify(view, timeout(TIME_OUT_SECONDS)).showEmptyView();
-    }
-
-    @Test
-    public void verifyChangeNewsFavoriteState_RemoveNewsItemIsCalled() {
-        when(updateNewsItemsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
-        newsItemExample.setFavorite(true);
-        when(news.get(anyInt())).thenReturn(newsItemExample);
-        presenter.setShowFavorite(true);
-        presenter.changeNewsFavoriteState(indexExample);
-        verify(view, timeout(TIME_OUT_SECONDS)).removeNewsItem(indexExample);
-    }
-
-    @Test
-    public void verifyChangeNewsFavoriteState_UpdateNewsItemIsCalled() {
-        when(updateNewsItemsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
-        when(news.get(anyInt())).thenReturn(newsItemExample);
-        presenter.setShowFavorite(false);
-        presenter.changeNewsFavoriteState(indexExample);
-        verify(view, timeout(TIME_OUT_SECONDS)).updateNewsItem(indexExample);
-    }
-
-    @Test
-    public void verifyUpdateActualNews_ShowProgressBarIsCalled() {
-        when(updateStorageUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
-        when(getFilteredNewsUseCase.run(any())).thenReturn(Single.just(exampleNewsList));
-        presenter.updateActualNews();
-        verify(view, timeout(TIME_OUT_SECONDS)).showProgressBar();
-    }
-
-    @Test
-    public void verifyOnCategoryButtonClick_ShowCategoryDialogIsCalled() {
-        presenter.onCategoryButtonClick();
-        verify(view, timeout(TIME_OUT_SECONDS)).showCategoryDialog();
     }
 }
