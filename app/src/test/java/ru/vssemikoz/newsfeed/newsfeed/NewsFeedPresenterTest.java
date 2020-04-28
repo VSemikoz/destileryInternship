@@ -3,8 +3,6 @@ package ru.vssemikoz.newsfeed.newsfeed;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -17,7 +15,6 @@ import java.util.Random;
 
 import io.reactivex.rxjava3.android.plugins.RxAndroidPlugins;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import ru.vssemikoz.newsfeed.MainApplication;
 
@@ -27,11 +24,9 @@ import ru.vssemikoz.newsfeed.usecases.GetFilteredNewsUseCase;
 import ru.vssemikoz.newsfeed.usecases.UpdateNewsItemsUseCase;
 import ru.vssemikoz.newsfeed.usecases.UpdateStorageUseCase;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

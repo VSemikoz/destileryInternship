@@ -26,7 +26,6 @@ import ru.vssemikoz.newsfeed.usecases.UpdateStorageUseCase;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private NewsFeedContract.View view;
-
     private Boolean showOnlyFavorite = false;
     private Category category = Category.ALL;
     private List<NewsItem> cashedNews;
