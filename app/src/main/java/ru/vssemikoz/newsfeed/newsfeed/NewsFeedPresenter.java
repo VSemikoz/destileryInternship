@@ -1,7 +1,8 @@
 package ru.vssemikoz.newsfeed.newsfeed;
 
 import android.content.Context;
-import android.util.Log;
+
+import androidx.annotation.VisibleForTesting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +25,6 @@ import ru.vssemikoz.newsfeed.usecases.UpdateNewsItemsUseCase;
 import ru.vssemikoz.newsfeed.usecases.UpdateStorageUseCase;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
-    private static final String TAG = NewsFeedPresenter.class.getName();
     private NewsFeedContract.View view;
 
     private Boolean showOnlyFavorite = false;
@@ -50,7 +50,6 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Override
     public void subscribe() {
-        Log.d(TAG, "start: " + mainApplication);
         Category.resolveCategory(mainApplication, Arrays.asList(Category.values()));
         initStartValues();
         updateActualNews();
@@ -71,20 +70,25 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        resultNews -> { /* Emit */
-                            setCashedNews(resultNews);
-                            updateNewsListUI(resultNews);
-                            view.hideProgressBar();
-                            view.hideRefreshLayout();
-                        },
-                        throwable -> { /* Error */
-                            Log.e(TAG, "updateActualNews failure: " + throwable);
-                            view.hideProgressBar();
-                            view.hideRefreshLayout();
-                            view.showEmptyView();
-                        }
+                        this::onUpdateActualNewsNext,
+                        this::onUpdateActualNewsError
                 );
         disposables.add(subscription);
+    }
+
+    @VisibleForTesting
+    private void onUpdateActualNewsNext(List<NewsItem> resultNews) {
+        setCashedNews(resultNews);
+        updateNewsListUI(resultNews);
+        view.hideProgressBar();
+        view.hideRefreshLayout();
+    }
+
+    @VisibleForTesting
+    private void onUpdateActualNewsError(Throwable throwable) {
+        view.hideProgressBar();
+        view.hideRefreshLayout();
+        view.showEmptyView();
     }
 
     @Override
@@ -102,20 +106,11 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         updateList.add(item);
         NewsFeedParams params = new NewsFeedParams(updateList, new Filter(category, showOnlyFavorite));
         Disposable subscription = updateNewsItemsUseCase.run(params)
+                .flatMap(updatedNews -> getFilteredNewsUseCase.run(params))
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(updatedNews -> {
-                            if (showOnlyFavorite && !item.isFavorite()) {
-                                cashedNews.remove(position);
-                                view.removeNewsItem(position);
-                                if (cashedNews.isEmpty()) {
-                                    view.showEmptyView();
-                                }
-                            } else {
-                                view.updateNewsItem(position);
-                            }
-                        },
-                        throwable -> Log.e(TAG, "changeNewsFavoriteState: " + throwable));
+                .subscribe(
+                        resultNews -> view.showList(resultNews));
         disposables.add(subscription);
     }
 
@@ -165,8 +160,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
                         result -> {//onEmit
                             updateNewsListUI(result);
                             setCashedNews(result);
-                        },
-                        throwable -> Log.e(TAG, "invertFavoriteState: " + throwable)//onError
+                        }
                 );
         disposables.add(subscription);
     }
