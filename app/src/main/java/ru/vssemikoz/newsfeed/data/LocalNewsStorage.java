@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
 import ru.vssemikoz.newsfeed.dao.NewsItemDAO;
 import ru.vssemikoz.newsfeed.database.NewsAppDataBase;
 import ru.vssemikoz.newsfeed.models.Category;
@@ -18,18 +20,20 @@ public class LocalNewsStorage implements NewsStorage {
     }
 
     @Override
-    public List<NewsItem> getFiltered(Boolean favoriteNewsState, Category category) {
-        if (favoriteNewsState) {
-            if (category == Category.ALL) {
-                return newsItemDAO.getFavoriteNews();
-            } else {
-                return newsItemDAO.getFavoriteNewsByCategory(Category.getCategoryName(category));
+    public Single<List<NewsItem>> getFiltered(Boolean favoriteNewsState, Category category) {
+        return Single.fromCallable(() -> {
+            if (favoriteNewsState) {
+                if (category == Category.ALL) {
+                    return newsItemDAO.getFavoriteNews();
+                } else {
+                    return newsItemDAO.getFavoriteNewsByCategory(Category.getCategoryName(category));
+                }
             }
-        }
-        if (category == Category.ALL) {
-            return newsItemDAO.getAll();
-        }
-        return newsItemDAO.getNewsByCategory(Category.getCategoryName(category));
+            if (category == Category.ALL) {
+                return newsItemDAO.getAll();
+            }
+            return newsItemDAO.getNewsByCategory(Category.getCategoryName(category));
+        });
     }
 
     @Override
@@ -43,7 +47,8 @@ public class LocalNewsStorage implements NewsStorage {
     }
 
     @Override
-    public void insertUnique(List<NewsItem> newsItems) {
-        newsItemDAO.insertUnique(newsItems);
+    public Single<List<NewsItem>> insertUnique(List<NewsItem> newsItems) {
+        return Completable.fromRunnable(() -> newsItemDAO.insertUnique(newsItems))
+                .toSingleDefault(newsItems);
     }
 }

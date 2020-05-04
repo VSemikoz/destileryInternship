@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import io.reactivex.rxjava3.core.Single;
 import ru.vssemikoz.newsfeed.data.NewsStorage;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.Filter;
@@ -19,8 +20,6 @@ import ru.vssemikoz.newsfeed.models.NewsFeedParams;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 import ru.vssemikoz.newsfeed.usecases.GetFilteredNewsUseCase;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -73,20 +72,28 @@ public class GetFilteredNewsUseCaseTest {
 
     @Test
     public void verifyGetFilteredReturnNewsList() {
-        when(newsStorage.getFiltered(any(), any())).thenReturn(exampleNewsList);
-        assertEquals(getFilteredNewsUseCase.run(paramsExample), exampleNewsList);
+        when(newsStorage.getFiltered(any(), any())).thenReturn(Single.just(exampleNewsList));
+        getFilteredNewsUseCase.run(paramsExample)
+                .test()
+                .assertValue(exampleNewsList)
+                .assertNoErrors();
     }
 
     @Test
     public void verifyGetFilteredReturnEmptyList() {
-        when(newsStorage.getFiltered(any(), any())).thenReturn(emptyNewsList);
-        assertEquals(getFilteredNewsUseCase.run(paramsExample), emptyNewsList);
+        when(newsStorage.getFiltered(any(), any())).thenReturn(Single.just(emptyNewsList));
+        getFilteredNewsUseCase.run(paramsExample)
+                .test()
+                .assertValue(emptyNewsList)
+                .assertNoErrors();
     }
 
     @Test
     public void verifyGetFilteredThrowException() {
-        when(newsStorage.getFiltered(any(), any())).thenThrow(new IllegalArgumentException());
-        assertThrows(IllegalArgumentException.class, () -> getFilteredNewsUseCase.run(paramsExample));
+        when(newsStorage.getFiltered(any(), any())).thenReturn(Single.error(new NullPointerException()));
+        getFilteredNewsUseCase.run(paramsExample)
+                .test()
+                .assertNoValues()
+                .assertError(NullPointerException.class);
     }
-
 }

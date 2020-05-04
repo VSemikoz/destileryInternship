@@ -1,7 +1,8 @@
 package ru.vssemikoz.newsfeed.newsfeed;
 
 import android.content.Context;
-import android.util.Log;
+
+import androidx.annotation.VisibleForTesting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +10,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import ru.vssemikoz.newsfeed.MainApplication;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.Filter;
@@ -20,12 +25,11 @@ import ru.vssemikoz.newsfeed.usecases.UpdateNewsItemsUseCase;
 import ru.vssemikoz.newsfeed.usecases.UpdateStorageUseCase;
 
 public class NewsFeedPresenter implements NewsFeedContract.Presenter {
-    private static final String TAG = NewsFeedPresenter.class.getName();
     private NewsFeedContract.View view;
-
     private Boolean showOnlyFavorite = false;
     private Category category = Category.ALL;
-    private List<NewsItem> news;
+    private List<NewsItem> cashedNews;
+    private CompositeDisposable disposables;
 
     @Inject
     MainApplication mainApplication;
@@ -40,45 +44,73 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Inject
     public NewsFeedPresenter() {
+        disposables = new CompositeDisposable();
     }
 
     @Override
-    public void start() {
-        Log.d(TAG, "start: " + mainApplication);
+    public void subscribe() {
         Category.resolveCategory(mainApplication, Arrays.asList(Category.values()));
         initStartValues();
         updateActualNews();
     }
 
     @Override
+    public void unsubscribe() {
+        disposables.clear();
+    }
+
+    @Override
     public void updateActualNews() {
-        view.showProgressBar();
-        updateNewsStorage();
+        NewsFeedParams params = new NewsFeedParams(new Filter(category, showOnlyFavorite));
+        Disposable subscription = updateStorageUseCase.run(params)
+                .flatMap(updatedNews -> getFilteredNewsUseCase.run(params))
+                .doOnSubscribe(disposable -> view.showProgressBar())
+                .onErrorResumeNext(throwable -> getFilteredNewsUseCase.run(params))
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        this::onUpdateActualNewsNext,
+                        this::onUpdateActualNewsError
+                );
+        disposables.add(subscription);
+    }
+
+    @VisibleForTesting
+    private void onUpdateActualNewsNext(List<NewsItem> resultNews) {
+        setCashedNews(resultNews);
+        updateNewsListUI(resultNews);
+        view.hideProgressBar();
+        view.hideRefreshLayout();
+    }
+
+    @VisibleForTesting
+    private void onUpdateActualNewsError(Throwable throwable) {
+        view.hideProgressBar();
+        view.hideRefreshLayout();
+        view.showEmptyView();
     }
 
     @Override
     public void openNewsDetails(int position, Context context) {
-        NewsItem item = news.get(position);
+        NewsItem item = cashedNews.get(position);
         String url = item.getUrl();
         navigator.openWebView(url);
     }
 
     @Override
     public void changeNewsFavoriteState(int position) {
-        NewsItem item = news.get(position);
+        NewsItem item = cashedNews.get(position);
         item.invertFavoriteState();
         List<NewsItem> updateList = new ArrayList<>();
         updateList.add(item);
-        updateItemsStorage(updateList);
-        if (showOnlyFavorite && !item.isFavorite()) {
-            news.remove(position);
-            view.removeNewsItem(position);
-            if (news.isEmpty()) {
-                view.showEmptyView();
-            }
-        } else {
-            view.updateNewsItem(position);
-        }
+        NewsFeedParams params = new NewsFeedParams(updateList, new Filter(category, showOnlyFavorite));
+        Disposable subscription = updateNewsItemsUseCase.run(params)
+                .flatMap(updatedNews -> getFilteredNewsUseCase.run(params))
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        resultNews -> view.showList(resultNews));
+        disposables.add(subscription);
     }
 
     @Override
@@ -113,7 +145,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
 
     @Override
     public void shareNewsItem(int position) {
-        String messageToSend = news.get(position).getUrl();
+        String messageToSend = cashedNews.get(position).getUrl();
         navigator.shareFeedItem(messageToSend);
     }
 
@@ -121,40 +153,15 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     public void invertFavoriteState() {
         showOnlyFavorite = !showOnlyFavorite;
         view.setFavoriteIcon(showOnlyFavorite);
-        getNewsFromStorage();
-        updateNewsListUI();
-    }
-
-    private void getNewsFromStorage() {
         NewsFeedParams params = new NewsFeedParams(new Filter(category, showOnlyFavorite));
-        news = getFilteredNewsUseCase.run(params);
-    }
-
-    private void updateNewsStorage() {
-        NewsFeedParams params = new NewsFeedParams(new Filter(category, showOnlyFavorite), new NewsFeedParams.RequestListener() {
-            @Override
-            public void onRequestSuccess(List<NewsItem> news) {
-                getNewsFromStorage();
-                updateNewsListUI();
-                view.hideProgressBar();
-                view.hideRefreshLayout();
-            }
-
-            @Override
-            public void onRequestFailure() {
-                Log.e(TAG, "onRequestFailure: update request failure, shows cash news" );
-                getNewsFromStorage();
-                view.showEmptyView();
-                view.hideProgressBar();
-                view.hideRefreshLayout();
-            }
-        });
-        updateStorageUseCase.run(params);
-    }
-
-    private void updateItemsStorage(List<NewsItem> updateList) {
-        NewsFeedParams params = new NewsFeedParams(updateList, new Filter(category, showOnlyFavorite));
-        updateNewsItemsUseCase.run(params);
+        Disposable subscription = getFilteredNewsUseCase.run(params).
+                subscribe(
+                        result -> {//onEmit
+                            updateNewsListUI(result);
+                            setCashedNews(result);
+                        }
+                );
+        disposables.add(subscription);
     }
 
     private void initStartValues() {
@@ -162,12 +169,15 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
         view.setCategoryTitle(category);
     }
 
-    private void updateNewsListUI() {
-        if (news == null || news.isEmpty()) {
+    private void updateNewsListUI(List<NewsItem> newsList) {
+        if (newsList == null || newsList.isEmpty()) {
             view.showEmptyView();
         } else {
-            view.showList(news);
+            view.showList(newsList);
         }
     }
 
+    public void setCashedNews(List<NewsItem> cashedNews) {
+        this.cashedNews = cashedNews;
+    }
 }

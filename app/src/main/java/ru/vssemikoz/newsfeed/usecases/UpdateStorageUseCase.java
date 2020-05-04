@@ -1,22 +1,17 @@
 package ru.vssemikoz.newsfeed.usecases;
 
-import android.util.Log;
-
 import java.util.List;
 
 import javax.inject.Inject;
 
-import retrofit2.Response;
+import io.reactivex.rxjava3.core.Single;
 import ru.vssemikoz.newsfeed.data.NewsRepository;
 import ru.vssemikoz.newsfeed.data.NewsStorage;
-import ru.vssemikoz.newsfeed.data.RemoteNewsRepository;
 import ru.vssemikoz.newsfeed.data.mappers.NewsMapper;
-import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsFeedParams;
 import ru.vssemikoz.newsfeed.models.NewsItem;
 
-public class UpdateStorageUseCase implements BaseUseCase<Void, NewsFeedParams> {
-    private static final String TAG = UpdateStorageUseCase.class.getName();
+public class UpdateStorageUseCase implements BaseUseCase<Single<List<NewsItem>>, NewsFeedParams> {
     @Inject
     NewsStorage newsStorage;
     @Inject
@@ -29,29 +24,8 @@ public class UpdateStorageUseCase implements BaseUseCase<Void, NewsFeedParams> {
     }
 
     @Override
-    public Void run(NewsFeedParams params) {
-        repository.getNewsFiltered(params.getFilter().getCategory(), getListener(params));
-        return null;
-    }
-
-    public RemoteNewsRepository.RequestListener getListener(NewsFeedParams params){
-        NewsFeedParams.RequestListener listener = params.getListener();
-        return new NewsRepository.RequestListener() {
-            @Override
-            public void onRequestSuccess(Response<NewsApiResponse> response) {
-                if (!response.isSuccessful()) {
-                    Log.d(TAG, "onResponse " + response.code());
-                    return;
-                }
-                List<NewsItem> news = mapper.map(response, params);
-                newsStorage.insertUnique(news);
-                listener.onRequestSuccess(news);
-            }
-
-            @Override
-            public void onRequestFailure(Throwable t) {
-                listener.onRequestFailure();
-            }
-        };
+    public Single<List<NewsItem>> run(NewsFeedParams params) {
+        return repository.getNewsFiltered(params)
+                .flatMap(news -> newsStorage.insertUnique(news));
     }
 }

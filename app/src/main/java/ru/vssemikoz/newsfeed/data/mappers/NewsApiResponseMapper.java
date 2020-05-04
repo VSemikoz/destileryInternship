@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import retrofit2.Response;
 import ru.vssemikoz.newsfeed.models.Category;
 import ru.vssemikoz.newsfeed.models.NewsApiResponse;
 import ru.vssemikoz.newsfeed.models.NewsApiResponseItem;
@@ -18,10 +17,10 @@ public class NewsApiResponseMapper implements NewsMapper {
     }
 
     @Override
-    public List<NewsItem> map(Response<NewsApiResponse> response, NewsFeedParams params) {
+    public List<NewsItem> map(NewsApiResponse response, NewsFeedParams params) {
         List<NewsItem> news = new ArrayList<>();
         Category category = params.getFilter().getCategory();
-        List<NewsApiResponseItem> responseItems = response.body().getNewsApiResponseItemList();
+        List<NewsApiResponseItem> responseItems = response.getNewsApiResponseItemList();
         for (NewsApiResponseItem newsApiResponseItem : responseItems) {
             news.add(new NewsItem(newsApiResponseItem, category));
         }
