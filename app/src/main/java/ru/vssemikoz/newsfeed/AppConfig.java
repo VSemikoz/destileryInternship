@@ -1,9 +1,9 @@
 package ru.vssemikoz.newsfeed;
 
 public class AppConfig {
-    private String baseUrl;
-    private String apiKey;
-    private String countryKey;
+    private final String baseUrl;
+    private final String apiKey;
+    private final String countryKey;
 
     public AppConfig(String baseUrl, String apiKey, String countryKey) {
         this.baseUrl = baseUrl;

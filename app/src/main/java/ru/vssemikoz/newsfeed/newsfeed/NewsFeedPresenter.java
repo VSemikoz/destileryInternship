@@ -29,7 +29,7 @@ public class NewsFeedPresenter implements NewsFeedContract.Presenter {
     private Boolean showOnlyFavorite = false;
     private Category category = Category.ALL;
     private List<NewsItem> cashedNews;
-    private CompositeDisposable disposables;
+    private final CompositeDisposable disposables;
 
     @Inject
     MainApplication mainApplication;
